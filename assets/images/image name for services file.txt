@@ -1,0 +1,15 @@
+web-design.jpg
+graphic-design.jpg
+digital-marketing.jpg
+social-media.jpg
+ecommerce.jpg
+seo.jpg
+wordpress.jpg
+ui-ux.jpg
+data.jpg
+it-training.jpg
+ads.jpg
+content.jpg
+logo.jpg
+email.jpg
+virtual-assistant.jpg
