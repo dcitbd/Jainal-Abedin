@@ -1,5 +1,5 @@
 /* =====================================================
-   PROJECTS PAGE CSS
+   PROJECTS PAGE CSS (FIXED & OPTIMIZED)
    Jainal Abedin Portfolio
 ===================================================== */
 
@@ -417,6 +417,7 @@ a {
     border:none;
 
     background:none;
+    cursor: pointer;
 
 
 }
@@ -434,18 +435,42 @@ a {
 
     background:var(--project-text);
 
-    margin:5px;
+    margin:5px auto;
 
 
 }
 
 
 
+/* MOBILE NAVIGATION (FIXED) */
 .ja-project-mobile-navigation {
 
+    display: none;
+    flex-direction: column;
+    position: absolute;
+    top: 80px;
+    left: 0;
+    width: 100%;
+    background: var(--project-card);
+    border-bottom: 1px solid var(--project-border);
+    padding: 20px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
 
-    display:none;
+.ja-project-mobile-navigation a {
+    display: block;
+    padding: 12px 0;
+    color: var(--project-text);
+    font-weight: 600;
+    border-bottom: 1px solid var(--project-border);
+}
 
+.ja-project-mobile-navigation a:last-child {
+    border-bottom: none;
+}
+
+.ja-project-mobile-navigation.show {
+    display: flex;
 }
 
 
@@ -509,6 +534,10 @@ a {
     font-weight:700;
 
 
+}
+
+.dark-mode .ja-project-eyebrow {
+    background: rgba(37, 99, 235, 0.15);
 }
 
 
@@ -723,8 +752,14 @@ a {
     cursor:pointer;
 
     font-weight:600;
+    transition: 0.3s;
 
 
+}
+
+.project-filter:hover {
+    border-color: var(--project-primary);
+    color: var(--project-primary);
 }
 
 
@@ -929,8 +964,13 @@ a {
     border-radius:20px;
 
     font-size:11px;
+    font-weight: 600;
 
+}
 
+.dark-mode .project-tags span {
+    background: rgba(37, 99, 235, 0.15);
+    color: #60a5fa;
 }
 
 
@@ -1024,11 +1064,12 @@ a {
 
     padding: 70px 0 20px;
 
-    border-top: 1px solid var(--ja-home-border);
+    border-top: 1px solid var(--project-border);
 
-    background: var(--ja-home-bg-secondary);
+    background: var(--project-card);
 
     text-align: center;
+    color: var(--project-muted);
 
 }
 
@@ -1138,60 +1179,4 @@ a {
 }
 
 
-
-.ja-project-mobile-navigation {
-
-
-    position:absolute;
-
-    top:80px;
-
-    left:0;
-
-    width:100%;
-
-    background:var(--project-card);
-
-    border-bottom:1px solid var(--project-border);
-
-    padding:20px;
-
 }
-
-
-
-.ja-project-mobile-navigation a {
-
-
-    display:block;
-
-    padding:12px 0;
-
-    color:var(--project-text);
-
-
-}
-
-
-
-.ja-project-mobile-navigation.show {
-
-
-    display:block;
-
-
-}
-
-
-}
-
-
-
-
-
-
-
-
-
-
-
