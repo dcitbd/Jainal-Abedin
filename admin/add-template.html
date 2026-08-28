@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Template | Jainal Abedin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="../assets/css/dashboard.css">
+    <link rel="stylesheet" href="../assets/css/add-template.css">
+</head>
+<body>
+<div class="admin-app">
+    <aside class="admin-sidebar" id="adminSidebar">
+        <div class="sidebar-brand"><a href="../index.html" class="brand-logo"><span class="brand-logo-symbol"><i class="fa-solid fa-code"></i></span><span class="brand-logo-text"><strong>JAINAL ABEDIN</strong><small>PORTFOLIO</small></span></a><button class="sidebar-close" id="sidebarClose" type="button" aria-label="Close menu"><i class="fa-solid fa-xmark"></i></button></div>
+        <div class="sidebar-user"><div class="sidebar-avatar">JA<i class="fa-solid fa-circle"></i></div><div class="sidebar-user-info"><strong>Jainal Abedin</strong><span>Administrator</span></div></div>
+        <nav class="admin-navigation">
+            <span class="nav-section-title">WORKSPACE</span>
+            <a href="dashboard.html" class="admin-nav-link"><span class="nav-link-icon"><i class="fa-solid fa-grid-2"></i></span><span>Dashboard</span></a>
+            <a href="#" class="admin-nav-link"><span class="nav-link-icon"><i class="fa-solid fa-layer-group"></i></span><span>Projects</span></a>
+            <a href="add-project.html" class="admin-nav-link"><span class="nav-link-icon"><i class="fa-solid fa-square-plus"></i></span><span>Add Project</span></a>
+            <a href="templates.html" class="admin-nav-link"><span class="nav-link-icon"><i class="fa-solid fa-table-cells-large"></i></span><span>Templates</span></a>
+            <a href="add-template.html" class="admin-nav-link active"><span class="nav-link-icon"><i class="fa-solid fa-square-plus"></i></span><span>Add Template</span></a>
+            <span class="nav-section-title">PORTFOLIO</span>
+            <a href="../assets/pages/about.html" class="admin-nav-link"><span class="nav-link-icon"><i class="fa-regular fa-user"></i></span><span>About</span></a>
+            <a href="../assets/pages/services.html" class="admin-nav-link"><span class="nav-link-icon"><i class="fa-solid fa-briefcase"></i></span><span>Services</span></a>
+            <a href="../assets/pages/companies.html" class="admin-nav-link"><span class="nav-link-icon"><i class="fa-solid fa-building"></i></span><span>Companies</span></a>
+            <a href="../assets/pages/skills.html" class="admin-nav-link"><span class="nav-link-icon"><i class="fa-solid fa-code"></i></span><span>Skills</span></a>
+            <span class="nav-section-title">SYSTEM</span>
+            <a href="../assets/pages/contact.html" class="admin-nav-link"><span class="nav-link-icon"><i class="fa-regular fa-envelope"></i></span><span>Messages</span></a>
+            <a href="../index.html" target="_blank" class="admin-nav-link"><span class="nav-link-icon"><i class="fa-solid fa-globe"></i></span><span>View Website</span></a>
+        </nav>
+        <div class="sidebar-footer"><div class="sidebar-status"><span class="status-indicator"></span><span>System Online</span></div><button id="logoutBtn" class="sidebar-logout" type="button"><i class="fa-solid fa-arrow-right-from-bracket"></i> Logout</button></div>
+    </aside>
+    <main class="admin-main">
+        <header class="admin-topbar"><div class="topbar-left"><button id="sidebarToggle" class="sidebar-toggle" type="button" aria-label="Open menu"><i class="fa-solid fa-bars"></i></button><div class="breadcrumb"><span>Admin</span><i class="fa-solid fa-chevron-right"></i><a href="templates.html">Templates</a><i class="fa-solid fa-chevron-right"></i><strong id="breadcrumbTitle">Add Template</strong></div></div><div class="topbar-right"><a href="templates.html" class="view-site-btn"><i class="fa-solid fa-arrow-left"></i> Back to Templates</a></div></header>
+        <div class="admin-content add-template-content">
+            <section class="template-form-hero"><div><span class="form-eyebrow"><i class="fa-solid fa-wand-magic-sparkles"></i> TEMPLATE BUILDER</span><h1 id="pageTitle">Add a new <span>template</span></h1><p>Upload one cover image, then add the links visitors need to explore your work.</p></div></section>
+            <form id="templateForm" novalidate>
+                <div class="template-form-layout">
+                    <div class="template-form-main">
+                        <section class="template-form-card">
+                            <div class="form-card-heading"><span>01</span><div><h2>Template details</h2><p>The essential information shown in your template card.</p></div></div>
+                            <div class="form-grid"><label class="form-field form-field-full">Template name <b>*</b><input id="templateName" name="title" required maxlength="80" placeholder="e.g. Modern Portfolio Website"></label><label class="form-field">Category <b>*</b><select id="templateCategory" name="category" required><option value="">Choose a category</option><option>Portfolio</option><option>Business</option><option>Landing Page</option><option>Dashboard</option><option>E-commerce</option><option>Blog</option><option>Other</option></select></label><label class="form-field">Status <b>*</b><select id="templateStatus" name="status"><option value="published">Published</option><option value="draft">Draft</option></select></label><label class="form-field form-field-full">Short description <textarea id="templateDescription" name="description" rows="4" maxlength="280" placeholder="A short description for the template card."></textarea><small><span id="descriptionCount">0</span>/280 characters</small></label><label class="form-field form-field-full">Tags <input id="templateTags" name="tags" placeholder="HTML, CSS, JavaScript (separate with commas)"><small>Optional — these appear as small labels on the card.</small></label></div>
+                        </section>
+                        <section class="template-form-card">
+                            <div class="form-card-heading"><span>02</span><div><h2>Template image</h2><p>Use one clear thumbnail image for the template.</p></div></div>
+                            <label class="image-upload" id="imageUpload" for="templateImage"><input id="templateImage" type="file" accept="image/png,image/jpeg,image/webp,image/gif"><span class="upload-empty" id="uploadEmpty"><i class="fa-solid fa-cloud-arrow-up"></i><strong>Choose template image</strong><small>PNG, JPG, WEBP or GIF</small></span><img id="imagePreview" alt="Selected template preview"></label><button class="remove-image" id="removeImage" type="button" hidden><i class="fa-solid fa-trash-can"></i> Remove image</button>
+                        </section>
+                        <section class="template-form-card">
+                            <div class="form-card-heading"><span>03</span><div><h2>Links</h2><p>Add the destination links for your template.</p></div></div>
+                            <div class="form-grid"><label class="form-field form-field-full">Live / code link <b>*</b><span class="input-icon"><i class="fa-solid fa-link"></i><input id="templateUrl" name="url" type="url" required placeholder="https://your-template-demo.com"></span><small>The main button will open this link.</small></label><label class="form-field">GitHub link <span class="optional">optional</span><span class="input-icon"><i class="fa-brands fa-github"></i><input id="githubUrl" name="githubUrl" type="url" placeholder="https://github.com/username/repository"></span></label><label class="form-field">Other link <span class="optional">optional</span><span class="input-icon"><i class="fa-solid fa-arrow-up-right-from-square"></i><input id="otherUrl" name="otherUrl" type="url" placeholder="https://figma.com/... or other"></span></label></div>
+                        </section>
+                    </div>
+                    <aside class="template-preview-side"><div class="preview-label"><span>LIVE PREVIEW</span><i class="fa-solid fa-circle"></i></div><div class="preview-card"><div class="preview-image-wrap"><img id="cardPreviewImage" alt=""><span id="previewPlaceholder"><i class="fa-regular fa-image"></i></span><span id="previewStatus">PUBLISHED</span></div><div class="preview-body"><small id="previewCategory">CATEGORY</small><h3 id="previewName">Template name</h3><p id="previewDescription">Your description will appear here.</p><div id="previewTags" class="preview-tags"></div><div class="preview-footer"><span>View template</span><i class="fa-solid fa-arrow-right"></i></div></div></div><p class="preview-note"><i class="fa-solid fa-circle-info"></i> This is how the card will appear in the admin list.</p></aside>
+                </div>
+                <div class="form-actions"><a href="templates.html" class="cancel-btn">Cancel</a><button class="save-template-btn" type="submit"><i class="fa-solid fa-floppy-disk"></i> <span id="saveButtonText">Save Template</span></button></div>
+            </form>
+        </div>
+    </main>
+</div>
+<div class="sidebar-overlay" id="sidebarOverlay"></div><div class="admin-toast" id="adminToast" role="status"><i class="fa-solid fa-circle-check"></i><span id="toastMessage"></span></div>
+<script src="../assets/js/auth.js"></script><script src="../assets/js/add-template.js"></script>
+</body>
+</html>

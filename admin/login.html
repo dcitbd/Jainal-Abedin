@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Admin Login | Jainal Abedin</title>
+
+    <meta name="description"
+          content="Secure admin login for Jainal Abedin Portfolio">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <!-- Login CSS -->
+    <link rel="stylesheet"
+          href="../assets/css/login.css">
+
+</head>
+
+<body>
+
+
+    <!-- ================= LOGIN PAGE ================= -->
+
+    <main class="login-page">
+
+
+        <!-- Left Visual Section -->
+
+        <section class="login-visual">
+
+
+            <div class="visual-overlay"></div>
+
+
+            <div class="visual-content">
+
+                <a href="../index.html"
+                   class="brand">
+
+                    <div class="brand-logo">
+                        JA
+                    </div>
+
+                    <div class="brand-text">
+
+                        <strong>
+                            Jainal Abedin
+                        </strong>
+
+                        <span>
+                            Portfolio
+                        </span>
+
+                    </div>
+
+                </a>
+
+
+                <div class="visual-message">
+
+                    <span class="small-label">
+                        ADMIN PORTAL
+                    </span>
+
+                    <h1>
+                        Manage your
+                        <span>digital world.</span>
+                    </h1>
+
+                    <p>
+                        Manage your projects, monitor website
+                        performance, and control your portfolio
+                        from one powerful dashboard.
+                    </p>
+
+                </div>
+
+
+                <div class="visual-footer">
+
+                    <span>
+                        © 2026 Jainal Abedin
+                    </span>
+
+                    <span>
+                        Secure Portfolio System
+                    </span>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- Right Login Section -->
+
+        <section class="login-section">
+
+
+            <div class="login-box">
+
+
+                <!-- Mobile Brand -->
+
+                <a href="../index.html"
+                   class="mobile-brand">
+
+                    <div class="brand-logo">
+                        JA
+                    </div>
+
+                    <strong>
+                        Jainal Abedin
+                    </strong>
+
+                </a>
+
+
+                <!-- Heading -->
+
+                <div class="login-heading">
+
+                    <span class="welcome-label">
+                        WELCOME BACK
+                    </span>
+
+                    <h2>
+                        Sign in to your account
+                    </h2>
+
+                    <p>
+                        Enter your credentials to access your dashboard.
+                    </p>
+
+                </div>
+
+
+                <!-- Login Form -->
+
+                <form id="loginForm"
+                      class="login-form">
+
+
+                    <!-- Email -->
+
+                    <div class="form-group">
+
+                        <label for="email">
+                            Email Address
+                        </label>
+
+                        <div class="input-wrapper">
+
+                            <i class="fa-regular fa-envelope"></i>
+
+                            <input type="email"
+                                   id="email"
+                                   name="email"
+                                   placeholder="Enter your email address"
+                                   autocomplete="email"
+                                   required>
+
+                        </div>
+
+                        <small class="input-error"
+                               id="emailError">
+
+                        </small>
+
+                    </div>
+
+
+                    <!-- Password -->
+
+                    <div class="form-group">
+
+                        <div class="label-row">
+
+                            <label for="password">
+                                Password
+                            </label>
+
+                            <a href="#"
+                               id="forgotPassword">
+
+                                Forgot password?
+
+                            </a>
+
+                        </div>
+
+
+                        <div class="input-wrapper">
+
+                            <i class="fa-solid fa-lock"></i>
+
+                            <input type="password"
+                                   id="password"
+                                   name="password"
+                                   placeholder="Enter your password"
+                                   autocomplete="current-password"
+                                   required>
+
+
+                            <button type="button"
+                                    class="password-toggle"
+                                    id="passwordToggle"
+                                    aria-label="Show password">
+
+                                <i class="fa-regular fa-eye"></i>
+
+                            </button>
+
+                        </div>
+
+                        <small class="input-error"
+                               id="passwordError">
+
+                        </small>
+
+                    </div>
+
+
+                    <!-- Remember Me -->
+
+                    <div class="form-options">
+
+                        <label class="remember-me">
+
+                            <input type="checkbox"
+                                   id="rememberMe">
+
+                            <span class="custom-checkbox"></span>
+
+                            <span>
+                                Remember me
+                            </span>
+
+                        </label>
+
+                    </div>
+
+
+                    <!-- Error Message -->
+
+                    <div class="login-message"
+                         id="loginMessage">
+
+                    </div>
+
+
+                    <!-- Submit -->
+
+                    <button type="submit"
+                            class="login-btn"
+                            id="loginBtn">
+
+                        <span class="btn-text">
+                            Sign In
+                        </span>
+
+                        <span class="btn-loader">
+
+                            <i class="fa-solid fa-spinner"></i>
+
+                        </span>
+
+                        <i class="fa-solid fa-arrow-right btn-arrow"></i>
+
+                    </button>
+
+
+                </form>
+
+
+                <!-- Back Website -->
+
+                <a href="../index.html"
+                   class="back-website">
+
+                    <i class="fa-solid fa-arrow-left"></i>
+
+                    Back to Website
+
+                </a>
+
+
+                <!-- Security Notice -->
+
+                <div class="security-notice">
+
+                    <i class="fa-solid fa-shield-halved"></i>
+
+                    <span>
+                        Your connection is secure and protected.
+                    </span>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- Login JavaScript -->
+
+    <script src="../assets/js/auth.js"></script>
+
+</body>
+
+</html>

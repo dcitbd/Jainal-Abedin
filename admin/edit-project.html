@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Edit Project | Jainal Abedin</title>
+
+
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com">
+
+    <link rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
+          rel="stylesheet">
+
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+
+    <link rel="stylesheet"
+          href="../assets/css/style.css">
+
+
+    <link rel="stylesheet"
+          href="../assets/css/dashboard.css">
+
+</head>
+
+
+<body>
+
+
+<div class="admin-app">
+
+
+    <aside class="admin-sidebar"
+           id="adminSidebar">
+
+
+        <div class="sidebar-brand">
+
+
+            <a href="../index.html"
+               class="brand-logo">
+
+
+                <span class="brand-logo-symbol">
+
+                    <i class="fa-solid fa-code"></i>
+
+                </span>
+
+
+                <span class="brand-logo-text">
+
+                    <strong>JAINAL</strong>
+
+                    <small>PORTFOLIO</small>
+
+                </span>
+
+
+            </a>
+
+
+            <button class="sidebar-close"
+                    id="sidebarClose">
+
+                <i class="fa-solid fa-xmark"></i>
+
+            </button>
+
+
+        </div>
+
+
+        <div class="sidebar-user">
+
+
+            <div class="sidebar-avatar">
+
+                JA
+
+                <i class="fa-solid fa-circle"></i>
+
+            </div>
+
+
+            <div class="sidebar-user-info">
+
+                <strong>Jainal Abedin</strong>
+
+                <span>Administrator</span>
+
+            </div>
+
+
+        </div>
+
+
+        <nav class="admin-navigation">
+
+
+            <span class="nav-section-title">
+
+                WORKSPACE
+
+            </span>
+
+
+            <a href="dashboard.html"
+               class="admin-nav-link">
+
+
+                <span class="nav-link-icon">
+
+                    <i class="fa-solid fa-grid-2"></i>
+
+                </span>
+
+
+                Dashboard
+
+            </a>
+
+
+            <a href="../assets/pages/projects.html"
+               class="admin-nav-link">
+
+
+                <span class="nav-link-icon">
+
+                    <i class="fa-solid fa-layer-group"></i>
+
+                </span>
+
+
+                Projects
+
+            </a>
+
+
+            <a href="add-project.html"
+               class="admin-nav-link">
+
+
+                <span class="nav-link-icon">
+
+                    <i class="fa-solid fa-square-plus"></i>
+
+                </span>
+
+
+                Add Project
+
+            </a>
+
+
+        </nav>
+
+
+        <div class="sidebar-footer">
+
+
+            <div class="sidebar-status">
+
+                <span class="status-indicator"></span>
+
+                System Online
+
+            </div>
+
+
+            <button class="sidebar-logout"
+                    id="logoutBtn">
+
+
+                <i class="fa-solid fa-arrow-right-from-bracket"></i>
+
+                Logout
+
+            </button>
+
+
+        </div>
+
+
+    </aside>
+
+
+    <main class="admin-main">
+
+
+        <header class="admin-topbar">
+
+
+            <div class="topbar-left">
+
+
+                <button class="sidebar-toggle"
+                        id="sidebarToggle">
+
+
+                    <i class="fa-solid fa-bars"></i>
+
+
+                </button>
+
+
+                <div class="breadcrumb">
+
+
+                    <span>Admin</span>
+
+
+                    <i class="fa-solid fa-chevron-right"></i>
+
+
+                    <span>Projects</span>
+
+
+                    <i class="fa-solid fa-chevron-right"></i>
+
+
+                    <strong>Edit Project</strong>
+
+
+                </div>
+
+
+            </div>
+
+
+        </header>
+
+
+        <div class="admin-content">
+
+
+            <a href="dashboard.html"
+               class="back-dashboard-btn">
+
+
+                <i class="fa-solid fa-arrow-left"></i>
+
+
+                Back to Dashboard
+
+
+            </a>
+
+
+            <form id="editProjectForm"
+                  class="project-form">
+
+
+                <!-- BASIC INFORMATION -->
+
+                <section class="form-section">
+
+
+                    <div class="form-section-heading">
+
+
+                        <div class="heading-icon">
+
+
+                            <i class="fa-solid fa-layer-group"></i>
+
+
+                        </div>
+
+
+                        <div>
+
+
+                            <h2>
+
+                                Project Information
+
+                            </h2>
+
+
+                            <p>
+
+                                Update the basic details of your project.
+
+                            </p>
+
+
+                        </div>
+
+
+                    </div>
+
+
+                    <div class="form-group">
+
+
+                        <label>
+
+                            Project Title <span>*</span>
+
+                        </label>
+
+
+                        <input type="text"
+                               id="projectTitle"
+                               required>
+
+
+                    </div>
+
+
+                    <div class="form-row">
+
+
+                        <div class="form-group">
+
+
+                            <label>
+
+                                Category <span>*</span>
+
+                            </label>
+
+
+                            <select id="projectCategory"
+                                    required>
+
+
+                                <option value="Web Design">
+
+                                    Web Design
+
+                                </option>
+
+
+                                <option value="Web Development">
+
+                                    Web Development
+
+                                </option>
+
+
+                                <option value="Graphic Design">
+
+                                    Graphic Design
+
+                                </option>
+
+
+                                <option value="Digital Marketing">
+
+                                    Digital Marketing
+
+                                </option>
+
+
+                                <option value="E-commerce">
+
+                                    E-commerce
+
+                                </option>
+
+
+                            </select>
+
+
+                        </div>
+
+
+                        <div class="form-group">
+
+
+                            <label>
+
+                                Status
+
+                            </label>
+
+
+                            <select id="projectStatus">
+
+
+                                <option value="published">
+
+                                    Published
+
+                                </option>
+
+
+                                <option value="draft">
+
+                                    Draft
+
+                                </option>
+
+
+                            </select>
+
+
+                        </div>
+
+
+                    </div>
+
+
+                    <div class="form-group">
+
+
+                        <label>
+
+                            Short Description
+
+                        </label>
+
+
+                        <textarea id="projectDescription"
+                                  rows="5"></textarea>
+
+
+                    </div>
+
+
+                </section>
+
+
+                <!-- PROJECT LINKS -->
+
+                <section class="form-section">
+
+
+                    <div class="form-section-heading">
+
+
+                        <div class="heading-icon">
+
+
+                            <i class="fa-solid fa-link"></i>
+
+
+                        </div>
+
+
+                        <div>
+
+
+                            <h2>
+
+                                Project Links
+
+                            </h2>
+
+
+                            <p>
+
+                                Add live project and source code links.
+
+                            </p>
+
+
+                        </div>
+
+
+                    </div>
+
+
+                    <div class="form-row">
+
+
+                        <div class="form-group">
+
+
+                            <label>
+
+                                Live Project URL
+
+                            </label>
+
+
+                            <input type="url"
+                                   id="projectUrl"
+                                   placeholder="https://example.com">
+
+
+                        </div>
+
+
+                        <div class="form-group">
+
+
+                            <label>
+
+                                Source Code URL
+
+                            </label>
+
+
+                            <input type="url"
+                                   id="projectGithub"
+                                   placeholder="https://github.com/...">
+
+
+                        </div>
+
+
+                    </div>
+
+
+                </section>
+
+
+                <!-- IMAGE -->
+
+                <section class="form-section">
+
+
+                    <div class="form-section-heading">
+
+
+                        <div class="heading-icon">
+
+
+                            <i class="fa-solid fa-image"></i>
+
+
+                        </div>
+
+
+                        <div>
+
+
+                            <h2>
+
+                                Project Image
+
+                            </h2>
+
+
+                            <p>
+
+                                Replace the project cover image.
+
+                            </p>
+
+
+                        </div>
+
+
+                    </div>
+
+
+                    <div id="currentImage"
+                         class="current-image-wrapper">
+
+
+                    </div>
+
+
+                    <div class="image-upload-box">
+
+
+                        <input type="file"
+                               id="projectImage"
+                               accept="image/*">
+
+
+                        <label for="projectImage">
+
+
+                            <i class="fa-solid fa-cloud-arrow-up"></i>
+
+
+                            <strong>
+
+                                Choose New Image
+
+                            </strong>
+
+
+                            <span>
+
+                                JPG, PNG or WEBP
+
+                            </span>
+
+
+                        </label>
+
+
+                    </div>
+
+
+                    <div id="imagePreview"
+                         class="image-preview">
+
+
+                    </div>
+
+
+                </section>
+
+
+                <!-- SETTINGS -->
+
+                <section class="form-section">
+
+
+                    <div class="form-section-heading">
+
+
+                        <div class="heading-icon">
+
+
+                            <i class="fa-solid fa-sliders"></i>
+
+
+                        </div>
+
+
+                        <div>
+
+
+                            <h2>
+
+                                Project Settings
+
+                            </h2>
+
+
+                            <p>
+
+                                Control project visibility.
+
+                            </p>
+
+
+                        </div>
+
+
+                    </div>
+
+
+                    <div class="settings-grid">
+
+
+                        <div class="setting-card">
+
+
+                            <div>
+
+
+                                <strong>
+
+                                    Featured Project
+
+                                </strong>
+
+
+                                <span>
+
+                                    Show this project prominently.
+
+                                </span>
+
+
+                            </div>
+
+
+                            <label class="switch">
+
+
+                                <input type="checkbox"
+                                       id="featuredProject">
+
+
+                                <span class="slider"></span>
+
+
+                            </label>
+
+
+                        </div>
+
+
+                        <div class="setting-card">
+
+
+                            <div>
+
+
+                                <strong>
+
+                                    Allow Comments
+
+                                </strong>
+
+
+                                <span>
+
+                                    Visitors can comment on project.
+
+                                </span>
+
+
+                            </div>
+
+
+                            <label class="switch">
+
+
+                                <input type="checkbox"
+                                       id="allowComments">
+
+
+                                <span class="slider"></span>
+
+
+                            </label>
+
+
+                        </div>
+
+
+                    </div>
+
+
+                </section>
+
+
+                <!-- ACTIONS -->
+
+                <div class="form-actions">
+
+
+                    <a href="dashboard.html"
+                       class="cancel-btn">
+
+
+                        Cancel
+
+
+                    </a>
+
+
+                    <button type="submit"
+                            class="update-project-btn">
+
+
+                        <i class="fa-solid fa-floppy-disk"></i>
+
+
+                        Update Project
+
+
+                    </button>
+
+
+                </div>
+
+
+            </form>
+
+
+            <!-- DELETE -->
+
+            <section class="danger-zone">
+
+
+                <div>
+
+
+                    <h3>
+
+                        Delete Project
+
+                    </h3>
+
+
+                    <p>
+
+                        This action cannot be undone.
+
+                    </p>
+
+
+                </div>
+
+
+                <button id="deleteProjectBtn"
+                        class="delete-project-btn">
+
+
+                    <i class="fa-solid fa-trash"></i>
+
+
+                    Delete Project
+
+
+                </button>
+
+
+            </section>
+
+
+        </div>
+
+
+    </main>
+
+
+</div>
+
+
+<div class="sidebar-overlay"
+     id="sidebarOverlay"></div>
+
+
+<div class="admin-toast"
+     id="adminToast">
+
+
+    <i class="fa-solid fa-circle-check"></i>
+
+
+    <span id="toastMessage"></span>
+
+
+</div>
+
+
+<script src="../assets/js/auth.js"></script>
+
+<script src="../assets/js/dashboard.js"></script>
+
+
+<script>
+
+
+const sidebar =
+    document.getElementById(
+        "adminSidebar"
+    );
+
+
+const sidebarToggle =
+    document.getElementById(
+        "sidebarToggle"
+    );
+
+
+const sidebarClose =
+    document.getElementById(
+        "sidebarClose"
+    );
+
+
+const sidebarOverlay =
+    document.getElementById(
+        "sidebarOverlay"
+    );
+
+
+sidebarToggle?.addEventListener(
+    "click",
+    () => {
+
+        sidebar.classList.add(
+            "show"
+        );
+
+        sidebarOverlay.classList.add(
+            "show"
+        );
+
+    }
+);
+
+
+function closeSidebar() {
+
+    sidebar.classList.remove(
+        "show"
+    );
+
+    sidebarOverlay.classList.remove(
+        "show"
+    );
+
+}
+
+
+sidebarClose?.addEventListener(
+    "click",
+    closeSidebar
+);
+
+
+sidebarOverlay?.addEventListener(
+    "click",
+    closeSidebar
+);
+
+
+document
+    .getElementById(
+        "logoutBtn"
+    )
+    ?.addEventListener(
+        "click",
+        function () {
+
+            localStorage.removeItem(
+                "adminLoggedIn"
+            );
+
+            sessionStorage.removeItem(
+                "adminLoggedIn"
+            );
+
+            window.location.href =
+                "login.html";
+
+        }
+    );
+
+
+</script>
+
+
+</body>
+
+</html>

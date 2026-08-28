@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | Jainal Abedin</title>
+    <link rel="preconnect"
+          href="[https://fonts.googleapis.com](https://fonts.googleapis.com)">
+    <link rel="preconnect"
+          href="[https://fonts.gstatic.com](https://fonts.gstatic.com)"
+          crossorigin>
+    <link href="[https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap](https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap)"
+          rel="stylesheet">
+    <link rel="stylesheet"
+          href="[https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css](https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css)">
+    <link rel="stylesheet"
+          href="../assets/css/style.css">
+    <link rel="stylesheet"
+          href="../assets/css/dashboard.css">
+<link rel="stylesheet" href="../assets/css/dashboard-polish.css">
+</head>
+<body>
+<div class="admin-app">
+    <!-- ================= SIDEBAR ================= -->
+    <aside class="admin-sidebar"
+           id="adminSidebar">
+        <div class="sidebar-brand">
+            <a href="../index.html"
+               class="brand-logo">
+                <span class="brand-logo-symbol">
+                    <i class="fa-solid fa-code"></i>
+                </span>
+                <span class="brand-logo-text">
+                    <strong>JAINAL ABEDIN</strong>
+                    <small>PORTFOLIO</small>
+                </span>
+            </a>
+            <button class="sidebar-close"
+                    id="sidebarClose">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+        <!-- USER -->
+        <div class="sidebar-user">
+            <div class="sidebar-avatar">
+                JA
+                <i class="fa-solid fa-circle"></i>
+            </div>
+            <div class="sidebar-user-info">
+                <strong>Jainal Abedin</strong>
+                <span>Administrator</span>
+            </div>
+        </div>
+        <!-- NAVIGATION -->
+        <nav class="admin-navigation">
+            <span class="nav-section-title">
+                WORKSPACE
+            </span>
+            <a href="dashboard.html"
+               class="admin-nav-link active">
+                <span class="nav-link-icon">
+                    <i class="fa-solid fa-grid-2"></i>
+                </span>
+                <span>Dashboard</span>
+            </a>
+            <a href="#recent-project"
+               class="admin-nav-link">
+                <span class="nav-link-icon">
+                    <i class="fa-solid fa-layer-group"></i>
+                </span>
+                <span>Projects</span>
+            </a>
+
+            <a href="add-project.html"
+               class="admin-nav-link">
+                <span class="nav-link-icon">
+                    <i class="fa-solid fa-square-plus"></i>
+                </span>
+                <span>Add Project</span>
+            </a>
+
+            <a href="templates.html"
+               class="admin-nav-link">
+                <span class="nav-link-icon">
+                    <i class="fa-solid fa-layer-group"></i>
+                </span>
+                <span>Templates</span>
+            </a>
+
+            <a href="add-template.html"
+               class="admin-nav-link">
+                <span class="nav-link-icon">
+                    <i class="fa-solid fa-square-plus"></i>
+                </span>
+                <span>Add Template</span>
+            </a>
+            <span class="nav-section-title">
+                PORTFOLIO
+            </span>
+            <a href="../assets/pages/about.html"
+               class="admin-nav-link">
+                <span class="nav-link-icon">
+                    <i class="fa-regular fa-user"></i>
+                </span>
+                <span>About</span>
+            </a>
+            <a href="../assets/pages/services.html"
+               class="admin-nav-link">
+                <span class="nav-link-icon">
+                    <i class="fa-solid fa-briefcase"></i>
+                </span>
+                <span>Services</span>
+            </a>
+            <a href="../assets/pages/companies.html"
+               class="admin-nav-link">
+                <span class="nav-link-icon">
+                    <i class="fa-solid fa-building"></i>
+                </span>
+                <span>Companies</span>
+            </a>
+            <a href="../assets/pages/skills.html"
+               class="admin-nav-link">
+                <span class="nav-link-icon">
+                    <i class="fa-solid fa-code"></i>
+                </span>
+                <span>Skills</span>
+            </a>
+            <span class="nav-section-title">
+                SYSTEM
+            </span>
+            <a href="../assets/pages/contact.html"
+               class="admin-nav-link">
+                <span class="nav-link-icon">
+                    <i class="fa-regular fa-envelope"></i>
+                </span>
+                <span>Messages</span>
+            </a>
+            <a href="../index.html"
+               target="_blank"
+               class="admin-nav-link">
+                <span class="nav-link-icon">
+                    <i class="fa-solid fa-globe"></i>
+                </span>
+                <span>View Website</span>
+            </a>
+        </nav>
+        <!-- FOOTER -->
+        <div class="sidebar-footer">
+            <div class="sidebar-status">
+                <span class="status-indicator"></span>
+                <span>System Online</span>
+            </div>
+            <button id="logoutBtn"
+                    class="sidebar-logout">
+                <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                Logout
+            </button>
+        </div>
+    </aside>
+    <!-- ================= MAIN ================= -->
+    <main class="admin-main">
+        <!-- TOPBAR -->
+        <header class="admin-topbar">
+            <div class="topbar-left">
+                <button id="sidebarToggle"
+                        class="sidebar-toggle">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+                <div class="breadcrumb">
+                    <span>Admin</span>
+                    <i class="fa-solid fa-chevron-right"></i>
+                    <strong>Dashboard</strong>
+                </div>
+            </div>
+            <div class="topbar-right">
+                <a href="../index.html"
+                   target="_blank"
+                   class="view-site-btn">
+                    <i class="fa-solid fa-globe"></i>
+                    View Site
+                </a>
+            </div>
+        </header>
+        <!-- CONTENT -->
+        <div class="admin-content">
+            <!-- WELCOME -->
+            <section class="dashboard-welcome">
+                <div>
+                    <span class="welcome-label">
+                        ADMIN WORKSPACE
+                    </span>
+                    <h2>
+                        Welcome back, Jainal 👋
+                    </h2>
+                    <p>
+                        Manage your portfolio, projects and website activity from one powerful workspace.
+                    </p>
+                </div>
+                <a href="add-project.html"
+                   class="add-project-btn">
+                    <i class="fa-solid fa-plus"></i>
+                    Add New Project
+                </a>
+            </section>
+            <!-- STATS -->
+            <section class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-card-top">
+                        <div class="stat-icon blue">
+                            <i class="fa-solid fa-layer-group"></i>
+                        </div>
+                        <span class="stat-label">
+                            Total Projects
+                        </span>
+                    </div>
+                    <div class="stat-value"
+                         id="totalProjects">
+                        0
+                    </div>
+                    <div class="stat-footer">
+                        Portfolio projects
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-card-top">
+                        <div class="stat-icon purple">
+                            <i class="fa-solid fa-eye"></i>
+                        </div>
+                        <span class="stat-label">
+                            Website Views
+                        </span>
+                    </div>
+                    <div class="stat-value"
+                         id="totalViews">
+                        0
+                    </div>
+                    <div class="stat-footer">
+                        All-time views
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-card-top">
+                        <div class="stat-icon green">
+                            <i class="fa-solid fa-users"></i>
+                        </div>
+                        <span class="stat-label">
+                            Subscribers
+                        </span>
+                    </div>
+                    <div class="stat-value"
+                         id="totalSubscribers">
+                        0
+                    </div>
+                    <div class="stat-footer">
+                        Newsletter audience
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-card-top">
+                        <div class="stat-icon orange">
+                            <i class="fa-solid fa-envelope"></i>
+                        </div>
+                        <span class="stat-label">
+                            Messages
+                        </span>
+                    </div>
+                    <div class="stat-value"
+                         id="totalMessages">
+                        0
+                    </div>
+                    <div class="stat-footer">
+                        Contact messages
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-card-top">
+                        <div class="stat-icon cyan">
+                            <i class="fa-solid fa-comments"></i>
+                        </div>
+                        <span class="stat-label">
+                            Comments
+                        </span>
+                    </div>
+                    <div class="stat-value"
+                         id="totalComments">
+                        0
+                    </div>
+                    <div class="stat-footer">
+                        Project comments
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-card-top">
+                        <div class="stat-icon red">
+                            <i class="fa-solid fa-circle-check"></i>
+                        </div>
+                        <span class="stat-label">
+                            Published
+                        </span>
+                    </div>
+                    <div class="stat-value"
+                         id="publishedProjects">
+                        0
+                    </div>
+                    <div class="stat-footer">
+                        Live projects
+                    </div>
+                </div>
+            </section>
+            <!-- ANALYTICS -->
+            <section class="dashboard-grid">
+                <div class="dashboard-panel">
+                    <div class="panel-header">
+                        <div>
+                            <h3>
+                                Website Analytics
+                            </h3>
+                            <p>
+                                Portfolio performance overview
+                            </p>
+                        </div>
+                        <select>
+                            <option>Last 7 days</option>
+                            <option>Last 30 days</option>
+                            <option>Last 90 days</option>
+                        </select>
+                    </div>
+                    <div class="analytics-chart">
+                        <div class="chart-placeholder">
+                            <i class="fa-solid fa-chart-line"></i>
+                            <span>
+                                Analytics will appear here
+                            </span>
+                            <small>
+                                Connect backend analytics later
+                            </small>
+                        </div>
+                    </div>
+                </div>
+                <!-- QUICK ACTIONS -->
+                <div class="dashboard-panel">
+                    <div class="panel-header">
+                        <div>
+                            <h3>
+                                Quick Actions
+                            </h3>
+                            <p>
+                                Manage your portfolio
+                            </p>
+                        </div>
+                    </div>
+                    <div class="quick-actions">
+                        <a href="add-project.html"
+                           class="quick-action">
+                            <span class="quick-action-icon blue">
+                                <i class="fa-solid fa-plus"></i>
+                            </span>
+                            <span>
+                                <strong>
+                                    Add New Project
+                                </strong>
+                                <small>
+                                    Create a new project
+                                </small>
+                            </span>
+                            <i class="fa-solid fa-chevron-right"></i>
+                        </a>
+                        <a href="../assets/pages/projects.html"
+                           class="quick-action">
+                            <span class="quick-action-icon purple">
+                                <i class="fa-solid fa-eye"></i>
+                            </span>
+                            <span>
+                                <strong>
+                                    View Projects
+                                </strong>
+                                <small>
+                                    Browse public projects
+                                </small>
+                            </span>
+                            <i class="fa-solid fa-chevron-right"></i>
+                        </a>
+                        <a href="../assets/pages/contact.html"
+                           class="quick-action">
+                            <span class="quick-action-icon orange">
+                                <i class="fa-solid fa-envelope"></i>
+                            </span>
+                            <span>
+                                <strong>
+                                    Check Messages
+                                </strong>
+                                <small>
+                                    Review visitor messages
+                                </small>
+                            </span>
+                            <i class="fa-solid fa-chevron-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </section>
+            <!-- PROJECT TABLE -->
+            <section class="dashboard-panel projects-panel" id="recent-project">
+                <div class="panel-header">
+                    <div>
+                        <h3>
+                            Recent Projects
+                        </h3>
+                        <p>
+                            Manage your latest portfolio work
+                        </p>
+                    </div>
+                    <a href="../assets/pages/projects.html"
+                       class="panel-action-btn">
+                        View All
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                </div>
+                <div class="projects-table-wrapper">
+                    <table class="projects-table">
+                        <thead>
+                            <tr>
+                                <th>Project</th>
+                                <th>Category</th>
+                                <th>Status</th>
+                                <th>Views</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="projectsTableBody"></tbody>
+                    </table>
+                </div>
+                <div class="empty-projects"
+                     id="emptyProjects">
+                    <i class="fa-solid fa-folder-open"></i>
+                    <strong>
+                        No projects yet
+                    </strong>
+                    <span>
+                        Add your first portfolio project.
+                    </span>
+                    <a href="add-project.html">
+                        Add Project →
+                    </a>
+                </div>
+            </section>
+            <!-- ACTIVITY -->
+            <section class="dashboard-panel activity-panel">
+                <div class="panel-header">
+                    <div>
+                        <h3>
+                            Recent Activity
+                        </h3>
+                        <p>
+                            Latest portfolio activities
+                        </p>
+                    </div>
+                </div>
+                <div class="activity-list"
+                     id="activityList">
+                    <div class="empty-activity">
+                        <i class="fa-regular fa-clock"></i>
+                        No recent activity yet
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+</div>
+<div class="sidebar-overlay"
+     id="sidebarOverlay"></div>
+<div class="admin-toast"
+     id="adminToast">
+    <i class="fa-solid fa-circle-check"></i>
+    <span id="toastMessage"></span>
+</div>
+<script src="../assets/js/auth.js"></script>
+<script src="../assets/js/dashboard.js"></script>
+<script>
+const sidebar =
+    document.getElementById(
+        "adminSidebar"
+    );
+const sidebarToggle =
+    document.getElementById(
+        "sidebarToggle"
+    );
+const sidebarClose =
+    document.getElementById(
+        "sidebarClose"
+    );
+const sidebarOverlay =
+    document.getElementById(
+        "sidebarOverlay"
+    );
+sidebarToggle?.addEventListener(
+    "click",
+    () => {
+        sidebar.classList.add(
+            "show"
+        );
+        sidebarOverlay.classList.add(
+            "show"
+        );
+    }
+);
+function closeSidebar() {
+    sidebar.classList.remove(
+        "show"
+    );
+    sidebarOverlay.classList.remove(
+        "show"
+    );
+}
+sidebarClose?.addEventListener(
+    "click",
+    closeSidebar
+);
+sidebarOverlay?.addEventListener(
+    "click",
+    closeSidebar
+);
+document
+    .getElementById(
+        "logoutBtn"
+    )
+    ?.addEventListener(
+        "click",
+        function () {
+            localStorage.removeItem(
+                "adminLoggedIn"
+            );
+            sessionStorage.removeItem(
+                "adminLoggedIn"
+            );
+            window.location.href =
+                "login.html";
+        }
+    );
+</script>
+</body>
+</html>

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Templates | Jainal Abedin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="../assets/css/dashboard.css">
+    <link rel="stylesheet" href="../assets/css/templates-admin.css">
+</head>
+<body>
+<div class="admin-app">
+    <aside class="admin-sidebar" id="adminSidebar">
+        <div class="sidebar-brand">
+            <a href="../index.html" class="brand-logo">
+                <span class="brand-logo-symbol"><i class="fa-solid fa-code"></i></span>
+                <span class="brand-logo-text"><strong>JAINAL ABEDIN</strong><small>PORTFOLIO</small></span>
+            </a>
+            <button class="sidebar-close" id="sidebarClose" type="button" aria-label="Close menu"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="sidebar-user">
+            <div class="sidebar-avatar">JA<i class="fa-solid fa-circle"></i></div>
+            <div class="sidebar-user-info"><strong>Jainal Abedin</strong><span>Administrator</span></div>
+        </div>
+        <nav class="admin-navigation">
+            <span class="nav-section-title">WORKSPACE</span>
+            <a href="dashboard.html" class="admin-nav-link"><span class="nav-link-icon"><i class="fa-solid fa-grid-2"></i></span><span>Dashboard</span></a>
+            <a href="#" class="admin-nav-link"><span class="nav-link-icon"><i class="fa-solid fa-layer-group"></i></span><span>Projects</span></a>
+            <a href="add-project.html" class="admin-nav-link"><span class="nav-link-icon"><i class="fa-solid fa-square-plus"></i></span><span>Add Project</span></a>
+            <a href="templates.html" class="admin-nav-link active"><span class="nav-link-icon"><i class="fa-solid fa-table-cells-large"></i></span><span>Templates</span></a>
+            <a href="add-template.html" class="admin-nav-link"><span class="nav-link-icon"><i class="fa-solid fa-square-plus"></i></span><span>Add Template</span></a>
+            <span class="nav-section-title">PORTFOLIO</span>
+            <a href="../assets/pages/about.html" class="admin-nav-link"><span class="nav-link-icon"><i class="fa-regular fa-user"></i></span><span>About</span></a>
+            <a href="../assets/pages/services.html" class="admin-nav-link"><span class="nav-link-icon"><i class="fa-solid fa-briefcase"></i></span><span>Services</span></a>
+            <a href="../assets/pages/companies.html" class="admin-nav-link"><span class="nav-link-icon"><i class="fa-solid fa-building"></i></span><span>Companies</span></a>
+            <a href="../assets/pages/skills.html" class="admin-nav-link"><span class="nav-link-icon"><i class="fa-solid fa-code"></i></span><span>Skills</span></a>
+            <span class="nav-section-title">SYSTEM</span>
+            <a href="../assets/pages/contact.html" class="admin-nav-link"><span class="nav-link-icon"><i class="fa-regular fa-envelope"></i></span><span>Messages</span></a>
+            <a href="../index.html" target="_blank" class="admin-nav-link"><span class="nav-link-icon"><i class="fa-solid fa-globe"></i></span><span>View Website</span></a>
+        </nav>
+        <div class="sidebar-footer"><div class="sidebar-status"><span class="status-indicator"></span><span>System Online</span></div><button id="logoutBtn" class="sidebar-logout" type="button"><i class="fa-solid fa-arrow-right-from-bracket"></i> Logout</button></div>
+    </aside>
+
+    <main class="admin-main">
+        <header class="admin-topbar">
+            <div class="topbar-left"><button id="sidebarToggle" class="sidebar-toggle" type="button" aria-label="Open menu"><i class="fa-solid fa-bars"></i></button><div class="breadcrumb"><span>Admin</span><i class="fa-solid fa-chevron-right"></i><strong>Templates</strong></div></div>
+            <div class="topbar-right"><a href="../assets/pages/templates.html" target="_blank" class="view-site-btn"><i class="fa-solid fa-globe"></i> View Templates</a></div>
+        </header>
+
+        <div class="admin-content templates-admin-content">
+            <section class="templates-hero">
+                <div><span class="templates-eyebrow"><i class="fa-solid fa-cubes"></i> TEMPLATE LIBRARY</span><h1>Manage your <span>templates</span></h1><p>Create, review and organize every template shown on your public portfolio.</p></div>
+                <a class="add-template-btn" href="add-template.html"><i class="fa-solid fa-plus"></i> Add Template</a>
+            </section>
+
+            <section class="template-stats" aria-label="Template statistics">
+                <div class="template-stat"><span class="template-stat-icon blue"><i class="fa-solid fa-table-cells-large"></i></span><div><small>Total templates</small><strong id="totalTemplates">0</strong></div></div>
+                <div class="template-stat"><span class="template-stat-icon green"><i class="fa-solid fa-circle-check"></i></span><div><small>Published</small><strong id="publishedTemplates">0</strong></div></div>
+                <div class="template-stat"><span class="template-stat-icon amber"><i class="fa-solid fa-pen-to-square"></i></span><div><small>Drafts</small><strong id="draftTemplates">0</strong></div></div>
+            </section>
+
+            <section class="templates-panel">
+                <div class="templates-panel-header"><div><h2>All Templates</h2><p id="resultText">Your saved template collection</p></div><button id="clearFilters" class="clear-filter-btn" type="button"><i class="fa-solid fa-filter-circle-xmark"></i> Clear filters</button></div>
+                <div class="template-filters">
+                    <label class="template-search"><i class="fa-solid fa-magnifying-glass"></i><input id="templateSearch" type="search" placeholder="Search templates…" autocomplete="off"></label>
+                    <label><span class="sr-only">Category</span><select id="categoryFilter"><option value="">All categories</option></select></label>
+                    <label><span class="sr-only">Status</span><select id="statusFilter"><option value="">All statuses</option><option value="published">Published</option><option value="draft">Draft</option></select></label>
+                </div>
+                <div id="templatesGrid" class="templates-grid" aria-live="polite"></div>
+                <div id="emptyTemplates" class="templates-empty" hidden><div class="empty-icon"><i class="fa-solid fa-cubes"></i></div><h3>No templates found</h3><p id="emptyMessage">Add your first template to start building your collection.</p><a href="add-template.html"><i class="fa-solid fa-plus"></i> Add Template</a></div>
+            </section>
+        </div>
+    </main>
+</div>
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+<div class="admin-toast" id="adminToast" role="status"><i class="fa-solid fa-circle-check"></i><span id="toastMessage"></span></div>
+<div class="template-modal" id="previewModal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="previewTitle"><div class="template-modal-backdrop" data-close-modal></div><div class="template-modal-dialog"><button class="modal-close" type="button" data-close-modal aria-label="Close preview"><i class="fa-solid fa-xmark"></i></button><div id="previewContent"></div></div></div>
+<script src="../assets/js/auth.js"></script>
+<script src="../assets/js/templates-admin.js"></script>
+</body>
+</html>
