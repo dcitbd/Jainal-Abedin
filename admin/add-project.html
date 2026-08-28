@@ -1,0 +1,1250 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Create Project | Jainal Abedin</title>
+
+    <meta name="description"
+          content="Create a new portfolio project">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <!-- Main CSS -->
+    <link rel="stylesheet"
+          href="../assets/css/style.css">
+
+    <!-- Dashboard CSS -->
+    <link rel="stylesheet"
+          href="../assets/css/dashboard.css">
+
+</head>
+
+
+<body class="admin-page">
+
+
+<div class="admin-layout">
+
+
+    <!-- =================================================
+         SIDEBAR
+    ================================================= -->
+
+    <aside class="admin-sidebar">
+
+
+        <div class="sidebar-brand">
+
+            <div class="brand-symbol">
+                JA
+            </div>
+
+
+            <div class="brand-content">
+
+                <strong>
+                    JAINAL
+                </strong>
+
+                <span>
+                    CREATIVE ADMIN
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <div class="sidebar-section-label">
+
+            WORKSPACE
+
+        </div>
+
+
+        <nav class="sidebar-navigation">
+
+
+            <a href="dashboard.html"
+               class="sidebar-navigation-link">
+
+                <span class="navigation-icon">
+
+                    <i class="fa-solid fa-chart-pie"></i>
+
+                </span>
+
+                <span>
+                    Overview
+                </span>
+
+            </a>
+
+
+            <a href="dashboard.html#recent-project"
+               class="sidebar-navigation-link">
+
+                <span class="navigation-icon">
+
+                    <i class="fa-solid fa-cubes"></i>
+
+                </span>
+
+                <span>
+                    Projects
+                </span>
+
+            </a>
+
+
+            <a href="add-project.html"
+               class="sidebar-navigation-link active">
+
+                <span class="navigation-icon">
+
+                    <i class="fa-solid fa-plus"></i>
+
+                </span>
+
+                <span>
+                    New Project
+                </span>
+
+            </a>
+
+
+        </nav>
+
+
+        <div class="sidebar-section-label">
+
+            SYSTEM
+
+        </div>
+
+
+        <nav class="sidebar-navigation">
+
+
+            <a href="../index.html"
+               target="_blank"
+               class="sidebar-navigation-link">
+
+                <span class="navigation-icon">
+
+                    <i class="fa-solid fa-arrow-up-right-from-square"></i>
+
+                </span>
+
+                <span>
+                    Live Website
+                </span>
+
+            </a>
+
+
+        </nav>
+
+
+        <div class="sidebar-footer">
+
+
+            <div class="sidebar-user">
+
+
+                <div class="sidebar-user-avatar">
+                    JA
+                </div>
+
+
+                <div class="sidebar-user-info">
+
+                    <strong>
+                        Jainal Abedin
+                    </strong>
+
+                    <span>
+                        Administrator
+                    </span>
+
+                </div>
+
+
+                <button id="logoutBtn"
+                        class="sidebar-logout-btn"
+                        title="Logout">
+
+                    <i class="fa-solid fa-right-from-bracket"></i>
+
+                </button>
+
+
+            </div>
+
+
+        </div>
+
+
+    </aside>
+
+
+    <!-- =================================================
+         MAIN CONTENT
+    ================================================= -->
+
+    <main class="admin-main">
+
+
+        <!-- ================= TOPBAR ================= -->
+
+        <header class="admin-topbar">
+
+
+            <div class="topbar-left">
+
+
+                <button id="mobileMenuBtn"
+                        class="mobile-menu-btn">
+
+                    <i class="fa-solid fa-bars"></i>
+
+                </button>
+
+
+                <div class="breadcrumb">
+
+                    <span>
+                        Workspace
+                    </span>
+
+                    <i class="fa-solid fa-chevron-right"></i>
+
+                    <strong>
+                        New Project
+                    </strong>
+
+                </div>
+
+
+            </div>
+
+
+            <div class="topbar-right">
+
+
+                <div class="system-status">
+
+                    <span class="system-status-dot"></span>
+
+                    System Online
+
+                </div>
+
+
+                <div class="topbar-avatar">
+
+                    JA
+
+                </div>
+
+
+            </div>
+
+
+        </header>
+
+
+        <!-- ================= PAGE CONTENT ================= -->
+
+        <div class="admin-content">
+
+
+            <!-- ================= HERO ================= -->
+
+            <section class="project-create-hero">
+
+
+                <div class="hero-content">
+
+
+                    <div class="hero-eyebrow">
+
+                        <span class="hero-eyebrow-line"></span>
+
+                        PROJECT BUILDER
+
+                    </div>
+
+
+                    <h1>
+
+                        Create something
+
+                        <span>
+                            remarkable.
+                        </span>
+
+                    </h1>
+
+
+                    <p>
+
+                        Add your completed work to your portfolio
+                        and let your projects speak for your skills.
+
+                    </p>
+
+
+                </div>
+
+
+                <div class="hero-decoration">
+
+
+                    <div class="code-window">
+
+
+                        <div class="code-window-header">
+
+                            <span></span>
+
+                            <span></span>
+
+                            <span></span>
+
+                        </div>
+
+
+                        <div class="code-content">
+
+                            <span class="code-purple">
+                                const
+                            </span>
+
+                            <span class="code-blue">
+                                project
+                            </span>
+
+                            <span>
+                                =
+                            </span>
+
+                            <span>
+                                {
+                            </span>
+
+
+                            <br>
+
+
+                            <span class="code-indent">
+
+                                title:
+
+                                <span class="code-green">
+                                    "Your Project"
+                                </span>
+
+                            </span>
+
+
+                            <br>
+
+
+                            <span class="code-indent">
+
+                                status:
+
+                                <span class="code-green">
+                                    "published"
+                                </span>
+
+                            </span>
+
+
+                            <br>
+
+
+                            <span>
+                                };
+                            </span>
+
+
+                        </div>
+
+
+                    </div>
+
+
+                </div>
+
+
+            </section>
+
+
+            <!-- ================= FORM LAYOUT ================= -->
+
+            <div class="project-builder-layout">
+
+
+                <!-- ================= FORM ================= -->
+
+                <form id="addProjectForm"
+                      class="project-builder-form">
+
+
+                    <!-- BASIC INFO -->
+
+                    <section class="builder-card">
+
+
+                        <div class="builder-card-header">
+
+
+                            <div class="builder-card-number">
+                                01
+                            </div>
+
+
+                            <div>
+
+                                <h2>
+                                    Project Identity
+                                </h2>
+
+                                <p>
+                                    Give your project a clear identity.
+                                </p>
+
+                            </div>
+
+
+                        </div>
+
+
+                        <div class="builder-form-group">
+
+
+                            <label for="projectTitle">
+
+                                Project Title
+
+                                <span>
+                                    *
+                                </span>
+
+                            </label>
+
+
+                            <input type="text"
+                                   id="projectTitle"
+                                   placeholder="e.g. Dream Cart BD"
+                                   required>
+
+
+                        </div>
+
+
+                        <div class="builder-form-grid">
+
+
+                            <div class="builder-form-group">
+
+
+                                <label for="projectCategory">
+
+                                    Category
+
+                                    <span>
+                                        *
+                                    </span>
+
+                                </label>
+
+
+                                <select id="projectCategory"
+                                        required>
+
+                                    <option value="">
+                                        Select category
+                                    </option>
+
+                                    <option>
+                                        Web Design
+                                    </option>
+
+                                    <option>
+                                        E-commerce
+                                    </option>
+
+                                    <option>
+                                        Graphic Design
+                                    </option>
+
+                                    <option>
+                                        Digital Marketing
+                                    </option>
+
+                                    <option>
+                                        Branding
+                                    </option>
+
+                                    <option>
+                                        Software
+                                    </option>
+
+                                    <option>
+                                        Other
+                                    </option>
+
+                                </select>
+
+
+                            </div>
+
+
+                            <div class="builder-form-group">
+
+
+                                <label for="projectStatus">
+
+                                    Project Status
+
+                                </label>
+
+
+                                <select id="projectStatus">
+
+                                    <option value="published">
+                                        Published
+                                    </option>
+
+                                    <option value="draft">
+                                        Draft
+                                    </option>
+
+                                </select>
+
+
+                            </div>
+
+
+                        </div>
+
+
+                        <div class="builder-form-group">
+
+
+                            <label for="shortDescription">
+
+                                Short Description
+
+                                <span>
+                                    *
+                                </span>
+
+                            </label>
+
+
+                            <textarea id="shortDescription"
+                                      rows="3"
+                                      maxlength="250"
+                                      placeholder="A short description that appears on your project card..."
+                                      required></textarea>
+
+
+                            <div class="character-counter">
+
+                                <span id="shortDescriptionCount">
+                                    0
+                                </span>
+
+                                / 250
+
+                            </div>
+
+
+                        </div>
+
+
+                    </section>
+
+
+                    <!-- DESCRIPTION -->
+
+                    <section class="builder-card">
+
+
+                        <div class="builder-card-header">
+
+
+                            <div class="builder-card-number">
+                                02
+                            </div>
+
+
+                            <div>
+
+                                <h2>
+                                    Project Story
+                                </h2>
+
+                                <p>
+                                    Tell visitors about your work.
+                                </p>
+
+                            </div>
+
+
+                        </div>
+
+
+                        <div class="builder-form-group">
+
+
+                            <label for="projectDescription">
+
+                                Full Description
+
+                                <span>
+                                    *
+                                </span>
+
+                            </label>
+
+
+                            <textarea id="projectDescription"
+                                      rows="9"
+                                      placeholder="Describe the project, your role, challenges, solutions and final result..."
+                                      required></textarea>
+
+
+                        </div>
+
+
+                    </section>
+
+
+<!---------------- IMAGE --------------->
+
+<section class="builder-card">
+
+    <div class="builder-card-header">
+
+        <div class="builder-card-number">
+            03
+        </div>
+
+        <div>
+
+            <h2>
+                Visual Identity
+            </h2>
+
+            <p>
+                Add project gallery images.
+            </p>
+
+        </div>
+
+    </div>
+
+    <div
+        id="imageUploadArea"
+        class="modern-upload-area"
+    >
+
+        <input
+            type="file"
+            id="projectImage"
+            accept="image/*"
+            multiple
+        >
+
+        <div class="upload-icon">
+
+            <i class="fa-solid fa-cloud-arrow-up"></i>
+
+        </div>
+
+        <h3>
+
+            Drop your images here
+
+        </h3>
+
+        <p>
+
+            or click to browse
+
+        </p>
+
+        <small>
+
+            JPG, PNG, WEBP • You can select multiple images
+
+        </small>
+
+    </div>
+
+    <!-- Image Preview -->
+
+    <div
+        id="imagePreview"
+        class="modern-image-preview"
+    ></div>
+
+</section>
+
+                    <!-- TECH STACK -->
+
+                    <section class="builder-card">
+
+
+                        <div class="builder-card-header">
+
+
+                            <div class="builder-card-number">
+                                04
+                            </div>
+
+
+                            <div>
+
+                                <h2>
+                                    Tech Stack
+                                </h2>
+
+                                <p>
+                                    What technologies powered this project?
+                                </p>
+
+                            </div>
+
+
+                        </div>
+
+
+                        <div class="builder-form-group">
+
+
+                            <label for="technologies">
+
+                                Technologies
+
+                            </label>
+
+
+                            <input type="text"
+                                   id="technologies"
+                                   placeholder="Type a technology and press Enter">
+
+
+                            <div id="technologyTags"
+                                 class="technology-tags">
+
+
+                            </div>
+
+
+                            <small class="field-hint">
+
+                                Press Enter after each technology.
+
+                            </small>
+
+
+                        </div>
+
+
+                    </section>
+
+
+                    <!-- FEATURES -->
+
+                    <section class="builder-card">
+
+
+                        <div class="builder-card-header">
+
+
+                            <div class="builder-card-number">
+                                05
+                            </div>
+
+
+                            <div>
+
+                                <h2>
+                                    Key Features
+                                </h2>
+
+                                <p>
+                                    Highlight the strongest parts of your project.
+                                </p>
+
+                            </div>
+
+
+                        </div>
+
+
+                        <div class="builder-form-group">
+
+
+                            <label for="features">
+
+                                Features
+
+                            </label>
+
+
+                            <textarea id="features"
+                                      rows="6"
+                                      placeholder="Responsive design&#10;Modern user interface&#10;Fast performance&#10;Secure authentication"></textarea>
+
+
+                            <small class="field-hint">
+
+                                Write one feature per line.
+
+                            </small>
+
+
+                        </div>
+
+
+                    </section>
+
+
+                    <!-- LINKS -->
+
+                    <section class="builder-card">
+
+
+                        <div class="builder-card-header">
+
+
+                            <div class="builder-card-number">
+                                06
+                            </div>
+
+
+                            <div>
+
+                                <h2>
+                                    Project Links
+                                </h2>
+
+                                <p>
+                                    Connect visitors with the live project.
+                                </p>
+
+                            </div>
+
+
+                        </div>
+
+
+                        <div class="builder-form-grid">
+
+
+                            <div class="builder-form-group">
+
+
+                                <label for="liveUrl">
+
+                                    Live Project
+
+                                </label>
+
+
+                                <div class="input-with-icon">
+
+                                    <i class="fa-solid fa-globe"></i>
+
+
+                                    <input type="url"
+                                           id="liveUrl"
+                                           placeholder="https://example.com">
+
+                                </div>
+
+
+                            </div>
+
+
+                            <div class="builder-form-group">
+
+
+                                <label for="githubUrl">
+
+                                    Source Code
+
+                                </label>
+
+
+                                <div class="input-with-icon">
+
+                                    <i class="fa-brands fa-github"></i>
+
+
+                                    <input type="url"
+                                           id="githubUrl"
+                                           placeholder="https://github.com/...">
+
+                                </div>
+
+
+                            </div>
+
+
+                        </div>
+
+
+                    </section>
+
+
+                    <!-- SETTINGS -->
+
+                    <section class="builder-card">
+
+
+                        <div class="builder-card-header">
+
+
+                            <div class="builder-card-number">
+                                07
+                            </div>
+
+
+                            <div>
+
+                                <h2>
+                                    Visibility & Engagement
+                                </h2>
+
+                                <p>
+                                    Control how visitors interact with your project.
+                                </p>
+
+                            </div>
+
+
+                        </div>
+
+
+                        <div class="modern-settings">
+
+
+                            <label class="modern-setting">
+
+
+                                <span class="setting-icon">
+
+                                    <i class="fa-solid fa-eye"></i>
+
+                                </span>
+
+
+                                <span class="setting-copy">
+
+                                    <strong>
+                                        Show on portfolio
+                                    </strong>
+
+                                    <small>
+                                        Make this project visible publicly.
+                                    </small>
+
+                                </span>
+
+
+                                <span class="modern-switch">
+
+                                    <input type="checkbox"
+                                           id="showPortfolio"
+                                           checked>
+
+                                    <span></span>
+
+                                </span>
+
+
+                            </label>
+
+
+                            <label class="modern-setting">
+
+
+                                <span class="setting-icon">
+
+                                    <i class="fa-regular fa-comments"></i>
+
+                                </span>
+
+
+                                <span class="setting-copy">
+
+                                    <strong>
+                                        Allow comments
+                                    </strong>
+
+                                    <small>
+                                        Let visitors share their thoughts.
+                                    </small>
+
+                                </span>
+
+
+                                <span class="modern-switch">
+
+                                    <input type="checkbox"
+                                           id="allowComments"
+                                           checked>
+
+                                    <span></span>
+
+                                </span>
+
+
+                            </label>
+
+
+                        </div>
+
+
+                    </section>
+
+
+                    <!-- ACTIONS -->
+
+                    <div class="builder-actions">
+
+
+                        <a href="dashboard.html"
+                           class="builder-cancel-btn">
+
+                            Cancel
+
+                        </a>
+
+
+                        <button type="submit"
+                                id="saveProjectBtn"
+                                class="builder-submit-btn">
+
+
+                            <i class="fa-solid fa-rocket"></i>
+
+
+                            <span>
+                                Publish Project
+                            </span>
+
+
+                        </button>
+
+
+                    </div>
+
+
+                </form>
+
+
+                <!-- ================= LIVE PREVIEW ================= -->
+
+                <aside class="project-live-preview">
+
+
+                    <div class="preview-sticky">
+
+
+                        <div class="preview-heading">
+
+
+                            <span>
+                                LIVE PREVIEW
+                            </span>
+
+
+                            <span class="preview-live-dot">
+
+                                <i></i>
+
+                                LIVE
+
+                            </span>
+
+
+                        </div>
+
+
+                        <div class="preview-card">
+
+
+                            <div class="preview-card-image">
+
+
+                                <img id="previewCardImage"
+                                     src=""
+                                     alt="Project Preview">
+
+
+                                <div id="previewImagePlaceholder"
+                                     class="preview-image-placeholder">
+
+
+                                    <i class="fa-solid fa-image"></i>
+
+                                    <span>
+                                        Your cover image
+                                    </span>
+
+
+                                </div>
+
+
+                                <span id="previewCategory"
+                                      class="preview-category">
+
+                                    CATEGORY
+
+                                </span>
+
+
+                            </div>
+
+
+                            <div class="preview-card-body">
+
+
+                                <span class="preview-project-number">
+
+                                    PROJECT / 001
+
+                                </span>
+
+
+                                <h3 id="previewTitle">
+
+                                    Your Project Title
+
+                                </h3>
+
+
+                                <p id="previewDescription">
+
+                                    Your project short description
+                                    will appear here.
+
+                                </p>
+
+
+                                <div id="previewTechStack"
+                                     class="preview-tech-stack">
+
+
+                                    <span>
+                                        HTML
+                                    </span>
+
+                                    <span>
+                                        CSS
+                                    </span>
+
+                                    <span>
+                                        JS
+                                    </span>
+
+
+                                </div>
+
+
+                                <div class="preview-card-footer">
+
+
+                                    <span>
+                                        View Details
+                                    </span>
+
+
+                                    <i class="fa-solid fa-arrow-up-right-from-square"></i>
+
+                                </div>
+
+
+                            </div>
+
+
+                        </div>
+
+
+                        <div class="preview-tip">
+
+
+                            <i class="fa-solid fa-lightbulb"></i>
+
+
+                            <p>
+
+                                This preview updates automatically
+                                as you fill in the form.
+
+                            </p>
+
+
+                        </div>
+
+
+                    </div>
+
+
+                </aside>
+
+
+            </div>
+
+
+        </div>
+
+
+    </main>
+
+
+</div>
+
+
+<!-- TOAST -->
+
+<div id="adminToast"
+     class="admin-toast">
+
+
+    <i class="fa-solid fa-circle-check"></i>
+
+
+    <span>
+        Project saved successfully.
+    </span>
+
+
+</div>
+
+
+<script src="../assets/js/auth.js"></script>
+
+<script src="../assets/js/dashboard.js"></script>
+
+
+</body>
+
+</html>
