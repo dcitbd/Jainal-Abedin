@@ -1,0 +1,1874 @@
+/* =====================================================
+   RESET
+===================================================== */
+
+* {
+
+    margin: 0;
+
+    padding: 0;
+
+    box-sizing: border-box;
+
+}
+
+
+:root {
+
+    --ja-bg: #07111f;
+
+    --ja-bg-deep: #040a13;
+
+    --ja-card: #0b1727;
+
+    --ja-card-light: #101f32;
+
+    --ja-border: rgba(255,255,255,0.09);
+
+    --ja-text: #f5f7fa;
+
+    --ja-muted: #8c9aae;
+
+    --ja-primary: #00e5ff;
+
+    --ja-secondary: #7c3cff;
+
+    --ja-green: #00ffb3;
+
+    --ja-radius: 18px;
+
+    --ja-transition: 0.35s ease;
+
+}
+
+
+html {
+
+    scroll-behavior: smooth;
+
+}
+
+
+body {
+
+    font-family: "Inter", sans-serif;
+
+    background: var(--ja-bg);
+
+    color: var(--ja-text);
+
+    line-height: 1.6;
+
+}
+
+
+a {
+
+    text-decoration: none;
+
+    color: inherit;
+
+}
+
+
+button,
+input {
+
+    font-family: inherit;
+
+}
+
+
+/* =====================================================
+   LOADER
+===================================================== */
+
+.ja-skills-loader {
+
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 9999;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background: var(--ja-bg-deep);
+
+    transition: opacity 0.6s ease,
+                visibility 0.6s ease;
+
+}
+
+
+.ja-skills-loader.hide {
+
+    opacity: 0;
+
+    visibility: hidden;
+
+}
+
+
+.ja-skills-loader-inner {
+
+    text-align: center;
+
+}
+
+
+.ja-skills-loader-image {
+
+    width: 95px;
+
+    height: 95px;
+
+    margin: auto;
+
+    padding: 5px;
+
+    border: 2px solid var(--ja-primary);
+
+    border-radius: 50%;
+
+    box-shadow:
+
+        0 0 20px rgba(0,229,255,0.35),
+
+        0 0 60px rgba(124,60,255,0.25);
+
+    animation: jaLoaderPulse 2s infinite;
+
+}
+
+
+.ja-skills-loader-image img {
+
+    width: 100%;
+
+    height: 100%;
+
+    object-fit: cover;
+
+    border-radius: 50%;
+
+}
+
+
+.ja-skills-loader-name {
+
+    margin-top: 20px;
+
+    font-family: "Space Grotesk", sans-serif;
+
+    font-size: 18px;
+
+    font-weight: 800;
+
+    letter-spacing: 4px;
+
+}
+
+
+.ja-skills-loader-line {
+
+    width: 220px;
+
+    height: 3px;
+
+    margin: 18px auto 12px;
+
+    overflow: hidden;
+
+    background: rgba(255,255,255,0.1);
+
+}
+
+
+.ja-skills-loader-line span {
+
+    display: block;
+
+    width: 40%;
+
+    height: 100%;
+
+    background: var(--ja-primary);
+
+    animation: jaLoaderLine 1.5s infinite;
+
+}
+
+
+.ja-skills-loader-inner p {
+
+    color: var(--ja-muted);
+
+    font-size: 12px;
+
+}
+
+
+@keyframes jaLoaderPulse {
+
+    0%, 100% {
+
+        transform: scale(1);
+
+    }
+
+    50% {
+
+        transform: scale(1.06);
+
+    }
+
+}
+
+
+@keyframes jaLoaderLine {
+
+    0% {
+
+        transform: translateX(-150%);
+
+    }
+
+    100% {
+
+        transform: translateX(400%);
+
+    }
+
+}
+
+
+/* =====================================================
+   HEADER
+===================================================== */
+
+.ja-skills-header {
+
+    position: sticky;
+
+    top: 0;
+
+    z-index: 1000;
+
+    background: rgba(4,10,19,0.88);
+
+    backdrop-filter: blur(18px);
+
+    border-bottom: 1px solid var(--ja-border);
+
+}
+
+
+.ja-skills-header-inner {
+
+    max-width: 1400px;
+
+    min-height: 80px;
+
+    margin: auto;
+
+    padding: 0 5%;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 30px;
+
+}
+
+
+.ja-skills-brand {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    font-family: "Space Grotesk", sans-serif;
+
+    font-weight: 700;
+
+    white-space: nowrap;
+
+}
+
+
+.ja-skills-brand-logo {
+
+    width: 42px;
+
+    height: 42px;
+
+    padding: 2px;
+
+    border: 2px solid var(--ja-primary);
+
+    border-radius: 50%;
+
+}
+
+
+.ja-skills-brand-logo img {
+
+    width: 100%;
+
+    height: 100%;
+
+    object-fit: cover;
+
+    border-radius: 50%;
+
+}
+
+
+.ja-skills-desktop-nav {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 24px;
+
+}
+
+
+.ja-skills-desktop-nav a {
+
+    position: relative;
+
+    color: var(--ja-muted);
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+    transition: var(--ja-transition);
+
+}
+
+
+.ja-skills-desktop-nav a:hover,
+.ja-skills-desktop-nav a.ja-skills-active {
+
+    color: var(--ja-primary);
+
+}
+
+
+.ja-skills-desktop-nav a.ja-skills-active::after {
+
+    content: "";
+
+    position: absolute;
+
+    left: 0;
+
+    right: 0;
+
+    bottom: -10px;
+
+    height: 2px;
+
+    background: var(--ja-primary);
+
+}
+
+
+.ja-skills-header-actions {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+}
+
+
+.ja-skills-header-actions button {
+
+    width: 40px;
+
+    height: 40px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    color: var(--ja-text);
+
+    background: var(--ja-card);
+
+    border: 1px solid var(--ja-border);
+
+    border-radius: 10px;
+
+    cursor: pointer;
+
+    transition: var(--ja-transition);
+
+}
+
+
+.ja-skills-header-actions button:hover {
+
+    color: var(--ja-primary);
+
+    border-color: var(--ja-primary);
+
+}
+
+
+#jaSkillsMenu {
+
+    display: none;
+
+    flex-direction: column;
+
+    gap: 5px;
+
+}
+
+
+#jaSkillsMenu span {
+
+    width: 20px;
+
+    height: 2px;
+
+    background: currentColor;
+
+}
+
+
+.ja-skills-mobile-nav {
+
+    display: none;
+
+}
+
+
+/* =====================================================
+   HERO
+===================================================== */
+
+.ja-skills-hero {
+
+    max-width: 1400px;
+
+    min-height: 680px;
+
+    margin: auto;
+
+    padding: 100px 5%;
+
+    display: grid;
+
+    grid-template-columns: 1.05fr 0.95fr;
+
+    align-items: center;
+
+    gap: 80px;
+
+}
+
+
+.ja-skills-eyebrow {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    color: var(--ja-primary);
+
+    font-size: 12px;
+
+    font-weight: 800;
+
+    letter-spacing: 2px;
+
+}
+
+
+.ja-skills-hero h1 {
+
+    max-width: 720px;
+
+    margin: 22px 0;
+
+    font-family: "Space Grotesk", sans-serif;
+
+    font-size: clamp(42px, 6vw, 78px);
+
+    line-height: 1.05;
+
+    letter-spacing: -3px;
+
+}
+
+
+.ja-skills-hero h1 span {
+
+    display: block;
+
+    color: var(--ja-primary);
+
+}
+
+
+.ja-skills-hero-content > p {
+
+    max-width: 650px;
+
+    color: var(--ja-muted);
+
+    font-size: 17px;
+
+}
+
+
+.ja-skills-hero-buttons {
+
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 14px;
+
+    margin-top: 35px;
+
+}
+
+
+.ja-skills-primary-btn,
+.ja-skills-secondary-btn {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    padding: 15px 22px;
+
+    border-radius: 10px;
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    transition: var(--ja-transition);
+
+}
+
+
+.ja-skills-primary-btn {
+
+    color: #001017;
+
+    background: var(--ja-primary);
+
+}
+
+
+.ja-skills-primary-btn:hover {
+
+    transform: translateY(-4px);
+
+    box-shadow: 0 12px 30px rgba(0,229,255,0.25);
+
+}
+
+
+.ja-skills-secondary-btn {
+
+    border: 1px solid var(--ja-border);
+
+    color: var(--ja-text);
+
+}
+
+
+.ja-skills-secondary-btn:hover {
+
+    color: var(--ja-primary);
+
+    border-color: var(--ja-primary);
+
+}
+
+
+/* TERMINAL */
+
+.ja-skills-terminal {
+
+    overflow: hidden;
+
+    background: #050b13;
+
+    border: 1px solid var(--ja-border);
+
+    border-radius: 16px;
+
+    box-shadow:
+
+        0 25px 80px rgba(0,0,0,0.45),
+
+        0 0 50px rgba(0,229,255,0.06);
+
+    transform: perspective(1000px) rotateY(-5deg);
+
+    transition: var(--ja-transition);
+
+}
+
+
+.ja-skills-terminal:hover {
+
+    transform: perspective(1000px) rotateY(0deg)
+               translateY(-8px);
+
+}
+
+
+.ja-skills-terminal-top {
+
+    height: 48px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    padding: 0 18px;
+
+    background: #0b1420;
+
+    border-bottom: 1px solid var(--ja-border);
+
+}
+
+
+.ja-skills-terminal-top span {
+
+    width: 10px;
+
+    height: 10px;
+
+    border-radius: 50%;
+
+    background: var(--ja-muted);
+
+}
+
+
+.ja-skills-terminal-top small {
+
+    margin-left: auto;
+
+    color: var(--ja-muted);
+
+}
+
+
+.ja-skills-terminal-body {
+
+    min-height: 350px;
+
+    padding: 30px;
+
+    color: #d5e2ed;
+
+    font-family: monospace;
+
+    font-size: 15px;
+
+}
+
+
+.ja-skills-terminal-body p {
+
+    margin-bottom: 13px;
+
+}
+
+
+.ja-code-purple {
+
+    color: #c792ea;
+
+}
+
+
+.ja-code-green {
+
+    color: var(--ja-green);
+
+}
+
+
+.ja-code-indent {
+
+    padding-left: 28px;
+
+}
+
+
+.ja-terminal-cursor {
+
+    margin-top: 40px;
+
+    color: var(--ja-muted);
+
+}
+
+
+.ja-terminal-cursor span {
+
+    color: var(--ja-primary);
+
+}
+
+
+/* =====================================================
+   STATS
+===================================================== */
+
+.ja-skills-stats {
+
+    max-width: 1200px;
+
+    margin: 0 auto 100px;
+
+    padding: 0 5%;
+
+    display: grid;
+
+    grid-template-columns: repeat(4, 1fr);
+
+    gap: 18px;
+
+}
+
+
+.ja-skills-stat-card {
+
+    padding: 28px 20px;
+
+    text-align: center;
+
+    background: var(--ja-card);
+
+    border: 1px solid var(--ja-border);
+
+    border-radius: var(--ja-radius);
+
+    transition: var(--ja-transition);
+
+}
+
+
+.ja-skills-stat-card:hover {
+
+    transform: translateY(-8px);
+
+    border-color: var(--ja-primary);
+
+}
+
+
+.ja-skills-stat-card i {
+
+    display: block;
+
+    margin-bottom: 14px;
+
+    color: var(--ja-primary);
+
+    font-size: 24px;
+
+}
+
+
+.ja-skills-stat-card strong {
+
+    display: block;
+
+    font-family: "Space Grotesk", sans-serif;
+
+    font-size: 34px;
+
+}
+
+
+.ja-skills-stat-card span {
+
+    color: var(--ja-muted);
+
+    font-size: 12px;
+
+}
+
+
+/* =====================================================
+   SECTION HEADING
+===================================================== */
+
+.ja-skills-section-heading {
+
+    max-width: 760px;
+
+    margin-bottom: 50px;
+
+}
+
+
+.ja-skills-section-heading > span,
+.ja-skills-rating > span,
+.ja-skills-client-content > span,
+.ja-skills-subscribe span,
+.ja-skills-cta > span {
+
+    color: var(--ja-primary);
+
+    font-size: 11px;
+
+    font-weight: 800;
+
+    letter-spacing: 2px;
+
+}
+
+
+.ja-skills-section-heading h2 {
+
+    margin: 14px 0;
+
+    font-family: "Space Grotesk", sans-serif;
+
+    font-size: clamp(34px, 5vw, 58px);
+
+    line-height: 1.1;
+
+}
+
+
+.ja-skills-section-heading h2 span,
+.ja-skills-client-content h2 span,
+.ja-skills-subscribe h2 span,
+.ja-skills-cta h2 span {
+
+    color: var(--ja-primary);
+
+}
+
+
+.ja-skills-section-heading p {
+
+    color: var(--ja-muted);
+
+}
+
+
+/* =====================================================
+   CORE SKILLS
+===================================================== */
+
+.ja-skills-core {
+
+    max-width: 1400px;
+
+    margin: auto;
+
+    padding: 100px 5%;
+
+}
+
+
+.ja-skills-grid {
+
+    display: grid;
+
+    grid-template-columns: repeat(3, 1fr);
+
+    gap: 20px;
+
+}
+
+
+.ja-skill-card {
+
+    padding: 28px;
+
+    background: linear-gradient(
+
+        145deg,
+
+        var(--ja-card),
+
+        #081321
+
+    );
+
+    border: 1px solid var(--ja-border);
+
+    border-radius: var(--ja-radius);
+
+    transition: var(--ja-transition);
+
+}
+
+
+.ja-skill-card:hover {
+
+    transform: translateY(-10px);
+
+    border-color: var(--ja-primary);
+
+    box-shadow: 0 20px 50px rgba(0,229,255,0.08);
+
+}
+
+
+.ja-skill-card-top {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+}
+
+
+.ja-skill-icon {
+
+    width: 52px;
+
+    height: 52px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    color: var(--ja-primary);
+
+    background: rgba(0,229,255,0.08);
+
+    border: 1px solid rgba(0,229,255,0.2);
+
+    border-radius: 14px;
+
+    font-size: 22px;
+
+}
+
+
+.ja-skill-card-top > span {
+
+    color: var(--ja-muted);
+
+    font-family: monospace;
+
+}
+
+
+.ja-skill-card h3 {
+
+    margin: 24px 0 10px;
+
+    font-family: "Space Grotesk", sans-serif;
+
+    font-size: 20px;
+
+}
+
+
+.ja-skill-card p {
+
+    min-height: 75px;
+
+    color: var(--ja-muted);
+
+    font-size: 13px;
+
+}
+
+
+.ja-skill-progress {
+
+    margin-top: 20px;
+
+}
+
+
+.ja-skill-progress-info {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    margin-bottom: 8px;
+
+    color: var(--ja-muted);
+
+    font-size: 11px;
+
+}
+
+
+.ja-skill-progress-info strong {
+
+    color: var(--ja-primary);
+
+}
+
+
+.ja-progress-bar {
+
+    height: 6px;
+
+    overflow: hidden;
+
+    background: rgba(255,255,255,0.08);
+
+    border-radius: 20px;
+
+}
+
+
+.ja-progress-bar span {
+
+    display: block;
+
+    height: 100%;
+
+    background: linear-gradient(
+
+        90deg,
+
+        var(--ja-secondary),
+
+        var(--ja-primary)
+
+    );
+
+    border-radius: inherit;
+
+}
+
+
+.ja-skill-tags {
+
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 7px;
+
+    margin-top: 20px;
+
+}
+
+
+.ja-skill-tags span {
+
+    padding: 5px 8px;
+
+    color: var(--ja-muted);
+
+    background: rgba(255,255,255,0.05);
+
+    border-radius: 5px;
+
+    font-size: 10px;
+
+}
+
+
+/* =====================================================
+   WORKFLOW
+===================================================== */
+
+.ja-skills-workflow {
+
+    padding: 110px 5%;
+
+    background: var(--ja-bg-deep);
+
+}
+
+
+.ja-skills-workflow > .ja-skills-section-heading,
+.ja-skills-workflow-grid {
+
+    max-width: 1200px;
+
+    margin-left: auto;
+
+    margin-right: auto;
+
+}
+
+
+.ja-skills-workflow-grid {
+
+    display: grid;
+
+    grid-template-columns: repeat(4, 1fr);
+
+    gap: 18px;
+
+}
+
+
+.ja-workflow-step {
+
+    position: relative;
+
+    padding: 28px;
+
+    background: var(--ja-card);
+
+    border: 1px solid var(--ja-border);
+
+    border-radius: var(--ja-radius);
+
+}
+
+
+.ja-workflow-step > strong {
+
+    color: var(--ja-primary);
+
+    font-family: monospace;
+
+}
+
+
+.ja-workflow-step i {
+
+    display: block;
+
+    margin: 35px 0 20px;
+
+    color: var(--ja-primary);
+
+    font-size: 25px;
+
+}
+
+
+.ja-workflow-step h3 {
+
+    margin-bottom: 10px;
+
+}
+
+
+.ja-workflow-step p {
+
+    color: var(--ja-muted);
+
+    font-size: 13px;
+
+}
+
+
+/* =====================================================
+   CLIENT SECTION
+===================================================== */
+
+.ja-skills-client-section {
+
+    max-width: 1200px;
+
+    margin: auto;
+
+    padding: 120px 5%;
+
+    display: grid;
+
+    grid-template-columns: 1.2fr 0.8fr;
+
+    gap: 80px;
+
+    align-items: center;
+
+}
+
+
+.ja-skills-client-content h2 {
+
+    margin: 18px 0;
+
+    font-family: "Space Grotesk", sans-serif;
+
+    font-size: clamp(36px, 5vw, 58px);
+
+    line-height: 1.1;
+
+}
+
+
+.ja-skills-client-content p {
+
+    max-width: 600px;
+
+    color: var(--ja-muted);
+
+}
+
+
+.ja-skills-client-btn {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    margin-top: 28px;
+
+    padding: 14px 20px;
+
+    color: #001017;
+
+    background: var(--ja-primary);
+
+    border-radius: 9px;
+
+    font-weight: 700;
+
+}
+
+
+.ja-skills-client-points {
+
+    display: grid;
+
+    gap: 16px;
+
+}
+
+
+.ja-skills-client-points div {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 14px;
+
+    padding: 18px;
+
+    background: var(--ja-card);
+
+    border: 1px solid var(--ja-border);
+
+    border-radius: 10px;
+
+}
+
+
+.ja-skills-client-points i {
+
+    color: var(--ja-green);
+
+}
+
+
+/* =====================================================
+   RATING
+===================================================== */
+
+.ja-skills-rating {
+
+    padding: 100px 5%;
+
+    text-align: center;
+
+    background: linear-gradient(
+
+        135deg,
+
+        #0b1727,
+
+        #11152d
+
+    );
+
+}
+
+
+.ja-skills-rating h2 {
+
+    margin: 18px 0;
+
+    font-family: "Space Grotesk", sans-serif;
+
+    font-size: clamp(32px, 5vw, 54px);
+
+}
+
+
+.ja-skills-rating h2 span {
+
+    color: var(--ja-primary);
+
+}
+
+
+.ja-skills-stars {
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    gap: 7px;
+
+    color: #ffd166;
+
+}
+
+
+.ja-skills-stars strong {
+
+    margin-left: 14px;
+
+    color: var(--ja-text);
+
+}
+
+
+.ja-skills-rating p {
+
+    margin-top: 18px;
+
+    color: var(--ja-muted);
+
+}
+
+
+/* =====================================================
+   SUBSCRIBE
+===================================================== */
+
+.ja-skills-subscribe {
+
+    max-width: 1200px;
+
+    margin: 100px auto;
+
+    padding: 50px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 40px;
+
+    background: var(--ja-card);
+
+    border: 1px solid var(--ja-border);
+
+    border-radius: 22px;
+
+}
+
+
+.ja-skills-subscribe h2 {
+
+    margin: 12px 0;
+
+    font-family: "Space Grotesk", sans-serif;
+
+    font-size: 32px;
+
+}
+
+
+.ja-skills-subscribe p {
+
+    color: var(--ja-muted);
+
+}
+
+
+.ja-skills-subscribe form {
+
+    display: flex;
+
+    min-width: 400px;
+
+}
+
+
+.ja-skills-subscribe input {
+
+    width: 100%;
+
+    padding: 15px;
+
+    color: var(--ja-text);
+
+    background: #050b13;
+
+    border: 1px solid var(--ja-border);
+
+    outline: none;
+
+}
+
+
+.ja-skills-subscribe button {
+
+    padding: 0 20px;
+
+    color: #001017;
+
+    background: var(--ja-primary);
+
+    border: none;
+
+    cursor: pointer;
+
+    font-weight: 700;
+
+}
+
+
+/* =====================================================
+   CTA
+===================================================== */
+
+.ja-skills-cta {
+
+    padding: 120px 5%;
+
+    text-align: center;
+
+    background: var(--ja-bg-deep);
+
+}
+
+
+.ja-skills-cta h2 {
+
+    max-width: 800px;
+
+    margin: 20px auto 35px;
+
+    font-family: "Space Grotesk", sans-serif;
+
+    font-size: clamp(38px, 6vw, 70px);
+
+    line-height: 1.1;
+
+}
+
+
+.ja-skills-cta a {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    padding: 16px 25px;
+
+    color: #001017;
+
+    background: var(--ja-primary);
+
+    border-radius: 10px;
+
+    font-weight: 800;
+
+}
+
+
+/* =====================================================
+   FOOTER
+===================================================== */
+
+.ja-skills-footer {
+
+    padding: 70px 5% 25px;
+
+    background: #030810;
+
+    border-top: 1px solid var(--ja-border);
+
+}
+
+
+.ja-skills-footer-grid {
+
+    max-width: 1200px;
+
+    margin: auto;
+
+    display: grid;
+
+    grid-template-columns: 1.5fr 1fr 1fr 1fr;
+
+    gap: 50px;
+
+}
+
+
+.ja-skills-footer h3 {
+
+    margin-bottom: 14px;
+
+    font-family: "Space Grotesk", sans-serif;
+
+}
+
+
+.ja-skills-footer h4 {
+
+    margin-bottom: 18px;
+
+}
+
+
+.ja-skills-footer p {
+
+    max-width: 300px;
+
+    color: var(--ja-muted);
+
+    font-size: 13px;
+
+}
+
+
+.ja-skills-footer-grid > div:not(:first-child) a {
+
+    display: block;
+
+    margin-bottom: 9px;
+
+    color: var(--ja-muted);
+
+    font-size: 13px;
+
+    transition: var(--ja-transition);
+
+}
+
+
+.ja-skills-footer-grid > div:not(:first-child) a:hover {
+
+    color: var(--ja-primary);
+
+}
+
+
+.ja-skills-socials {
+
+    display: flex;
+
+    gap: 10px;
+
+}
+
+
+.ja-skills-socials a {
+
+    width: 36px;
+
+    height: 36px;
+
+    display: flex !important;
+
+    align-items: center;
+
+    justify-content: center;
+
+    color: var(--ja-text) !important;
+
+    background: var(--ja-card);
+
+    border: 1px solid var(--ja-border);
+
+    border-radius: 8px;
+
+}
+
+
+.ja-skills-footer-bottom {
+
+    max-width: 1200px;
+
+    margin: 50px auto 0;
+
+    padding-top: 20px;
+
+    color: var(--ja-muted);
+
+    border-top: 1px solid var(--ja-border);
+
+    text-align: center;
+
+    font-size: 12px;
+
+}
+
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media (max-width: 1100px) {
+
+
+    .ja-skills-desktop-nav {
+
+        gap: 14px;
+
+    }
+
+
+    .ja-skills-grid {
+
+        grid-template-columns: repeat(2, 1fr);
+
+    }
+
+
+    .ja-skills-workflow-grid {
+
+        grid-template-columns: repeat(2, 1fr);
+
+    }
+
+}
+
+
+@media (max-width: 850px) {
+
+
+    .ja-skills-desktop-nav {
+
+        display: none;
+
+    }
+
+
+    #jaSkillsMenu {
+
+        display: flex;
+
+    }
+
+
+    .ja-skills-mobile-nav {
+
+        display: none;
+
+        padding: 20px 5% 25px;
+
+        background: var(--ja-bg-deep);
+
+        border-top: 1px solid var(--ja-border);
+
+    }
+
+
+    .ja-skills-mobile-nav.active {
+
+        display: grid;
+
+        gap: 15px;
+
+    }
+
+
+    .ja-skills-mobile-nav a {
+
+        color: var(--ja-muted);
+
+        font-size: 14px;
+
+    }
+
+
+    .ja-skills-hero {
+
+        grid-template-columns: 1fr;
+
+        gap: 50px;
+
+        padding-top: 70px;
+
+    }
+
+
+    .ja-skills-terminal {
+
+        transform: none;
+
+    }
+
+
+    .ja-skills-stats {
+
+        grid-template-columns: repeat(2, 1fr);
+
+    }
+
+
+    .ja-skills-client-section {
+
+        grid-template-columns: 1fr;
+
+        gap: 45px;
+
+    }
+
+
+    .ja-skills-subscribe {
+
+        margin-left: 5%;
+
+        margin-right: 5%;
+
+        flex-direction: column;
+
+        align-items: flex-start;
+
+    }
+
+
+    .ja-skills-subscribe form {
+
+        width: 100%;
+
+        min-width: 0;
+
+    }
+
+
+    .ja-skills-footer-grid {
+
+        grid-template-columns: repeat(2, 1fr);
+
+    }
+
+}
+
+
+@media (max-width: 560px) {
+
+
+    .ja-skills-header-inner {
+
+        min-height: 70px;
+
+    }
+
+
+    .ja-skills-hero {
+
+        padding: 70px 5%;
+
+    }
+
+
+    .ja-skills-hero h1 {
+
+        letter-spacing: -2px;
+
+    }
+
+
+    .ja-skills-grid {
+
+        grid-template-columns: 1fr;
+
+    }
+
+
+    .ja-skills-workflow-grid {
+
+        grid-template-columns: 1fr;
+
+    }
+
+
+    .ja-skills-stats {
+
+        grid-template-columns: 1fr 1fr;
+
+        padding: 0 5%;
+
+    }
+
+
+    .ja-skills-stat-card {
+
+        padding: 20px 10px;
+
+    }
+
+
+    .ja-skills-subscribe {
+
+        padding: 30px 20px;
+
+    }
+
+
+    .ja-skills-subscribe form {
+
+        flex-direction: column;
+
+        gap: 10px;
+
+    }
+
+
+    .ja-skills-subscribe button {
+
+        min-height: 48px;
+
+    }
+
+
+    .ja-skills-footer-grid {
+
+        grid-template-columns: 1fr;
+
+        gap: 30px;
+
+    }
+
+}
