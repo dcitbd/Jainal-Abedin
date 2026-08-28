@@ -1,5 +1,5 @@
 /* =====================================================
-   PROJECT DETAILS JAVASCRIPT
+   PROJECT DETAILS JAVASCRIPT (FINAL FIXED)
    Jainal Abedin Portfolio
 ===================================================== */
 
@@ -47,20 +47,27 @@ document.addEventListener("DOMContentLoaded", function () {
     const params = new URLSearchParams(window.location.search);
     const projectId = params.get("id");
 
-    /* ================= GET PROJECT ================= */
+    /* ================= GET PROJECT (ROBUST FINDER) ================= */
     const projects = JSON.parse(localStorage.getItem("portfolioProjects")) || [];
 
     let project = null;
 
-    if (projectId) {
+    if (projectId !== null && projectId !== "") {
+        // ১. প্রথমে ইউনিক ID দিয়ে খোঁজার চেষ্টা
         project = projects.find(item => String(item.id) === String(projectId));
+
+        // ২. আইডি দিয়ে না পেলে ইনডেক্স (Index) হিসেবে খোঁজা
+        if (!project) {
+            const index = Number(projectId);
+            if (!isNaN(index) && projects[index]) {
+                project = projects[index];
+            }
+        }
     }
 
-    if (!project && projectId) {
-        const index = Number(projectId);
-        if (!isNaN(index) && projects[index]) {
-            project = projects[index];
-        }
+    // যদি ইউজার সরাসরি ID বা Index ছাড়া পেজে আসে, তবে লেটেস্ট প্রজেক্ট বা প্রথম প্রজেক্ট দেখানোর ফলব্যাক
+    if (!project && projects.length > 0) {
+        project = projects[0];
     }
 
     /* ================= PROJECT NOT FOUND ================= */
@@ -110,7 +117,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-    /* ================= TECHNOLOGY ================= */
+    /* ================= TECHNOLOGY (ROBUST PARSER) ================= */
     const techBox = document.getElementById("technologyList");
 
     if (techBox) {
@@ -124,6 +131,7 @@ document.addEventListener("DOMContentLoaded", function () {
             techArray = rawTech.split(",");
         }
 
+        // যদি কোনো কারণে অবজেক্টের ভেতরে সাব-প্রপার্টি থাকে
         if (techArray.length > 0) {
             techArray.forEach(item => {
                 let cleanItem = String(item).trim();
@@ -149,11 +157,13 @@ document.addEventListener("DOMContentLoaded", function () {
             features = features.split("\n");
         }
 
-        features.forEach(item => {
-            if (item && item.trim()) {
-                featureBox.innerHTML += `<li>${item.trim()}</li>`;
-            }
-        });
+        if (Array.isArray(features)) {
+            features.forEach(item => {
+                if (item && String(item).trim()) {
+                    featureBox.innerHTML += `<li>${String(item).trim()}</li>`;
+                }
+            });
+        }
     }
 
     /* ================= LINKS ================= */
