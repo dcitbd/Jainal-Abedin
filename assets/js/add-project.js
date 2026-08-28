@@ -1,525 +1,265 @@
 /* =====================================================
-   ADD PROJECT JAVASCRIPT
+   MODERN ADD PROJECT BUILDER (FIXED & OPTIMIZED)
 ===================================================== */
 
-
-/* ================= SIDEBAR ================= */
-
-const menuBtn =
-    document.getElementById("menuBtn");
-
-const closeSidebar =
-    document.getElementById("closeSidebar");
-
-const sidebar =
-    document.getElementById("sidebar");
-
-const sidebarOverlay =
-    document.getElementById("sidebarOverlay");
-
-
-if (menuBtn) {
-
-    menuBtn.addEventListener(
-        "click",
-        function () {
-
-            sidebar.classList.add(
-                "open"
-            );
-
-            sidebarOverlay.classList.add(
-                "active"
-            );
-
-            document.body.style.overflow =
-                "hidden";
-
-        }
-
-    );
-
-}
-
-
-function closeSidebarMenu() {
-
-    sidebar.classList.remove(
-        "open"
-    );
-
-    sidebarOverlay.classList.remove(
-        "active"
-    );
-
-    document.body.style.overflow =
-        "";
-
-}
-
-
-if (closeSidebar) {
-
-    closeSidebar.addEventListener(
-        "click",
-        closeSidebarMenu
-    );
-
-}
-
-
-if (sidebarOverlay) {
-
-    sidebarOverlay.addEventListener(
-        "click",
-        closeSidebarMenu
-    );
-
-}
-
-
-/* ================= LOGOUT ================= */
-
-const logoutBtn =
-    document.getElementById("logoutBtn");
-
-
-if (logoutBtn) {
-
-    logoutBtn.addEventListener(
-        "click",
-        function () {
-
-
-            const confirmLogout =
-                confirm(
-                    "Are you sure you want to logout?"
-                );
-
-
-            if (confirmLogout) {
-
-                localStorage.removeItem(
-                    "adminLoggedIn"
-                );
-
-
-                sessionStorage.removeItem(
-                    "adminLoggedIn"
-                );
-
-
-                window.location.href =
-                    "login.html";
-
-            }
-
-        }
-
-    );
-
-}
-
-
-/* ================= SHORT DESCRIPTION COUNT ================= */
-
-const shortDescription =
-    document.getElementById(
-        "shortDescription"
-    );
-
-
-const shortDescriptionCount =
-    document.getElementById(
-        "shortDescriptionCount"
-    );
-
-
-if (shortDescription) {
-
-    shortDescription.addEventListener(
-        "input",
-        function () {
-
-            shortDescriptionCount.textContent =
-                this.value.length;
-
-        }
-
-    );
-
-}
-
-
-/* ================= MULTI IMAGE UPLOAD ================= */
-
+const addProjectForm = document.getElementById("addProjectForm");
 const projectImage = document.getElementById("projectImage");
 const imageUploadArea = document.getElementById("imageUploadArea");
 const imagePreview = document.getElementById("imagePreview");
+const previewCardImage = document.getElementById("previewCardImage");
+const previewImagePlaceholder = document.getElementById("previewImagePlaceholder");
+const previewTitle = document.getElementById("previewTitle");
+const previewDescription = document.getElementById("previewDescription");
+const previewCategory = document.getElementById("previewCategory");
+const technologiesInput = document.getElementById("technologies");
+const technologyTags = document.getElementById("technologyTags");
+const shortDescription = document.getElementById("shortDescription");
+const shortDescriptionCount = document.getElementById("shortDescriptionCount");
+const adminToast = document.getElementById("adminToast");
 
-if (imageUploadArea) {
-
-    imageUploadArea.addEventListener("click", function () {
-
-        projectImage.click();
-
+const projectTitle = document.getElementById("projectTitle");
+if (projectTitle) {
+    projectTitle.addEventListener("input", function () {
+        previewTitle.textContent = this.value.trim() || "Your Project Title";
     });
-
 }
 
-if (projectImage) {
+if (shortDescription) {
+    shortDescription.addEventListener("input", function () {
+        previewDescription.textContent = this.value.trim() || "Your project short description will appear here.";
+        if (shortDescriptionCount) {
+            shortDescriptionCount.textContent = this.value.length;
+        }
+    });
+}
+
+const projectCategory = document.getElementById("projectCategory");
+if (projectCategory) {
+    projectCategory.addEventListener("change", function () {
+        previewCategory.textContent = this.value || "CATEGORY";
+    });
+}
+
+let technologies = [];
+
+if (technologiesInput) {
+    technologiesInput.addEventListener("keydown", function (event) {
+        if (event.key === "Enter") {
+            event.preventDefault();
+            const value = this.value.trim();
+            if (value !== "" && !technologies.includes(value)) {
+                technologies.push(value);
+                this.value = "";
+                renderTechnologyTags();
+            }
+        }
+    });
+}
+
+function renderTechnologyTags() {
+    if (!technologyTags) return;
+    technologyTags.innerHTML = "";
+    technologies.forEach(function (technology, index) {
+        const tag = document.createElement("span");
+        tag.className = "technology-tag";
+        tag.innerHTML = `
+            ${technology}
+            <button type="button" data-index="${index}" aria-label="Remove technology">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        `;
+        technologyTags.appendChild(tag);
+    });
+    updatePreviewTechStack();
+}
+
+function updatePreviewTechStack() {
+    const previewTechStack = document.getElementById("previewTechStack");
+    if (!previewTechStack) return;
+    previewTechStack.innerHTML = "";
+    const previewItems = technologies.length ? technologies.slice(0, 4) : ["HTML", "CSS", "JS"];
+    previewItems.forEach(function (technology) {
+        const span = document.createElement("span");
+        span.textContent = technology;
+        previewTechStack.appendChild(span);
+    });
+}
+
+if (technologyTags) {
+    technologyTags.addEventListener("click", function (event) {
+        const button = event.target.closest("button");
+        if (!button) return;
+        const index = Number(button.dataset.index);
+        technologies.splice(index, 1);
+        renderTechnologyTags();
+    });
+}
+
+if (imageUploadArea && projectImage) {
+    imageUploadArea.addEventListener("click", function () {
+        projectImage.click();
+    });
 
     projectImage.addEventListener("change", function () {
-
-        imagePreview.innerHTML = "";
-
-        const files = Array.from(this.files);
-
-        files.forEach(function (file, index) {
-
-            if (!file.type.startsWith("image/")) {
-                return;
-            }
-
-            const reader = new FileReader();
-
-            reader.onload = function (event) {
-
-                const item = document.createElement("div");
-
-                item.className = "gallery-item";
-
-                item.innerHTML = `
-
-                    <img
-                        src="${event.target.result}"
-                        alt="Project Image ${index + 1}"
-                    >
-
-                    <button
-                        type="button"
-                        class="gallery-remove"
-                    >
-                        <i class="fa-solid fa-xmark"></i>
-                    </button>
-
-                `;
-
-                item.querySelector(".gallery-remove")
-                    .addEventListener("click", function (e) {
-
-                        e.stopPropagation();
-
-                        item.remove();
-
-                    });
-
-                imagePreview.appendChild(item);
-
-            };
-
-            reader.readAsDataURL(file);
-
-        });
-
+        handleImages(Array.from(this.files));
     });
-
 }
 
-
-/* ================= FORM ================= */
-
-const projectForm =
-    document.getElementById(
-        "addProjectForm"
-    );
-
-
-/* ================= SAVE PROJECT ================= */
-
-function saveProject(
-    status
-) {
-
-
-    const title =
-        document.getElementById(
-            "projectTitle"
-        ).value.trim();
-
-
-    const category =
-        document.getElementById(
-            "projectCategory"
-        ).value;
-
-
-    const shortDescription =
-        document.getElementById(
-            "shortDescription"
-        ).value.trim();
-
-
-    const fullDescription =
-        document.getElementById(
-            "projectDescription"
-        ).value.trim();
-
-
-    /* ================= TECHNOLOGY FIXED LOGIC ================= */
-    const techElement = document.getElementById("technologies");
-    const technologiesInput = techElement ? techElement.value.trim() : "";
-
-    const technologies =
-        technologiesInput
-            ? technologiesInput
-                .split(",")
-                .map(function (item) {
-                    return item.trim();
-                })
-                .filter(function (item) {
-                    return item !== "";
-                })
-            : [];
-    /* ======================================================== */
-
-
-    const completionDate =
-        new Date().toISOString();
-
-
-    const projectUrl =
-        document.getElementById(
-            "liveUrl"
-        ) ? document.getElementById("liveUrl").value.trim() : "";
-
-
-    const githubUrl =
-        document.getElementById(
-            "githubUrl"
-        ) ? document.getElementById("githubUrl").value.trim() : "";
-
-
-    const featured =
-        document.getElementById(
-            "showPortfolio"
-        ) ? document.getElementById("showPortfolio").checked : true;
-
-
-    const allowComments =
-        document.getElementById(
-            "allowComments"
-        ) ? document.getElementById("allowComments").checked : true;
-
-
-    // গ্যালারি ইমেজ প্রিভিউ থেকে প্রথম ছবিটি মূল প্রজেক্ট ইমেজ হিসেবে সেট করা
-    let coverImageUrl = "";
-    const firstGalleryImg = imagePreview ? imagePreview.querySelector("img") : null;
-    if (firstGalleryImg) {
-        coverImageUrl = firstGalleryImg.src;
-    }
-
-
-    const project = {
-
-
-        id:
-            Date.now(),
-
-
-        title:
-            title,
-
-
-        category:
-            category,
-
-
-        shortDescription:
-            shortDescription,
-
-
-        description:
-            fullDescription,
-
-
-        technologies:
-            technologies,
-
-        tech:
-            technologies, // ব্যাকআপ প্রপার্টি যাতে উভয় ফরম্যাটেই ডিটেইলস পেজ রিড করতে পারে
-
-
-        features:
-            document.getElementById("features") ? document.getElementById("features").value.trim() : "",
-
-
-        createdAt:
-            completionDate,
-
-
-        liveUrl:
-            projectUrl,
-
-
-        githubUrl:
-            githubUrl,
-
-
-        featured:
-            featured,
-
-
-        allowComments:
-            allowComments,
-
-
-        status:
-            status,
-
-
-        views:
-            0,
-
-
-        comments:
-            0,
-
-
-        image:
-            coverImageUrl
-
-    };
-
-
-    const projects =
-        JSON.parse(
-
-            localStorage.getItem(
-                "portfolioProjects"
-            )
-
-        ) || [];
-
-
-    projects.unshift(
-        project
-    );
-
-
-
-
-
-    try {
-
-        localStorage.setItem(
-
-            "portfolioProjects",
-
-            JSON.stringify(projects)
-
-        );
-
-    }
-
-    catch(error){
-
-        console.error(error);
-
-        alert(
-
-            "Storage Full"
-
-        );
-
-    }
-
-
-    return project;
-
+function handleImages(files) {
+    imagePreview.innerHTML = "";
+    if (!files.length) return;
+
+    files.forEach(function (file, index) {
+        if (!file.type.startsWith("image/")) return;
+
+        const reader = new FileReader();
+        reader.onload = function (event) {
+            const imageData = event.target.result;
+
+            if (index === 0 && previewCardImage) {
+                previewCardImage.src = imageData;
+                previewCardImage.style.display = "block";
+                if (previewImagePlaceholder) {
+                    previewImagePlaceholder.style.display = "none";
+                }
+            }
+
+            const item = document.createElement("div");
+            item.className = "gallery-item";
+            item.innerHTML = `
+                <img src="${imageData}" alt="Project Image ${index + 1}">
+                <button type="button" class="gallery-remove"><i class="fa-solid fa-xmark"></i></button>
+            `;
+            item.querySelector(".gallery-remove").addEventListener("click", function (e) {
+                e.stopPropagation();
+                item.remove();
+            });
+            imagePreview.appendChild(item);
+        };
+        reader.readAsDataURL(file);
+    });
 }
 
+function showToast(message, type = "success") {
+    if (!adminToast) return;
+    const icon = adminToast.querySelector("i");
+    const text = adminToast.querySelector("span");
+    text.textContent = message;
 
-/* ================= PUBLISH ================= */
+    if (type === "error") {
+        icon.className = "fa-solid fa-circle-exclamation";
+        icon.style.color = "#f87171";
+    } else {
+        icon.className = "fa-solid fa-circle-check";
+        icon.style.color = "#34d399";
+    }
 
-if (projectForm) {
+    adminToast.classList.add("show");
+    setTimeout(function () {
+        adminToast.classList.remove("show");
+    }, 3500);
+}
 
-    projectForm.addEventListener(
-        "submit",
-        function (event) {
+// ইমেজ সাইজ কম্প্রেস করার ফাংশন (লোকালস্টোরেজ ফুল হওয়া রোধ করতে)
+function compressImage(base64Str, maxWidth = 800, maxHeight = 800, quality = 0.7) {
+    return new Promise((resolve) => {
+        let img = new Image();
+        img.src = base64Str;
+        img.onload = function () {
+            let canvas = document.createElement('canvas');
+            let width = img.width;
+            let height = img.height;
 
-
-            event.preventDefault();
-
-
-            const clickedButton =
-                event.submitter;
-
-
-            let status =
-                "published";
-
-
-            if (
-                clickedButton &&
-                clickedButton.id ===
-                "saveDraftBtn"
-            ) {
-
-                status =
-                    "draft";
-
+            if (width > height) {
+                if (width > maxWidth) {
+                    height *= maxWidth / width;
+                    width = maxWidth;
+                }
+            } else {
+                if (height > maxHeight) {
+                    width *= maxHeight / height;
+                    height = maxHeight;
+                }
             }
 
+            canvas.width = width;
+            canvas.height = height;
+            let ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, width, height);
+            resolve(canvas.toDataURL('image/jpeg', quality));
+        };
+    });
+}
 
-            if (
-                !projectForm.checkValidity()
-            ) {
+if (addProjectForm) {
+    addProjectForm.addEventListener("submit", async function (event) {
+        event.preventDefault();
 
-                projectForm.reportValidity();
+        const title = projectTitle.value.trim();
+        const category = projectCategory.value;
+        const status = document.getElementById("projectStatus").value;
+        const shortText = shortDescription.value.trim();
+        const description = document.getElementById("projectDescription").value.trim();
+        const featuresText = document.getElementById("features").value.trim();
+        const liveUrl = document.getElementById("liveUrl").value.trim();
+        const githubUrl = document.getElementById("githubUrl").value.trim();
+        const allowComments = document.getElementById("allowComments").checked;
+        const showPortfolio = document.getElementById("showPortfolio").checked;
 
-                return;
-
-            }
-
-
-            const project =
-                saveProject(
-                    status
-                );
-
-
-            if (
-                status ===
-                "published"
-            ) {
-
-
-                alert(
-                    "Project published successfully!"
-                );
-
-
-                window.location.href =
-                    "dashboard.html";
-
-            }
-
-            else {
-
-
-                alert(
-                    "Project saved as draft successfully!"
-                );
-
-
-                window.location.href =
-                    "dashboard.html";
-
-            }
-
+        if (!title || !category || !shortText || !description) {
+            showToast("Please complete all required fields.", "error");
+            return;
         }
 
-    );
+        let compressedImage = "";
+        if (projectImage.files[0]) {
+            let base64Image = await new Promise((resolve) => {
+                const reader = new FileReader();
+                reader.onload = (e) => resolve(e.target.result);
+                reader.readAsDataURL(projectImage.files[0]);
+            });
+            compressedImage = await compressImage(base64Image);
+        }
 
+        const projects = JSON.parse(localStorage.getItem("portfolioProjects")) || [];
+
+        const newProject = {
+            id: Date.now(),
+            title: title,
+            category: category,
+            status: status,
+            shortDescription: shortText,
+            description: description,
+            technologies: technologies,
+            tech: technologies,
+            features: featuresText.split("\n").map(item => item.trim()).filter(item => item),
+            liveUrl: liveUrl,
+            githubUrl: githubUrl,
+            image: compressedImage,
+            allowComments: allowComments,
+            showPortfolio: showPortfolio,
+            views: 0,
+            comments: 0,
+            createdAt: new Date().toISOString()
+        };
+
+        projects.unshift(newProject);
+
+        try {
+            localStorage.setItem("portfolioProjects", JSON.stringify(projects));
+            showToast("Project published successfully.");
+            
+            const submitButton = document.getElementById("saveProjectBtn");
+            submitButton.disabled = true;
+            submitButton.innerHTML = `<i class="fa-solid fa-check"></i> Published Successfully`;
+
+            setTimeout(function () {
+                window.location.href = "dashboard.html";
+            }, 1200);
+
+        } catch (error) {
+            console.error("Storage limit exceeded:", error);
+            showToast("Storage Full! Too many projects stored.", "error");
+        }
+    });
 }
