@@ -1,297 +1,281 @@
 /* =====================================================
-   MODERN ADD PROJECT BUILDER (TECH STACK & DATA FIX)
+   ADD / EDIT TEMPLATE JAVASCRIPT (INDEXEDDB POWERED)
    Jainal Abedin Portfolio
 ===================================================== */
+(() => {
+  const DB_NAME = 'JainalPortfolioDB';
+  const DB_VERSION = 1;
+  const STORE_NAME = 'templates';
 
-document.addEventListener("DOMContentLoaded", function () {
+  const $ = selector => document.querySelector(selector);
+  const form = $('#templateForm');
+  const params = new URLSearchParams(window.location.search);
+  const editingId = params.get('edit');
+  let imageData = '';
+  let existing = null;
 
-    const addProjectForm = document.getElementById("addProjectForm");
-    const projectImage = document.getElementById("projectImage");
-    const imageUploadArea = document.getElementById("imageUploadArea");
-    const imagePreview = document.getElementById("imagePreview");
-    const previewCardImage = document.getElementById("previewCardImage");
-    const previewImagePlaceholder = document.getElementById("previewImagePlaceholder");
-    const previewTitle = document.getElementById("previewTitle");
-    const previewDescription = document.getElementById("previewDescription");
-    const previewCategory = document.getElementById("previewCategory");
-    const technologiesInput = document.getElementById("technologies");
-    const technologyTags = document.getElementById("technologyTags");
-    const shortDescription = document.getElementById("shortDescription");
-    const shortDescriptionCount = document.getElementById("shortDescriptionCount");
-    const adminToast = document.getElementById("adminToast");
-    const projectTitle = document.getElementById("projectTitle");
-    const projectCategory = document.getElementById("projectCategory");
-
-    if (projectTitle) {
-        projectTitle.addEventListener("input", function () {
-            previewTitle.textContent = this.value.trim() || "Your Project Title";
-        });
-    }
-
-    if (shortDescription) {
-        shortDescription.addEventListener("input", function () {
-            previewDescription.textContent = this.value.trim() || "Your project short description will appear here.";
-            if (shortDescriptionCount) {
-                shortDescriptionCount.textContent = this.value.length;
-            }
-        });
-    }
-
-    if (projectCategory) {
-        projectCategory.addEventListener("change", function () {
-            previewCategory.textContent = this.value || "CATEGORY";
-        });
-    }
-
-    let technologies = [];
-
-    // টেকনোলজি ইনপুট ফিল্ডে এন্টার প্রেস করলে ট্যাগ হিসেবে যুক্ত হওয়া
-    if (technologiesInput) {
-        technologiesInput.addEventListener("keydown", function (event) {
-            if (event.key === "Enter") {
-                event.preventDefault();
-                const value = this.value.trim();
-                if (value !== "" && !technologies.includes(value)) {
-                    technologies.push(value);
-                    this.value = "";
-                    renderTechnologyTags();
-                }
-            }
-        });
-    }
-
-    function renderTechnologyTags() {
-        if (!technologyTags) return;
-        technologyTags.innerHTML = "";
-        technologies.forEach(function (technology, index) {
-            const tag = document.createElement("span");
-            tag.className = "technology-tag";
-            tag.innerHTML = `
-                ${technology}
-                <button type="button" data-index="${index}" aria-label="Remove technology">
-                    <i class="fa-solid fa-xmark"></i>
-                </button>
-            `;
-            technologyTags.appendChild(tag);
-        });
-        updatePreviewTechStack();
-    }
-
-    function updatePreviewTechStack() {
-        const previewTechStack = document.getElementById("previewTechStack");
-        if (!previewTechStack) return;
-        previewTechStack.innerHTML = "";
-        
-        const previewItems = technologies.length > 0 ? technologies.slice(0, 4) : ["HTML", "CSS", "JS"];
-        previewItems.forEach(function (technology) {
-            const span = document.createElement("span");
-            span.textContent = technology;
-            previewTechStack.appendChild(span);
-        });
-    }
-
-    if (technologyTags) {
-        technologyTags.addEventListener("click", function (event) {
-            const button = event.target.closest("button");
-            if (!button) return;
-            const index = Number(button.dataset.index);
-            technologies.splice(index, 1);
-            renderTechnologyTags();
-        });
-    }
-
-    if (imageUploadArea && projectImage) {
-        imageUploadArea.addEventListener("click", function () {
-            projectImage.click();
-        });
-
-        projectImage.addEventListener("change", function () {
-            handleImages(Array.from(this.files));
-        });
-    }
-
-    function handleImages(files) {
-        imagePreview.innerHTML = "";
-        if (!files.length) return;
-
-        files.forEach(function (file, index) {
-            if (!file.type.startsWith("image/")) return;
-
-            const reader = new FileReader();
-            reader.onload = function (event) {
-                const imageData = event.target.result;
-
-                if (index === 0 && previewCardImage) {
-                    previewCardImage.src = imageData;
-                    previewCardImage.style.display = "block";
-                    if (previewImagePlaceholder) {
-                        previewImagePlaceholder.style.display = "none";
-                    }
-                }
-
-                const item = document.createElement("div");
-                item.className = "gallery-item";
-                item.innerHTML = `
-                    <img src="${imageData}" alt="Project Image ${index + 1}">
-                    <button type="button" class="gallery-remove"><i class="fa-solid fa-xmark"></i></button>
-                `;
-                item.querySelector(".gallery-remove").addEventListener("click", function (e) {
-                    e.stopPropagation();
-                    item.remove();
-                });
-                imagePreview.appendChild(item);
-            };
-            reader.readAsDataURL(file);
-        });
-    }
-
-    function showToast(message, type = "success") {
-        if (!adminToast) return;
-        const icon = adminToast.querySelector("i");
-        const text = adminToast.querySelector("span");
-        text.textContent = message;
-
-        if (type === "error") {
-            icon.className = "fa-solid fa-circle-exclamation";
-            icon.style.color = "#f87171";
-        } else {
-            icon.className = "fa-solid fa-circle-check";
-            icon.style.color = "#34d399";
+  // IndexedDB ডাটাবেস ওপেন করার ফাংশন
+  function openDB() {
+    return new Promise((resolve, reject) => {
+      const request = indexedDB.open(DB_NAME, DB_VERSION);
+      request.onupgradeneeded = (e) => {
+        const db = e.target.result;
+        if (!db.objectStoreNames.contains(STORE_NAME)) {
+          db.createObjectStore(STORE_NAME, { keyPath: 'id' });
         }
+      };
+      request.onsuccess = () => resolve(request.result);
+      request.onerror = () => reject(request.error);
+    });
+  }
 
-        adminToast.classList.add("show");
-        setTimeout(function () {
-            adminToast.classList.remove("show");
-        }, 3500);
+  // সব টেমপ্লেট রিড করা
+  async function getAllTemplates() {
+    const db = await openDB();
+    return new Promise((resolve, reject) => {
+      const tx = db.transaction(STORE_NAME, 'readonly');
+      const store = tx.objectStore(STORE_NAME);
+      const req = store.getAll();
+      req.onsuccess = () => {
+        // যদি IndexedDB খালি থাকে তবে লোকালস্টোরেজ থেকে মাইগ্রেট করা
+        if (!req.result || req.result.length === 0) {
+          try {
+            const ls = JSON.parse(localStorage.getItem('jainalTemplates') || '[]');
+            resolve(Array.isArray(ls) ? ls : []);
+          } catch {
+            resolve([]);
+          }
+        } else {
+          resolve(req.result);
+        }
+      };
+      req.onerror = () => reject(req.error);
+    });
+  }
+
+  // টেমপ্লেট সেভ বা আপডেট করা
+  async function saveTemplateDB(record) {
+    const db = await openDB();
+    return new Promise((resolve, reject) => {
+      const tx = db.transaction(STORE_NAME, 'readwrite');
+      const store = tx.objectStore(STORE_NAME);
+      store.put(record);
+      tx.oncomplete = () => {
+        // লোকালস্টোরেজেও একটি লাইটওয়েট ব্যাকআপ সিঙ্ক রাখা
+        try {
+          const miniRecord = { ...record };
+          if (miniRecord.image && miniRecord.image.length > 50000) {
+            miniRecord.image = ''; 
+          }
+          const ls = JSON.parse(localStorage.getItem('jainalTemplates') || '[]');
+          const idx = ls.findIndex(i => String(i.id) === String(record.id));
+          if (idx >= 0) ls[idx] = miniRecord;
+          else ls.unshift(miniRecord);
+          localStorage.setItem('jainalTemplates', JSON.stringify(ls));
+        } catch (_) {}
+        resolve();
+      };
+      tx.onerror = () => reject(tx.error);
+    });
+  }
+
+  const toast = (message, icon = 'fa-circle-check') => {
+    const t = $('#adminToast');
+    if (!t) return;
+    t.querySelector('i').className = `fa-solid ${icon}`;
+    $('#toastMessage').textContent = message;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2500);
+  };
+
+  const updatePreview = () => {
+    const name = $('#templateName').value.trim();
+    const category = $('#templateCategory').value;
+    const description = $('#templateDescription').value.trim();
+    const tags = $('#templateTags').value.split(',').map(v => v.trim()).filter(Boolean);
+
+    $('#previewName').textContent = name || 'Template name';
+    $('#previewCategory').textContent = category || 'CATEGORY';
+    $('#previewDescription').textContent = description || 'Your description will appear here.';
+    $('#previewStatus').textContent = $('#templateStatus').value.toUpperCase();
+    $('#previewStatus').style.background = $('#templateStatus').value === 'draft' ? 'rgba(146,64,14,.88)' : '';
+    $('#previewTags').innerHTML = tags.slice(0, 3).map(tag => `<span>${tag.replace(/[&<>'"]/g, '')}</span>`).join('');
+    $('#descriptionCount').textContent = $('#templateDescription').value.length;
+  };
+
+  const showImage = src => {
+    imageData = src || '';
+    const upload = $('#imageUpload');
+    if ($('#imagePreview')) $('#imagePreview').src = imageData;
+    if ($('#cardPreviewImage')) $('#cardPreviewImage').src = imageData;
+    if (upload) upload.classList.toggle('has-image', Boolean(imageData));
+    if ($('#cardPreviewImage')) $('#cardPreviewImage').parentElement.classList.toggle('has-image', Boolean(imageData));
+    if ($('#removeImage')) $('#removeImage').hidden = !imageData;
+  };
+
+  // ইমেজ কম্প্রেস ও রিসাইজ
+  function compressImage(base64Str, maxWidth = 800, maxHeight = 800, quality = 0.7) {
+    return new Promise((resolve) => {
+      let img = new Image();
+      img.src = base64Str;
+      img.onload = function () {
+        let canvas = document.createElement('canvas');
+        let width = img.width;
+        let height = img.height;
+        if (width > height) {
+          if (width > maxWidth) {
+            height *= maxWidth / width;
+            width = maxWidth;
+          }
+        } else {
+          if (height > maxHeight) {
+            width *= maxHeight / height;
+            height = maxHeight;
+          }
+        }
+        canvas.width = width;
+        canvas.height = height;
+        let ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, width, height);
+        resolve(canvas.toDataURL('image/jpeg', quality));
+      };
+    });
+  }
+
+  const fileInput = $('#templateImage');
+  if (fileInput) {
+    fileInput.addEventListener('change', event => {
+      const file = event.target.files[0];
+      if (!file) return;
+      if (!file.type.startsWith('image/')) {
+        toast('Please select an image file.', 'fa-circle-exclamation');
+        event.target.value = '';
+        return;
+      }
+      const reader = new FileReader();
+      reader.addEventListener('load', async () => {
+        const compressed = await compressImage(reader.result);
+        showImage(compressed);
+      });
+      reader.readAsDataURL(file);
+    });
+  }
+
+  $('#removeImage')?.addEventListener('click', () => {
+    if ($('#templateImage')) $('#templateImage').value = '';
+    showImage('');
+  });
+
+  ['templateName', 'templateCategory', 'templateStatus', 'templateDescription', 'templateTags'].forEach(id => {
+    $(`#${id}`)?.addEventListener('input', updatePreview);
+    $(`#${id}`)?.addEventListener('change', updatePreview);
+  });
+
+  const uploadBox = $('#imageUpload');
+  if (uploadBox) {
+    uploadBox.addEventListener('dragover', e => { e.preventDefault(); uploadBox.classList.add('dragover'); });
+    uploadBox.addEventListener('dragleave', () => uploadBox.classList.remove('dragover'));
+    uploadBox.addEventListener('drop', async e => {
+      e.preventDefault();
+      uploadBox.classList.remove('dragover');
+      const file = e.dataTransfer.files[0];
+      if (!file || !file.type.startsWith('image/')) return toast('Please drop an image file.', 'fa-circle-exclamation');
+      const reader = new FileReader();
+      reader.addEventListener('load', async () => {
+        const compressed = await compressImage(reader.result);
+        showImage(compressed);
+      });
+      reader.readAsDataURL(file);
+    });
+  }
+
+  async function populateEdit() {
+    if (!editingId) return;
+    const list = await getAllTemplates();
+    existing = list.find(item => String(item.id) === String(editingId));
+    if (!existing) {
+      toast('Template not found.', 'fa-circle-exclamation');
+      return;
     }
-
-    function compressImage(base64Str, maxWidth = 800, maxHeight = 800, quality = 0.7) {
-        return new Promise((resolve) => {
-            let img = new Image();
-            img.src = base64Str;
-            img.onload = function () {
-                let canvas = document.createElement('canvas');
-                let width = img.width;
-                let height = img.height;
-
-                if (width > height) {
-                    if (width > maxWidth) {
-                        height *= maxWidth / width;
-                        width = maxWidth;
-                    }
-                } else {
-                    if (height > maxHeight) {
-                        width *= maxHeight / height;
-                        height = maxHeight;
-                    }
-                }
-
-                canvas.width = width;
-                canvas.height = height;
-                let ctx = canvas.getContext('2d');
-                ctx.drawImage(img, 0, 0, width, height);
-                resolve(canvas.toDataURL('image/jpeg', quality));
-            };
-        });
+    $('#templateName').value = existing.title || existing.name || '';
+    const savedCategory = existing.category || '';
+    if (savedCategory && ![...$('#templateCategory').options].some(o => o.value === savedCategory)) {
+      const opt = document.createElement('option');
+      opt.value = savedCategory;
+      opt.textContent = savedCategory;
+      $('#templateCategory').append(opt);
     }
+    $('#templateCategory').value = savedCategory;
+    $('#templateStatus').value = String(existing.status || 'published').toLowerCase() === 'draft' ? 'draft' : 'published';
+    $('#templateDescription').value = existing.description || '';
+    $('#templateTags').value = Array.isArray(existing.tags) ? existing.tags.join(', ') : (existing.tags || '');
+    $('#templateUrl').value = existing.url || '';
+    $('#githubUrl').value = existing.githubUrl || '';
+    $('#otherUrl').value = existing.otherUrl || (existing.otherLinks && existing.otherLinks[0]) || '';
+    showImage(existing.image || '');
+    $('#pageTitle').innerHTML = 'Edit <span>template</span>';
+    $('#breadcrumbTitle').textContent = 'Edit Template';
+    $('#saveButtonText').textContent = 'Update Template';
+    updatePreview();
+  }
 
-    if (addProjectForm) {
-        addProjectForm.addEventListener("submit", async function (event) {
-            event.preventDefault();
+  if (form) {
+    form.addEventListener('submit', async event => {
+      event.preventDefault();
+      if (!form.reportValidity()) return;
+      if (!imageData) return toast('Please add one template image.', 'fa-circle-exclamation');
 
-            const title = projectTitle ? projectTitle.value.trim() : "";
-            const category = projectCategory ? projectCategory.value : "";
-            const statusElem = document.getElementById("projectStatus");
-            const status = statusElem ? statusElem.value : "published";
-            const shortText = shortDescription ? shortDescription.value.trim() : "";
-            const descElem = document.getElementById("projectDescription");
-            const description = descElem ? descElem.value.trim() : "";
-            const featElem = document.getElementById("features");
-            const featuresText = featElem ? featElem.value.trim() : "";
-            const liveElem = document.getElementById("liveUrl");
-            const liveUrl = liveElem ? liveElem.value.trim() : "";
-            const gitElem = document.getElementById("githubUrl");
-            const githubUrl = gitElem ? gitElem.value.trim() : "";
-            const commElem = document.getElementById("allowComments");
-            const allowComments = commElem ? commElem.checked : true;
-            const portElem = document.getElementById("showPortfolio");
-            const showPortfolio = portElem ? portElem.checked : true;
+      const submitBtn = form.querySelector('button[type="submit"]');
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Saving...`;
 
-            // সঠিক উপায়ে টেকনোলজি সংগ্রহ (ট্যাগ অ্যারে এবং ইনপুট ফিল্ড উভয় চেক করা হবে)
-            let finalTechnologies = [...technologies];
+      const now = new Date().toISOString();
+      const titleVal = $('#templateName').value.trim();
+      const record = {
+        ...(existing || {}),
+        id: existing?.id || editingId || `template-${Date.now()}`,
+        title: titleVal,
+        name: titleVal,
+        category: $('#templateCategory').value,
+        description: $('#templateDescription').value.trim(),
+        image: imageData,
+        tags: $('#templateTags').value.split(',').map(v => v.trim()).filter(Boolean),
+        status: $('#templateStatus').value,
+        url: $('#templateUrl').value.trim(),
+        githubUrl: $('#githubUrl').value.trim(),
+        otherLinks: $('#otherUrl').value.trim() ? [$('#otherUrl').value.trim()] : [],
+        createdAt: existing?.createdAt || now,
+        updatedAt: now
+      };
 
-            if (technologiesInput && technologiesInput.value.trim() !== "") {
-                const manualValues = technologiesInput.value.split(",").map(t => t.trim()).filter(t => t);
-                manualValues.forEach(val => {
-                    if (!finalTechnologies.includes(val)) {
-                        finalTechnologies.push(val);
-                    }
-                });
-            }
+      try {
+        await saveTemplateDB(record);
+        toast(editingId ? 'Template updated successfully.' : 'Template saved successfully.');
+        setTimeout(() => {
+          window.location.href = 'templates.html';
+        }, 700);
+      } catch (err) {
+        console.error('Save error:', err);
+        toast('Database error! Failed to save.', 'fa-circle-exclamation');
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = `<i class="fa-solid fa-floppy-disk"></i> Save Template`;
+      }
+    });
+  }
 
-            // যদি ব্যবহারকারী কোনো ট্যাগ যোগ না করে থাকেন, তবে সাধারণ টেক্সট ইনপুট বা ফলব্যাক ব্যবহার হবে
-            if (finalTechnologies.length === 0) {
-                finalTechnologies = ["HTML5", "CSS3", "JavaScript"];
-            }
+  function setupSidebar() {
+    const sidebar = $('#adminSidebar'), overlay = $('#sidebarOverlay');
+    $('#sidebarToggle')?.addEventListener('click', () => { sidebar.classList.add('show', 'open'); overlay.classList.add('show'); });
+    $('#sidebarClose')?.addEventListener('click', () => { sidebar.classList.remove('show', 'open'); overlay.classList.remove('show'); });
+    overlay?.addEventListener('click', () => { sidebar.classList.remove('show', 'open'); overlay.classList.remove('show'); });
+    $('#logoutBtn')?.addEventListener('click', () => {
+      localStorage.removeItem('adminLoggedIn');
+      sessionStorage.removeItem('adminLoggedIn');
+      window.location.href = 'login.html';
+    });
+  }
 
-            if (!title || !category || !shortText || !description) {
-                showToast("Please complete all required fields.", "error");
-                return;
-            }
-
-            let compressedImage = "";
-            if (projectImage && projectImage.files[0]) {
-                let base64Image = await new Promise((resolve) => {
-                    const reader = new FileReader();
-                    reader.onload = (e) => resolve(e.target.result);
-                    reader.readAsDataURL(projectImage.files[0]);
-                });
-                compressedImage = await compressImage(base64Image);
-            }
-
-            const projects = JSON.parse(localStorage.getItem("portfolioProjects")) || [];
-
-            const newProject = {
-                id: Date.now(),
-                title: title,
-                category: category,
-                status: status,
-                shortDescription: shortText,
-                description: description,
-                technologies: finalTechnologies, // অ্যারে হিসেবে সেভ হচ্ছে
-                tech: finalTechnologies,           // ব্যাকআপ প্রপার্টি
-                features: featuresText ? featuresText.split("\n").map(item => item.trim()).filter(item => item) : [],
-                liveUrl: liveUrl,
-                githubUrl: githubUrl,
-                image: compressedImage,
-                allowComments: allowComments,
-                showPortfolio: showPortfolio,
-                views: 0,
-                comments: 0,
-                createdAt: new Date().toISOString()
-            };
-
-            projects.unshift(newProject);
-
-            try {
-                localStorage.setItem("portfolioProjects", JSON.stringify(projects));
-                showToast("Project published successfully.");
-                
-                const submitButton = document.getElementById("saveProjectBtn");
-                if (submitButton) {
-                    submitButton.disabled = true;
-                    submitButton.innerHTML = `<i class="fa-solid fa-check"></i> Published Successfully`;
-                }
-
-                setTimeout(function () {
-                    window.location.href = "dashboard.html";
-                }, 1200);
-
-            } catch (error) {
-                console.error("Storage limit exceeded:", error);
-                showToast("Storage Full! Too many projects stored.", "error");
-            }
-        });
-    }
-
-});
+  populateEdit();
+  updatePreview();
+  setupSidebar();
+})();
