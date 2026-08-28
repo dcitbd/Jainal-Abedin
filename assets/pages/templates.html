@@ -1642,29 +1642,8 @@ themeButton?.addEventListener(
 
 
 /* =====================================================
-   TEMPLATE STORAGE
+   TEMPLATE STORAGE & RENDERING
 ===================================================== */
-
-/*
-    Add Template page should save data into:
-
-    localStorage key:
-    "jainalTemplates"
-
-    Example object:
-
-    {
-        id: "template_123",
-        name: "Business Website",
-        category: "Business",
-        description: "Modern business website",
-        image: "../uploads/templates/demo.jpg",
-        url: "../templates/business/index.html",
-        tags: ["Business", "Corporate"],
-        createdAt: "2026-08-25T10:00:00.000Z"
-    }
-*/
-
 
 const STORAGE_KEY =
     "jainalTemplates";
@@ -1841,10 +1820,12 @@ function createTemplateCard(template) {
 
     const image =
         template.image ||
+        template.thumbnail ||
         "../images/template-placeholder.jpg";
 
 
     const name =
+        template.title ||
         template.name ||
         "Untitled Template";
 
@@ -1856,6 +1837,7 @@ function createTemplateCard(template) {
 
     const description =
         template.description ||
+        template.shortDescription ||
         "Professional website template.";
 
 
@@ -1867,12 +1849,13 @@ function createTemplateCard(template) {
 
     const url =
         template.url ||
+        template.liveUrl ||
         "#";
 
 
     const createdAt =
         formatDate(
-            template.createdAt
+            template.createdAt || template.date
         );
 
 
@@ -2056,8 +2039,15 @@ function buildCategories(templates) {
 function renderTemplates() {
 
 
-    const templates =
+    const allTemplates =
         getTemplates();
+
+
+    // ড্রাফট বাদে কেবল পাবলিশড টেম্প্লেট ফিল্টার করা
+    const templates =
+        allTemplates.filter(
+            t => String(t.status || 'published').toLowerCase() !== 'draft'
+        );
 
 
     buildCategories(
@@ -2115,6 +2105,7 @@ function renderTemplates() {
 
                 const name =
                     (
+                        template.title ||
                         template.name ||
                         ""
                     ).toLowerCase();
@@ -2123,6 +2114,7 @@ function renderTemplates() {
                 const description =
                     (
                         template.description ||
+                        template.shortDescription ||
                         ""
                     ).toLowerCase();
 
@@ -2190,12 +2182,12 @@ function renderTemplates() {
 
                 const dateA =
                     new Date(
-                        a.createdAt || 0
+                        a.createdAt || a.date || 0
                     );
 
                 const dateB =
                     new Date(
-                        b.createdAt || 0
+                        b.createdAt || b.date || 0
                     );
 
                 return dateB - dateA;
@@ -2263,13 +2255,6 @@ window.addEventListener(
 
     }
 );
-
-
-
-
-
-
-
 
 </script>
 
