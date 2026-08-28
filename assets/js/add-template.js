@@ -1,53 +1,41 @@
 /* =====================================================
-   ADD / EDIT TEMPLATE JAVASCRIPT (QUOTA & STORAGE FIXED)
+   ADD TEMPLATE - DIRECT GITHUB API INTEGRATION
    Jainal Abedin Portfolio
 ===================================================== */
 (() => {
-  const KEY = 'jainalTemplates';
+  // আপনার GitHub কনফিগারেশন সেট করুন
+  const GITHUB_CONFIG = {
+    username: "YOUR_GITHUB_USERNAME", // আপনার GitHub ইউজারনেম
+    repo: "YOUR_REPOSITORY_NAME",     // আপনার রিপোজিটরির নাম
+    branch: "main",                   // ব্রাঞ্চের নাম (main/master)
+    filePath: "templates-data.json",  // JSON ফাইলের পাথ
+    token: "YOUR_GITHUB_PERSONAL_ACCESS_TOKEN" // GitHub Fine-grained বা Personal Access Token (repo scope সহ)
+  };
+
   const $ = selector => document.querySelector(selector);
   const form = $('#templateForm');
-  const params = new URLSearchParams(window.location.search);
-  const editingId = params.get('edit');
   let imageData = '';
-  let existing = null;
 
-  const read = () => { try { const list = JSON.parse(localStorage.getItem(KEY) || '[]'); return Array.isArray(list) ? list : []; } catch { return []; } };
-  const idOf = (item, index) => String(item.id || item.templateId || `template-${index}`);
-  
-  const toast = (message, icon = 'fa-circle-check') => { 
-    $('#adminToast').querySelector('i').className = `fa-solid ${icon}`; 
-    $('#toastMessage').textContent = message; 
-    $('#adminToast').classList.add('show'); 
-    setTimeout(() => $('#adminToast').classList.remove('show'), 2500); 
+  const toast = (message, icon = 'fa-circle-check') => {
+    const toastEl = $('#adminToast');
+    if (!toastEl) return;
+    toastEl.querySelector('i').className = `fa-solid ${icon}`;
+    $('#toastMessage').textContent = message;
+    toastEl.classList.add('show');
+    setTimeout(() => toastEl.classList.remove('show'), 3000);
   };
 
-  const updatePreview = () => { 
-    const name = $('#templateName').value.trim();
-    const category = $('#templateCategory').value; 
-    const description = $('#templateDescription').value.trim(); 
-    const tags = $('#templateTags').value.split(',').map(value => value.trim()).filter(Boolean); 
-    
-    $('#previewName').textContent = name || 'Template name'; 
-    $('#previewCategory').textContent = category || 'CATEGORY'; 
-    $('#previewDescription').textContent = description || 'Your description will appear here.'; 
-    $('#previewStatus').textContent = $('#templateStatus').value.toUpperCase(); 
-    $('#previewStatus').style.background = $('#templateStatus').value === 'draft' ? 'rgba(146,64,14,.88)' : ''; 
-    $('#previewTags').innerHTML = tags.slice(0,3).map(tag => `<span>${tag.replace(/[&<>'"]/g, '')}</span>`).join(''); 
-    $('#descriptionCount').textContent = $('#templateDescription').value.length; 
+  const showImage = src => {
+    imageData = src || '';
+    const upload = $('#imageUpload');
+    if ($('#imagePreview')) $('#imagePreview').src = imageData;
+    if ($('#cardPreviewImage')) $('#cardPreviewImage').src = imageData;
+    if (upload) upload.classList.toggle('has-image', Boolean(imageData));
+    if ($('#removeImage')) $('#removeImage').hidden = !imageData;
   };
 
-  const showImage = src => { 
-    imageData = src || ''; 
-    const upload = $('#imageUpload'); 
-    $('#imagePreview').src = imageData; 
-    $('#cardPreviewImage').src = imageData; 
-    upload.classList.toggle('has-image', Boolean(imageData)); 
-    $('#cardPreviewImage').parentElement.classList.toggle('has-image', Boolean(imageData)); 
-    $('#removeImage').hidden = !imageData; 
-  };
-
-  // ইমেজ কম্প্রেস ও সাইজ ছোট করার ফাংশন (QuotaExceededError রোধ করতে)
-  function compressImage(base64Str, maxWidth = 600, maxHeight = 600, quality = 0.5) {
+  // ইমেজ সাইজ অপ্টিমাইজেশন
+  function compressImage(base64Str, maxWidth = 800, maxHeight = 800, quality = 0.6) {
     return new Promise((resolve) => {
       let img = new Image();
       img.src = base64Str;
@@ -55,7 +43,6 @@
         let canvas = document.createElement('canvas');
         let width = img.width;
         let height = img.height;
-
         if (width > height) {
           if (width > maxWidth) {
             height *= maxWidth / width;
@@ -67,7 +54,6 @@
             height = maxHeight;
           }
         }
-
         canvas.width = width;
         canvas.height = height;
         let ctx = canvas.getContext('2d');
@@ -77,136 +63,129 @@
     });
   }
 
-  $('#templateImage').addEventListener('change', event => { 
-    const file = event.target.files[0]; 
-    if (!file) return; 
-    if (!file.type.startsWith('image/')) { 
-      toast('Please select an image file.', 'fa-circle-exclamation'); 
-      event.target.value = ''; 
-      return; 
-    } 
-    const reader = new FileReader(); 
-    reader.addEventListener('load', async () => {
-      const compressed = await compressImage(reader.result);
-      showImage(compressed);
-    }); 
-    reader.readAsDataURL(file); 
-  });
-
-  $('#removeImage').addEventListener('click', () => { $('#templateImage').value = ''; showImage(''); });
-
-  ['templateName','templateCategory','templateStatus','templateDescription','templateTags'].forEach(id => { 
-    $(`#${id}`).addEventListener('input', updatePreview); 
-    $(`#${id}`).addEventListener('change', updatePreview); 
-  });
-
-  $('#imageUpload').addEventListener('dragover', event => { event.preventDefault(); $('#imageUpload').classList.add('dragover'); });
-  $('#imageUpload').addEventListener('dragleave', () => $('#imageUpload').classList.remove('dragover'));
-  $('#imageUpload').addEventListener('drop', async event => { 
-    event.preventDefault(); 
-    $('#imageUpload').classList.remove('dragover'); 
-    const file = event.dataTransfer.files[0]; 
-    if (!file || !file.type.startsWith('image/')) return toast('Please drop an image file.', 'fa-circle-exclamation'); 
-    const reader = new FileReader(); 
-    reader.addEventListener('load', async () => {
-      const compressed = await compressImage(reader.result);
-      showImage(compressed);
-    }); 
-    reader.readAsDataURL(file); 
-  });
-
-  function populateEdit() { 
-    if (!editingId) return; 
-    const list = read(); 
-    const index = list.findIndex((item, i) => idOf(item, i) === editingId); 
-    if (index < 0) { 
-      toast('Template not found.', 'fa-circle-exclamation'); 
-      return; 
-    } 
-    existing = list[index]; 
-    $('#templateName').value = existing.title || existing.name || existing.templateName || ''; 
-    const savedCategory = existing.category || existing.type || ''; 
-    
-    if (savedCategory && ![...$('#templateCategory').options].some(option => option.value === savedCategory)) { 
-      const option = document.createElement('option'); 
-      option.value = savedCategory; 
-      option.textContent = savedCategory; 
-      $('#templateCategory').append(option); 
-    } 
-    
-    $('#templateCategory').value = savedCategory; 
-    $('#templateStatus').value = String(existing.status || 'published').toLowerCase() === 'draft' ? 'draft' : 'published'; 
-    $('#templateDescription').value = existing.description || existing.shortDescription || existing.summary || ''; 
-    $('#templateTags').value = Array.isArray(existing.tags) ? existing.tags.join(', ') : (existing.tags || existing.technology || ''); 
-    $('#templateUrl').value = existing.url || existing.liveUrl || existing.templateUrl || existing.link || ''; 
-    $('#githubUrl').value = existing.githubUrl || existing.github || ''; 
-    $('#otherUrl').value = existing.otherUrl || (existing.otherLinks && existing.otherLinks[0]) || ''; 
-    
-    showImage(existing.image || existing.thumbnail || existing.coverImage || existing.previewImage || ''); 
-    $('#pageTitle').innerHTML = 'Edit <span>template</span>'; 
-    $('#breadcrumbTitle').textContent = 'Edit Template'; 
-    $('#saveButtonText').textContent = 'Update Template'; 
-    updatePreview(); 
+  // ইমেজ সিলেক্ট হ্যান্ডলার
+  const fileInput = $('#templateImage');
+  if (fileInput) {
+    fileInput.addEventListener('change', event => {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.addEventListener('load', async () => {
+        const compressed = await compressImage(reader.result);
+        showImage(compressed);
+      });
+      reader.readAsDataURL(file);
+    });
   }
 
-  form.addEventListener('submit', async event => { 
-    event.preventDefault(); 
-    if (!form.reportValidity()) return; 
-    if (!imageData) return toast('Please add one template image.', 'fa-circle-exclamation'); 
-    
-    const now = new Date().toISOString(); 
-    const newId = typeof globalThis.crypto?.randomUUID === 'function' ? globalThis.crypto.randomUUID() : `template-${Date.now()}`; 
-    const titleVal = $('#templateName').value.trim();
+  // GitHub থেকে বর্তমান ফাইল ডাটা এবং SHA নিয়ে আসা
+  async function getFileFromGitHub() {
+    const url = `https://api.github.com/repos/${GITHUB_CONFIG.username}/${GITHUB_CONFIG.repo}/contents/${GITHUB_CONFIG.filePath}?ref=${GITHUB_CONFIG.branch}`;
+    const response = await fetch(url, {
+      headers: {
+        'Authorization': `Bearer ${GITHUB_CONFIG.token}`,
+        'Accept': 'application/vnd.github.v3+json'
+      }
+    });
 
-    const record = { 
-      ...(existing || {}), 
-      id: existing?.id || existing?.templateId || editingId || newId, 
-      title: titleVal, 
-      name: titleVal, 
-      category: $('#templateCategory`').value || $('#templateCategory').value, 
-      description: $('#templateDescription').value.trim(), 
-      image: imageData, 
-      tags: $('#templateTags').value.split(',').map(value => value.trim()).filter(Boolean), 
-      status: $('#templateStatus').value, 
-      url: $('#templateUrl').value.trim(), 
-      githubUrl: $('#githubUrl').value.trim(), 
-      otherLinks: $('#otherUrl').value.trim() ? [$('#otherUrl').value.trim()] : [], 
-      createdAt: existing?.createdAt || now, 
-      updatedAt: now 
-    }; 
-
-    const list = read(); 
-    const index = editingId ? list.findIndex((item, i) => idOf(item, i) === editingId) : -1; 
-    
-    if (index >= 0) list[index] = record; 
-    else list.unshift(record); 
-    
-    try {
-      localStorage.setItem(KEY, JSON.stringify(list)); 
-      toast(editingId ? 'Template updated successfully.' : 'Template saved successfully.'); 
-      
-      setTimeout(() => { 
-        window.location.href = 'templates.html'; 
-      }, 700); 
-    } catch (e) {
-      console.error("Storage quota error:", e);
-      toast('Storage full! Please use a smaller image file.', 'fa-circle-exclamation');
+    if (response.status === 404) {
+      return { content: [], sha: null };
     }
-  });
 
-  function setupSidebar() { 
-    const sidebar = $('#adminSidebar'), overlay = $('#sidebarOverlay'), open = () => { sidebar.classList.add('show','open'); overlay.classList.add('show'); }, close = () => { sidebar.classList.remove('show','open'); overlay.classList.remove('show'); }; 
-    $('#sidebarToggle')?.addEventListener('click', open); 
-    $('#sidebarClose')?.addEventListener('click', close); 
-    overlay?.addEventListener('click', close); 
-    $('#logoutBtn')?.addEventListener('click', () => { 
-      localStorage.removeItem('adminLoggedIn'); 
-      sessionStorage.removeItem('adminLoggedIn'); 
-      window.location.href = 'login.html'; 
-    }); 
+    if (!response.ok) {
+      throw new Error(`GitHub Fetch Error: ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    const decodedContent = decodeURIComponent(escape(atob(data.content)));
+    return {
+      content: JSON.parse(decodedContent || '[]'),
+      sha: data.sha
+    };
   }
 
-  populateEdit(); 
-  updatePreview(); 
-  setupSidebar();
+  // GitHub API দিয়ে নতুন ডাটা কমিট ও পুশ করা
+  async function saveToGitHub(newContentList, fileSha) {
+    const url = `https://api.github.com/repos/${GITHUB_CONFIG.username}/${GITHUB_CONFIG.repo}/contents/${GITHUB_CONFIG.filePath}`;
+    const stringContent = JSON.stringify(newContentList, null, 2);
+    const encodedContent = btoa(unescape(encodeURIComponent(stringContent)));
+
+    const body = {
+      message: `Add new template: ${$('#templateName').value.trim()}`,
+      content: encodedContent,
+      branch: GITHUB_CONFIG.branch
+    };
+
+    if (fileSha) {
+      body.sha = fileSha;
+    }
+
+    const response = await fetch(url, {
+      method: 'PUT',
+      headers: {
+        'Authorization': `Bearer ${GITHUB_CONFIG.token}`,
+        'Content-Type': 'application/json',
+        'Accept': 'application/vnd.github.v3+json'
+      },
+      body: JSON.stringify(body)
+    });
+
+    if (!response.ok) {
+      const err = await response.json();
+      throw new Error(err.message || 'Failed to commit to GitHub');
+    }
+
+    return await response.json();
+  }
+
+  // ফর্ম সাবমিশন
+  if (form) {
+    form.addEventListener('submit', async event => {
+      event.preventDefault();
+      if (!form.reportValidity()) return;
+
+      const submitBtn = form.querySelector('button[type="submit"]');
+      const originalText = submitBtn.innerHTML;
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Saving to GitHub...`;
+
+      try {
+        const { content: currentTemplates, sha } = await getFileFromGitHub();
+
+        const titleVal = $('#templateName').value.trim();
+        const newTemplate = {
+          id: `template-${Date.now()}`,
+          title: titleVal,
+          name: titleVal,
+          category: $('#templateCategory').value,
+          description: $('#templateDescription').value.trim(),
+          image: imageData || 'https://via.placeholder.com/600x400',
+          tags: $('#templateTags').value.split(',').map(v => v.trim()).filter(Boolean),
+          status: $('#templateStatus').value,
+          url: $('#templateUrl').value.trim(),
+          githubUrl: $('#githubUrl').value.trim(),
+          otherLinks: $('#otherUrl').value.trim() ? [$('#otherUrl').value.trim()] : [],
+          createdAt: new Date().toISOString()
+        };
+
+        currentTemplates.unshift(newTemplate);
+
+        await saveToGitHub(currentTemplates, sha);
+
+        // লোকালস্টোরেজ ক্যাশ ব্যাকআপ
+        localStorage.setItem('jainalTemplates', JSON.stringify(currentTemplates));
+
+        toast('Template successfully published to GitHub!');
+        setTimeout(() => {
+          window.location.href = 'templates.html';
+        }, 1200);
+
+      } catch (error) {
+        console.error('GitHub Sync Error:', error);
+        toast(`Error: ${error.message}`, 'fa-circle-exclamation');
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalText;
+      }
+    });
+  }
 })();
