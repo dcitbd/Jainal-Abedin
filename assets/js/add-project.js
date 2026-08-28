@@ -1,5 +1,5 @@
 /* =====================================================
-   MODERN ADD PROJECT BUILDER (FIXED & OPTIMIZED)
+   MODERN ADD PROJECT BUILDER (UPDATED & FIXED)
 ===================================================== */
 
 const addProjectForm = document.getElementById("addProjectForm");
@@ -160,7 +160,7 @@ function showToast(message, type = "success") {
     }, 3500);
 }
 
-// ইমেজ সাইজ কম্প্রেস করার ফাংশন (লোকালস্টোরেজ ফুল হওয়া রোধ করতে)
+// ইমেজ সাইজ অপ্টিমাইজ ও কম্প্রেস করার ফাংশন
 function compressImage(base64Str, maxWidth = 800, maxHeight = 800, quality = 0.7) {
     return new Promise((resolve) => {
         let img = new Image();
@@ -206,6 +206,15 @@ if (addProjectForm) {
         const allowComments = document.getElementById("allowComments").checked;
         const showPortfolio = document.getElementById("showPortfolio").checked;
 
+        // ইনপুট ফিল্ড থেকে যদি কেউ কমা দিয়ে টেকনোলজি লিখে থাকে তা ক্যাচ করা
+        let finalTechnologies = [...technologies];
+        if (technologiesInput && technologiesInput.value.trim() !== "") {
+            const typedTechs = technologiesInput.value.split(",").map(t => t.trim()).filter(t => t);
+            typedTechs.forEach(t => {
+                if (!finalTechnologies.includes(t)) finalTechnologies.push(t);
+            });
+        }
+
         if (!title || !category || !shortText || !description) {
             showToast("Please complete all required fields.", "error");
             return;
@@ -230,8 +239,8 @@ if (addProjectForm) {
             status: status,
             shortDescription: shortText,
             description: description,
-            technologies: technologies,
-            tech: technologies,
+            technologies: finalTechnologies,
+            tech: finalTechnologies,
             features: featuresText.split("\n").map(item => item.trim()).filter(item => item),
             liveUrl: liveUrl,
             githubUrl: githubUrl,
