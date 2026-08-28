@@ -266,7 +266,7 @@ function saveProject(
         ).value.trim();
 
 
-    // টেকনোলজি ইনপুট থেকে ডেটা সঠিকভাবে অ্যারে আকারে নেওয়ার লজিক
+    // টেকনোলজি ইনপুট থেকে ডেটা সঠিকভাবে অ্যারে বা স্ট্রিং আকারে নেওয়া নিশ্চিত করা
     const technologiesInput =
         document.getElementById(
             "technologies"
@@ -347,6 +347,9 @@ function saveProject(
 
         technologies:
             technologies,
+
+        tech:
+            technologies, // ব্যাকআপ প্রপার্টি যাতে উভয় ফরম্যাটেই ডিটেইলস পেজ রিড করতে পারে
 
 
         features:
