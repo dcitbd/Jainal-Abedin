@@ -231,19 +231,7 @@ if (projectImage) {
 
 const projectForm =
     document.getElementById(
-        "projectForm"
-    );
-
-
-const publishBtn =
-    document.getElementById(
-        "publishBtn"
-    );
-
-
-const saveDraftBtn =
-    document.getElementById(
-        "saveDraftBtn"
+        "addProjectForm"
     );
 
 
@@ -274,44 +262,64 @@ function saveProject(
 
     const fullDescription =
         document.getElementById(
-            "fullDescription"
+            "projectDescription"
         ).value.trim();
 
 
-    const technologies =
+    // টেকনোলজি ইনপুট থেকে ডেটা সঠিকভাবে অ্যারে আকারে নেওয়ার লজিক
+    const technologiesInput =
         document.getElementById(
             "technologies"
         ).value.trim();
 
 
+    const technologies =
+        technologiesInput
+            ? technologiesInput
+                .split(",")
+                .map(function (item) {
+                    return item.trim();
+                })
+                .filter(function (item) {
+                    return item !== "";
+                })
+            : [];
+
+
     const completionDate =
-        document.getElementById(
-            "completionDate"
-        ).value;
+        new Date().toISOString();
 
 
     const projectUrl =
         document.getElementById(
-            "projectUrl"
-        ).value.trim();
+            "liveUrl"
+        ) ? document.getElementById("liveUrl").value.trim() : "";
 
 
     const githubUrl =
         document.getElementById(
             "githubUrl"
-        ).value.trim();
+        ) ? document.getElementById("githubUrl").value.trim() : "";
 
 
     const featured =
         document.getElementById(
-            "featuredProject"
-        ).checked;
+            "showPortfolio"
+        ) ? document.getElementById("showPortfolio").checked : true;
 
 
     const allowComments =
         document.getElementById(
             "allowComments"
-        ).checked;
+        ) ? document.getElementById("allowComments").checked : true;
+
+
+    // গ্যালারি ইমেজ প্রিভিউ থেকে প্রথম ছবিটি মূল প্রজেক্ট ইমেজ হিসেবে সেট করা
+    let coverImageUrl = "";
+    const firstGalleryImg = imagePreview ? imagePreview.querySelector("img") : null;
+    if (firstGalleryImg) {
+        coverImageUrl = firstGalleryImg.src;
+    }
 
 
     const project = {
@@ -333,36 +341,23 @@ function saveProject(
             shortDescription,
 
 
-        fullDescription:
+        description:
             fullDescription,
 
 
         technologies:
-            technologies
-                .split(",")
-                .map(
-                    function (item) {
-
-                        return item.trim();
-
-                    }
-
-                )
-                .filter(
-                    function (item) {
-
-                        return item !== "";
-
-                    }
-
-                ),
+            technologies,
 
 
-        completionDate:
+        features:
+            document.getElementById("features") ? document.getElementById("features").value.trim() : "",
+
+
+        createdAt:
             completionDate,
 
 
-        projectUrl:
+        liveUrl:
             projectUrl,
 
 
@@ -390,8 +385,8 @@ function saveProject(
             0,
 
 
-        createdAt:
-            new Date().toISOString()
+        image:
+            coverImageUrl
 
     };
 
@@ -416,27 +411,27 @@ function saveProject(
 
     try {
 
-    localStorage.setItem(
+        localStorage.setItem(
 
-        "portfolioProjects",
+            "portfolioProjects",
 
-        JSON.stringify(projects)
+            JSON.stringify(projects)
 
-    );
+        );
 
-}
+    }
 
-catch(error){
+    catch(error){
 
-    console.error(error);
+        console.error(error);
 
-    alert(
+        alert(
 
-        "Storage Full"
+            "Storage Full"
 
-    );
+        );
 
-}
+    }
 
 
     return project;
