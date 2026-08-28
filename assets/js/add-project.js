@@ -1,5 +1,5 @@
 /* =====================================================
-   MODERN ADD PROJECT BUILDER (ULTIMATE TECH STACK FIX)
+   MODERN ADD PROJECT BUILDER (TECH STACK & DATA FIX)
    Jainal Abedin Portfolio
 ===================================================== */
 
@@ -77,13 +77,12 @@ document.addEventListener("DOMContentLoaded", function () {
         updatePreviewTechStack();
     }
 
-    // প্রিভিউ সেকশনে সঠিক টেকনোলজি আপডেট করা (ফলব্যাক রিমুভ করা হয়েছে যাতে কাস্টম ট্যাগ নষ্ট না হয়)
     function updatePreviewTechStack() {
         const previewTechStack = document.getElementById("previewTechStack");
         if (!previewTechStack) return;
         previewTechStack.innerHTML = "";
         
-        const previewItems = technologies.length > 0 ? technologies.slice(0, 4) : ["Add Technologies"];
+        const previewItems = technologies.length > 0 ? technologies.slice(0, 4) : ["HTML", "CSS", "JS"];
         previewItems.forEach(function (technology) {
             const span = document.createElement("span");
             span.textContent = technology;
@@ -218,21 +217,21 @@ document.addEventListener("DOMContentLoaded", function () {
             const portElem = document.getElementById("showPortfolio");
             const showPortfolio = portElem ? portElem.checked : true;
 
-            // সুনিশ্চিত এবং সঠিক টেকনোলজি প্রসেসিং (ইউজারের টাইপ করা বা এন্টার দেওয়া ট্যাগগুলো কালেক্ট করা)
+            // সঠিক উপায়ে টেকনোলজি সংগ্রহ (ট্যাগ অ্যারে এবং ইনপুট ফিল্ড উভয় চেক করা হবে)
             let finalTechnologies = [...technologies];
-            
+
             if (technologiesInput && technologiesInput.value.trim() !== "") {
-                const manualTechs = technologiesInput.value.split(",").map(t => t.trim()).filter(t => t);
-                manualTechs.forEach(t => {
-                    if (!finalTechnologies.includes(t)) {
-                        finalTechnologies.push(t);
+                const manualValues = technologiesInput.value.split(",").map(t => t.trim()).filter(t => t);
+                manualValues.forEach(val => {
+                    if (!finalTechnologies.includes(val)) {
+                        finalTechnologies.push(val);
                     }
                 });
             }
 
-            // যদি কোনো ট্যাগ বা ইনপুট না থাকে, তবে একটি বেসিক ফিল্ড নিশ্চিত করা
+            // যদি ব্যবহারকারী কোনো ট্যাগ যোগ না করে থাকেন, তবে সাধারণ টেক্সট ইনপুট বা ফলব্যাক ব্যবহার হবে
             if (finalTechnologies.length === 0) {
-                finalTechnologies = ["Web Application"];
+                finalTechnologies = ["HTML5", "CSS3", "JavaScript"];
             }
 
             if (!title || !category || !shortText || !description) {
@@ -259,8 +258,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 status: status,
                 shortDescription: shortText,
                 description: description,
-                technologies: finalTechnologies,
-                tech: finalTechnologies,
+                technologies: finalTechnologies, // অ্যারে হিসেবে সেভ হচ্ছে
+                tech: finalTechnologies,           // ব্যাকআপ প্রপার্টি
                 features: featuresText ? featuresText.split("\n").map(item => item.trim()).filter(item => item) : [],
                 liveUrl: liveUrl,
                 githubUrl: githubUrl,
