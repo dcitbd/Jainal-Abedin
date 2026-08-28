@@ -1,52 +1,206 @@
-/* Frontend-only template store shared by the admin pages. */
-(function () {
-    const KEY = 'jainalPortfolioTemplates';
-    const DEFAULTS = [
-        { id: 'tpl-agency', name: 'Agency Launch', category: 'Business', status: 'published', description: 'A refined company profile and services showcase.', tags: ['Business', 'Responsive'], preview: '', updatedAt: '2026-08-20T10:00:00.000Z' },
-        { id: 'tpl-creative', name: 'Creative Portfolio', category: 'Portfolio', status: 'draft', description: 'A visual-first personal portfolio for designers and creators.', tags: ['Portfolio', 'Dark'], preview: '', updatedAt: '2026-08-18T10:00:00.000Z' }
-    ];
+<script>
 
-    function read() {
-        try {
-            const records = JSON.parse(localStorage.getItem(KEY));
-            return Array.isArray(records) ? records : DEFAULTS;
-        } catch (_) { return DEFAULTS; }
+/* =====================================================
+   LOADER
+===================================================== */
+
+window.addEventListener("load", function () {
+    setTimeout(function () {
+        document.getElementById("jaCompaniesLoader")?.classList.add("hide");
+    }, 500);
+});
+
+/* =====================================================
+   MOBILE MENU
+===================================================== */
+
+const menuButton = document.getElementById("jaCompaniesMenu");
+const mobileNav = document.getElementById("jaCompaniesMobileNav");
+
+menuButton?.addEventListener("click", function () {
+    mobileNav.classList.toggle("show");
+});
+
+/* =====================================================
+   THEME
+===================================================== */
+
+const themeButton = document.getElementById("jaCompaniesTheme");
+
+function updateThemeIcon() {
+    const icon = themeButton?.querySelector("i");
+    if (!icon) return;
+    if (document.body.classList.contains("light-theme")) {
+        icon.className = "fa-solid fa-sun";
+    } else {
+        icon.className = "fa-solid fa-moon";
     }
-    function write(records) { localStorage.setItem(KEY, JSON.stringify(records)); }
-    function id() { return 'tpl-' + Date.now().toString(36) + Math.random().toString(36).slice(2, 7); }
-    function escape(value) {
-        const node = document.createElement('span');
-        node.textContent = value || '';
-        return node.innerHTML;
+}
+
+const savedTheme = localStorage.getItem("jaTheme");
+if (savedTheme === "light") {
+    document.body.classList.add("light-theme");
+}
+updateThemeIcon();
+
+themeButton?.addEventListener("click", function () {
+    document.body.classList.toggle("light-theme");
+    const isLight = document.body.classList.contains("light-theme");
+    localStorage.setItem("jaTheme", isLight ? "light" : "dark");
+    updateThemeIcon();
+});
+
+/* =====================================================
+   TEMPLATE STORAGE & RENDERING
+===================================================== */
+
+const STORAGE_KEY = "jainalTemplates";
+
+function getTemplates() {
+    try {
+        const data = localStorage.getItem(STORAGE_KEY);
+        if (!data) return [];
+        const parsed = JSON.parse(data);
+        return Array.isArray(parsed) ? parsed : [];
+    } catch (error) {
+        console.error("Template storage error:", error);
+        return [];
     }
-    function date(value) { return new Intl.DateTimeFormat('en', { month: 'short', day: 'numeric', year: 'numeric' }).format(new Date(value)); }
-    function toast(message, type) {
-        let el = document.querySelector('.template-toast');
-        if (!el) { el = document.createElement('div'); el.className = 'template-toast'; document.body.appendChild(el); }
-        el.className = 'template-toast is-visible ' + (type || 'success');
-        el.innerHTML = '<i class="fa-solid fa-' + (type === 'error' ? 'circle-exclamation' : 'circle-check') + '"></i><span>' + escape(message) + '</span>';
-        window.clearTimeout(toast.timer); toast.timer = window.setTimeout(() => el.classList.remove('is-visible'), 2800);
+}
+
+const templatesGrid = document.getElementById("templatesGrid");
+const templatesEmpty = document.getElementById("templatesEmpty");
+const templateNoResult = document.getElementById("templateNoResult");
+const templateSearch = document.getElementById("templateSearch");
+const templateCategory = document.getElementById("templateCategory");
+const templateCount = document.getElementById("templateCount");
+
+function escapeHTML(value) {
+    if (value === null || value === undefined) return "";
+    return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
+function formatDate(date) {
+    if (!date) return "";
+    const parsed = new Date(date);
+    if (Number.isNaN(parsed.getTime())) return "";
+    return parsed.toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" });
+}
+
+function createTemplateCard(template) {
+    const image = template.image || template.thumbnail || "../images/template-placeholder.jpg";
+    const name = template.title || template.name || "Untitled Template";
+    const category = template.category || "General";
+    const description = template.description || template.shortDescription || "Professional website template.";
+    const tags = Array.isArray(template.tags) ? template.tags : [];
+    const url = template.url || template.liveUrl || "#";
+    const createdAt = formatDate(template.createdAt || template.date);
+
+    const tagsHTML = tags.slice(0, 5).map(tag => `<span class="template-tag">${escapeHTML(tag)}</span>`).join("");
+
+    const card = document.createElement("article");
+    card.className = "template-card";
+    card.dataset.name = name.toLowerCase();
+    card.dataset.category = category.toLowerCase();
+
+    card.innerHTML = `
+        <div class="template-card-image">
+            <img src="${escapeHTML(image)}" alt="${escapeHTML(name)}" loading="lazy" onerror="this.src='../images/template-placeholder.jpg'">
+            <span class="template-category">${escapeHTML(category)}</span>
+        </div>
+        <div class="template-card-body">
+            <h3>${escapeHTML(name)}</h3>
+            <p>${escapeHTML(description)}</p>
+            ${tagsHTML ? `<div class="template-tags">${tagsHTML}</div>` : ""}
+            <div class="template-card-footer">
+                <span class="template-card-date">${createdAt ? `Added ${createdAt}` : "Portfolio Template"}</span>
+                <a href="${escapeHTML(url)}" class="template-view-btn" target="_blank" rel="noopener">
+                    View Template <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                </a>
+            </div>
+        </div>
+    `;
+    return card;
+}
+
+function buildCategories(templates) {
+    const categories = [...new Set(templates.map(t => t.category).filter(Boolean))];
+    categories.sort();
+    templateCategory.innerHTML = `<option value="all">All Categories</option>`;
+    categories.forEach(category => {
+        const option = document.createElement("option");
+        option.value = category.toLowerCase();
+        option.textContent = category;
+        templateCategory.appendChild(option);
+    });
+}
+
+function renderTemplates() {
+    const allTemplates = getTemplates();
+    
+    // শুধু পাবলিশড টেম্প্লেটগুলো পাবলিক পেজে দেখানোর জন্য ফিল্টার করা হলো (ড্রাফট বাদ দিয়ে)
+    const templates = allTemplates.filter(t => String(t.status || 'published').toLowerCase() !== 'draft');
+
+    buildCategories(templates);
+
+    templatesGrid.querySelectorAll(".template-card").forEach(card => card.remove());
+
+    if (!templates.length) {
+        templatesEmpty.classList.add("show");
+        templateNoResult.classList.remove("show");
+        templateCount.textContent = "0";
+        return;
     }
-    function templateCard(record, compact) {
-        const tags = record.tags.slice(0, 3).map(tag => '<span>' + escape(tag) + '</span>').join('');
-        return '<article class="template-card" data-id="' + record.id + '"><div class="template-preview">' +
-            (record.preview ? '<img src="' + escape(record.preview) + '" alt="' + escape(record.name) + ' preview">' : '<i class="fa-solid fa-wand-magic-sparkles"></i>') +
-            '<span class="template-status ' + record.status + '">' + escape(record.status) + '</span></div><div class="template-card-body">' +
-            '<div class="template-card-heading"><div><span class="template-category">' + escape(record.category) + '</span><h3>' + escape(record.name) + '</h3></div>' +
-            '<button class="icon-action template-menu" aria-label="Template actions"><i class="fa-solid fa-ellipsis"></i></button></div>' +
-            (compact ? '' : '<p>' + escape(record.description) + '</p><div class="template-tags">' + tags + '</div>') +
-            '<div class="template-card-footer"><small>Updated ' + date(record.updatedAt) + '</small><div class="template-actions"><a href="customer-viewer.html?id=' + record.id + '" title="View"><i class="fa-regular fa-eye"></i></a><a href="add-template.html?id=' + record.id + '" title="Edit"><i class="fa-regular fa-pen-to-square"></i></a><button class="delete-template" title="Delete"><i class="fa-regular fa-trash-can"></i></button></div></div></div></article>';
+
+    templatesEmpty.classList.remove("show");
+
+    const search = templateSearch.value.trim().toLowerCase();
+    const category = templateCategory.value;
+
+    const filtered = templates.filter(template => {
+        const name = (template.title || template.name || "").toLowerCase();
+        const description = (template.description || template.shortDescription || "").toLowerCase();
+        const templateCategoryName = (template.category || "").toLowerCase();
+        const tags = Array.isArray(template.tags) ? template.tags.join(" ").toLowerCase() : "";
+
+        const matchesSearch = !search || name.includes(search) || description.includes(search) || templateCategoryName.includes(search) || tags.includes(search);
+        const matchesCategory = category === "all" || templateCategoryName === category;
+
+        return matchesSearch && matchesCategory;
+    });
+
+    templateCount.textContent = filtered.length;
+
+    if (!filtered.length) {
+        templateNoResult.classList.add("show");
+        return;
     }
-    function bindDelete(container, after) {
-        container.addEventListener('click', event => {
-            const button = event.target.closest('.delete-template');
-            if (!button) return;
-            const card = button.closest('[data-id]');
-            const record = read().find(item => item.id === card.dataset.id);
-            if (record && window.confirm('Delete “' + record.name + '”? This cannot be undone.')) {
-                write(read().filter(item => item.id !== record.id)); toast('Template deleted.'); after();
-            }
-        });
+
+    templateNoResult.classList.remove("show");
+
+    filtered.sort((a, b) => {
+        const dateA = new Date(a.createdAt || a.date || 0);
+        const dateB = new Date(b.createdAt || b.date || 0);
+        return dateB - dateA;
+    }).forEach(template => {
+        templatesGrid.insertBefore(createTemplateCard(template), templateNoResult);
+    });
+}
+
+templateSearch?.addEventListener("input", renderTemplates);
+templateCategory?.addEventListener("change", renderTemplates);
+
+renderTemplates();
+
+window.addEventListener("storage", function (event) {
+    if (event.key === STORAGE_KEY) {
+        renderTemplates();
     }
-    window.TemplateStore = { KEY, read, write, id, escape, date, toast, templateCard, bindDelete };
-}());
+});
+
+</script>
