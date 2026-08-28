@@ -22,7 +22,7 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
 
-<!-- PROJECT DETAILS CSS (যদি css ফোল্ডারে থাকে তবে "../css/project-details.css" এবং assets/css এ থাকলে "../assets/css/project-details.css" দিন) -->
+<!-- PROJECT DETAILS CSS -->
 
 <link rel="stylesheet"
       href="../css/project-details.css">
@@ -146,9 +146,7 @@ Projects
 </a>
 
 
-<a href="templates.html"
-   class="jd-active">
-
+<a href="templates.html">
 Templates
 </a>
 
@@ -542,6 +540,43 @@ Key Features
 </ul>
 
 
+</div>
+
+
+
+
+
+<!-- LIKE & ENGAGEMENT SECTION -->
+<div class="jd-engagement-card">
+    <div class="jd-like-action">
+        <button id="jdLikeBtn" class="jd-like-btn">
+            <i class="fa-solid fa-heart"></i>
+            <span>Like Project</span>
+        </button>
+        <span id="jdLikeCount" style="color: var(--jd-muted); font-weight: 600;">0 Likes</span>
+    </div>
+</div>
+
+
+
+<!-- COMMENTS SECTION -->
+<div class="jd-card">
+    <h2>
+        <i class="fa-solid fa-comments"></i>
+        Discussion & Comments
+    </h2>
+
+    <div class="jd-comments-wrapper">
+        <form id="jdCommentForm" class="jd-comment-form">
+            <input type="text" id="commentName" placeholder="Your Name" required>
+            <textarea id="commentText" rows="3" placeholder="Write your comment here..." required></textarea>
+            <button type="submit" class="jd-comment-submit">Post Comment</button>
+        </form>
+
+        <div class="jd-comment-list" id="jdCommentList">
+            <!-- Dynamic Comments will appear here -->
+        </div>
+    </div>
 </div>
 
 
