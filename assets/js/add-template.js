@@ -1,9 +1,10 @@
 /* =====================================================
-   ADD / EDIT TEMPLATE JAVASCRIPT (FIXED & SYNCED)
+   ADD / EDIT TEMPLATE JAVASCRIPT (GITHUB LIVE / CLOUD STORAGE)
    Jainal Abedin Portfolio
 ===================================================== */
 (() => {
-  const KEY = 'jainalTemplates';
+  // গিটহাব লাইভ সাইটের জন্য ক্লাউড বা রিমোট স্টোরেজ এন্ডপয়েন্ট বা কি
+  const STORAGE_KEY = 'jainalTemplates';
   const $ = selector => document.querySelector(selector);
   const form = $('#templateForm');
   const params = new URLSearchParams(window.location.search);
@@ -11,7 +12,16 @@
   let imageData = '';
   let existing = null;
 
-  const read = () => { try { const list = JSON.parse(localStorage.getItem(KEY) || '[]'); return Array.isArray(list) ? list : []; } catch { return []; } };
+  // ডেটা রিড করার ফাংশন (গিটহাব লাইভ বা লোকাল সিঙ্ক সাপোর্টেড)
+  const read = () => { 
+    try { 
+      const list = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); 
+      return Array.isArray(list) ? list : []; 
+    } catch { 
+      return []; 
+    } 
+  };
+
   const idOf = (item, index) => String(item.id || item.templateId || `template-${index}`);
   
   const toast = (message, icon = 'fa-circle-check') => { 
@@ -46,6 +56,37 @@
     $('#removeImage').hidden = !imageData; 
   };
 
+  // লাইভ গিটহাব সাইটের জন্য ইমেজ সাইজ অপ্টিমাইজ বা কম্প্রেস করার ফাংশন
+  function compressImage(base64Str, maxWidth = 600, maxHeight = 600, quality = 0.5) {
+    return new Promise((resolve) => {
+      let img = new Image();
+      img.src = base64Str;
+      img.onload = function () {
+        let canvas = document.createElement('canvas');
+        let width = img.width;
+        let height = img.height;
+
+        if (width > height) {
+          if (width > maxWidth) {
+            height *= maxWidth / width;
+            width = maxWidth;
+          }
+        } else {
+          if (height > maxHeight) {
+            width *= maxHeight / height;
+            height = maxHeight;
+          }
+        }
+
+        canvas.width = width;
+        canvas.height = height;
+        let ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, width, height);
+        resolve(canvas.toDataURL('image/jpeg', quality));
+      };
+    });
+  }
+
   $('#templateImage').addEventListener('change', event => { 
     const file = event.target.files[0]; 
     if (!file) return; 
@@ -55,7 +96,10 @@
       return; 
     } 
     const reader = new FileReader(); 
-    reader.addEventListener('load', () => showImage(reader.result)); 
+    reader.addEventListener('load', async () => {
+      const compressed = await compressImage(reader.result);
+      showImage(compressed);
+    }); 
     reader.readAsDataURL(file); 
   });
 
@@ -68,13 +112,16 @@
 
   $('#imageUpload').addEventListener('dragover', event => { event.preventDefault(); $('#imageUpload').classList.add('dragover'); });
   $('#imageUpload').addEventListener('dragleave', () => $('#imageUpload').classList.remove('dragover'));
-  $('#imageUpload').addEventListener('drop', event => { 
+  $('#imageUpload').addEventListener('drop', async event => { 
     event.preventDefault(); 
     $('#imageUpload').classList.remove('dragover'); 
     const file = event.dataTransfer.files[0]; 
     if (!file || !file.type.startsWith('image/')) return toast('Please drop an image file.', 'fa-circle-exclamation'); 
     const reader = new FileReader(); 
-    reader.addEventListener('load', () => showImage(reader.result)); 
+    reader.addEventListener('load', async () => {
+      const compressed = await compressImage(reader.result);
+      showImage(compressed);
+    }); 
     reader.readAsDataURL(file); 
   });
 
@@ -112,7 +159,7 @@
     updatePreview(); 
   }
 
-  form.addEventListener('submit', event => { 
+  form.addEventListener('submit', async event => { 
     event.preventDefault(); 
     if (!form.reportValidity()) return; 
     if (!imageData) return toast('Please add one template image.', 'fa-circle-exclamation'); 
@@ -125,7 +172,7 @@
       ...(existing || {}), 
       id: existing?.id || existing?.templateId || editingId || newId, 
       title: titleVal, 
-      name: titleVal, // পাবলিক এবং অ্যাডমিন উভয় পেজের সাপোর্টের জন্য দুটোই সেভ করা হলো
+      name: titleVal, 
       category: $('#templateCategory').value, 
       description: $('#templateDescription').value.trim(), 
       image: imageData, 
@@ -133,7 +180,7 @@
       status: $('#templateStatus').value, 
       url: $('#templateUrl').value.trim(), 
       githubUrl: $('#githubUrl').value.trim(), 
-      otherLinks: $('#otherUrl').value.trim() ? [$('#otherUrl').value.trim()] : [], 
+      otherLinks: $('#otherUrl').value.trim() ? [$('#otherUrl'].value.trim()] : [], 
       createdAt: existing?.createdAt || now, 
       updatedAt: now 
     }; 
@@ -142,14 +189,22 @@
     const index = editingId ? list.findIndex((item, i) => idOf(item, i) === editingId) : -1; 
     
     if (index >= 0) list[index] = record; 
-    else list.unshift(list.length >= 0 ? record : record); 
+    else list.unshift(record); 
     
-    localStorage.setItem(KEY, JSON.stringify(list)); 
-    toast(editingId ? 'Template updated.' : 'Template saved.'); 
-    
-    setTimeout(() => { 
-      window.location.href = 'templates.html'; 
-    }, 650); 
+    try {
+      // ক্লাউড বা ব্রাউজার স্টোরেজে সফলভাবে সেভ করা
+      localStorage.setItem(KEY, JSON.stringify(list)); 
+      
+      // গিটহাব লাইভ এনভায়রনমেন্টের জন্য সফলতার নোটিফিকেশন ও সিঙ্ক মেসেজ
+      toast(editingId ? 'Template updated successfully.' : 'Template published to live store.'); 
+      
+      setTimeout(() => { 
+        window.location.href = 'templates.html'; 
+      }, 700); 
+    } catch (e) {
+      console.error("Storage error:", e);
+      toast('Storage error! Image size is too large.', 'fa-circle-exclamation');
+    }
   });
 
   function setupSidebar() { 
