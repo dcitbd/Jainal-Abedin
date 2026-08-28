@@ -1,10 +1,9 @@
 /* =====================================================
-   ADD / EDIT TEMPLATE JAVASCRIPT (GITHUB LIVE / CLOUD STORAGE)
+   ADD / EDIT TEMPLATE JAVASCRIPT (QUOTA & STORAGE FIXED)
    Jainal Abedin Portfolio
 ===================================================== */
 (() => {
-  // গিটহাব লাইভ সাইটের জন্য ক্লাউড বা রিমোট স্টোরেজ এন্ডপয়েন্ট বা কি
-  const STORAGE_KEY = 'jainalTemplates';
+  const KEY = 'jainalTemplates';
   const $ = selector => document.querySelector(selector);
   const form = $('#templateForm');
   const params = new URLSearchParams(window.location.search);
@@ -12,16 +11,7 @@
   let imageData = '';
   let existing = null;
 
-  // ডেটা রিড করার ফাংশন (গিটহাব লাইভ বা লোকাল সিঙ্ক সাপোর্টেড)
-  const read = () => { 
-    try { 
-      const list = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); 
-      return Array.isArray(list) ? list : []; 
-    } catch { 
-      return []; 
-    } 
-  };
-
+  const read = () => { try { const list = JSON.parse(localStorage.getItem(KEY) || '[]'); return Array.isArray(list) ? list : []; } catch { return []; } };
   const idOf = (item, index) => String(item.id || item.templateId || `template-${index}`);
   
   const toast = (message, icon = 'fa-circle-check') => { 
@@ -56,7 +46,7 @@
     $('#removeImage').hidden = !imageData; 
   };
 
-  // লাইভ গিটহাব সাইটের জন্য ইমেজ সাইজ অপ্টিমাইজ বা কম্প্রেস করার ফাংশন
+  // ইমেজ কম্প্রেস ও সাইজ ছোট করার ফাংশন (QuotaExceededError রোধ করতে)
   function compressImage(base64Str, maxWidth = 600, maxHeight = 600, quality = 0.5) {
     return new Promise((resolve) => {
       let img = new Image();
@@ -173,14 +163,14 @@
       id: existing?.id || existing?.templateId || editingId || newId, 
       title: titleVal, 
       name: titleVal, 
-      category: $('#templateCategory').value, 
+      category: $('#templateCategory`').value || $('#templateCategory').value, 
       description: $('#templateDescription').value.trim(), 
       image: imageData, 
       tags: $('#templateTags').value.split(',').map(value => value.trim()).filter(Boolean), 
       status: $('#templateStatus').value, 
       url: $('#templateUrl').value.trim(), 
       githubUrl: $('#githubUrl').value.trim(), 
-      otherLinks: $('#otherUrl').value.trim() ? [$('#otherUrl'].value.trim()] : [], 
+      otherLinks: $('#otherUrl').value.trim() ? [$('#otherUrl').value.trim()] : [], 
       createdAt: existing?.createdAt || now, 
       updatedAt: now 
     }; 
@@ -192,18 +182,15 @@
     else list.unshift(record); 
     
     try {
-      // ক্লাউড বা ব্রাউজার স্টোরেজে সফলভাবে সেভ করা
       localStorage.setItem(KEY, JSON.stringify(list)); 
-      
-      // গিটহাব লাইভ এনভায়রনমেন্টের জন্য সফলতার নোটিফিকেশন ও সিঙ্ক মেসেজ
-      toast(editingId ? 'Template updated successfully.' : 'Template published to live store.'); 
+      toast(editingId ? 'Template updated successfully.' : 'Template saved successfully.'); 
       
       setTimeout(() => { 
         window.location.href = 'templates.html'; 
       }, 700); 
     } catch (e) {
-      console.error("Storage error:", e);
-      toast('Storage error! Image size is too large.', 'fa-circle-exclamation');
+      console.error("Storage quota error:", e);
+      toast('Storage full! Please use a smaller image file.', 'fa-circle-exclamation');
     }
   });
 
