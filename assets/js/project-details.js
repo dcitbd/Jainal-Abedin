@@ -463,50 +463,67 @@ document.getElementById(
 if(techBox){
 
 
-techBox.innerHTML="";
+    techBox.innerHTML = "";
 
 
 
-let tech =
-project.technologies || [];
+    let tech =
+    project.technologies || project.tech || [];
 
 
 
-if(
-typeof tech === "string"
-){
+    if(
+        typeof tech === "string"
+    ){
 
-tech =
-tech.split(",");
+        tech =
+        tech.split(",");
 
-}
-
-
+    }
 
 
-tech.forEach(
-item=>{
+
+    if(
+        Array.isArray(tech) &&
+        tech.length > 0
+    ){
+
+        tech.forEach(
+            item=>{
 
 
-if(
-item.trim()
-){
+                if(
+                    item.trim()
+                ){
 
 
-techBox.innerHTML +=
-`
+                    techBox.innerHTML +=
+                    `
 
-<span>
-${item.trim()}
-</span>
+                    <span>
+                    ${item.trim()}
+                    </span>
 
-`;
-
-
-}
+                    `;
 
 
-});
+                }
+
+
+            }
+        );
+
+    }
+    else{
+
+        techBox.innerHTML =
+        `
+        <span style="color:var(--jd-muted);">
+        No technologies specified
+        </span>
+        `;
+
+    }
 
 
 }
