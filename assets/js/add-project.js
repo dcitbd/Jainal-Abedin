@@ -266,12 +266,9 @@ function saveProject(
         ).value.trim();
 
 
-    // টেকনোলজি ইনপুট থেকে ডেটা সঠিকভাবে অ্যারে বা স্ট্রিং আকারে নেওয়া নিশ্চিত করা
-    const technologiesInput =
-        document.getElementById(
-            "technologies"
-        ).value.trim();
-
+    /* ================= TECHNOLOGY FIXED LOGIC ================= */
+    const techElement = document.getElementById("technologies");
+    const technologiesInput = techElement ? techElement.value.trim() : "";
 
     const technologies =
         technologiesInput
@@ -284,6 +281,7 @@ function saveProject(
                     return item !== "";
                 })
             : [];
+    /* ======================================================== */
 
 
     const completionDate =
