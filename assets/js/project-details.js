@@ -1,666 +1,198 @@
 /* =====================================================
-   PROJECT DETAILS JAVASCRIPT
-   Jainal Abedin Portfolio
+   ADD PROJECT JAVASCRIPT
 ===================================================== */
 
+/* ================= SIDEBAR ================= */
 
-document.addEventListener(
-"DOMContentLoaded",
-function(){
+const menuBtn = document.getElementById("menuBtn");
+const closeSidebar = document.getElementById("closeSidebar");
+const sidebar = document.getElementById("sidebar");
+const sidebarOverlay = document.getElementById("sidebarOverlay");
 
-
-
-/* ================= LOADER ================= */
-
-
-const loader =
-document.getElementById(
-"jdLoader"
-);
-
-
-if(loader){
-
-setTimeout(()=>{
-
-loader.style.opacity="0";
-
-setTimeout(()=>{
-
-loader.style.display="none";
-
-},400);
-
-
-},700);
-
+if (menuBtn) {
+    menuBtn.addEventListener("click", function () {
+        sidebar.classList.add("open");
+        sidebarOverlay.classList.add("active");
+        document.body.style.overflow = "hidden";
+    });
 }
 
-
-
-
-/* ================= THEME ================= */
-
-
-const themeButton =
-document.getElementById(
-"jdThemeButton"
-);
-
-
-if(
-localStorage.getItem("theme")
-==="dark"
-){
-
-document.body.classList.add(
-"dark-mode"
-);
-
+function closeSidebarMenu() {
+    sidebar.classList.remove("open");
+    sidebarOverlay.classList.remove("active");
+    document.body.style.overflow = "";
 }
 
-
-
-if(themeButton){
-
-
-themeButton.addEventListener(
-"click",
-()=>{
-
-
-document.body.classList.toggle(
-"dark-mode"
-);
-
-
-if(
-document.body.classList.contains(
-"dark-mode"
-)
-){
-
-localStorage.setItem(
-"theme",
-"dark"
-);
-
-
-themeButton.innerHTML =
-`
-<i class="fa-solid fa-sun"></i>
-`;
-
-
-}
-else{
-
-
-localStorage.setItem(
-"theme",
-"light"
-);
-
-
-themeButton.innerHTML =
-`
-<i class="fa-solid fa-moon"></i>
-`;
-
-
+if (closeSidebar) {
+    closeSidebar.addEventListener("click", closeSidebarMenu);
 }
 
-
-});
-
+if (sidebarOverlay) {
+    sidebarOverlay.addEventListener("click", closeSidebarMenu);
 }
 
+/* ================= LOGOUT ================= */
 
+const logoutBtn = document.getElementById("logoutBtn");
 
-
-/* ================= MOBILE MENU ================= */
-
-
-const mobileButton =
-document.getElementById(
-"jdMobileButton"
-);
-
-
-const mobileNavigation =
-document.getElementById(
-"jdMobileNavigation"
-);
-
-
-
-if(
-mobileButton &&
-mobileNavigation
-){
-
-
-mobileButton.addEventListener(
-"click",
-()=>{
-
-
-mobileNavigation.classList.toggle(
-"show"
-);
-
-
-});
-
-
+if (logoutBtn) {
+    logoutBtn.addEventListener("click", function () {
+        const confirmLogout = confirm("Are you sure you want to logout?");
+        if (confirmLogout) {
+            localStorage.removeItem("adminLoggedIn");
+            sessionStorage.removeItem("adminLoggedIn");
+            window.location.href = "login.html";
+        }
+    });
 }
 
+/* ================= SHORT DESCRIPTION COUNT ================= */
 
+const shortDescription = document.getElementById("shortDescription");
+const shortDescriptionCount = document.getElementById("shortDescriptionCount");
 
-
-/* ================= GET ID ================= */
-
-
-const params =
-new URLSearchParams(
-window.location.search
-);
-
-
-const projectId =
-params.get("id");
-
-
-
-
-
-/* ================= GET PROJECT ================= */
-
-
-const projects =
-JSON.parse(
-    localStorage.getItem(
-        "portfolioProjects"
-    )
-) || [];
-
-
-
-console.log(
-    "All Projects:",
-    projects
-);
-
-
-
-let project = null;
-
-
-
-// Find by ID
-
-if(projectId){
-
-
-    project =
-    projects.find(
-
-        item =>
-
-        String(item.id)
-        ===
-        String(projectId)
-
-    );
-
-
+if (shortDescription) {
+    shortDescription.addEventListener("input", function () {
+        shortDescriptionCount.textContent = this.value.length;
+    });
 }
 
+/* ================= MULTI IMAGE UPLOAD ================= */
 
+const projectImage = document.getElementById("projectImage");
+const imageUploadArea = document.getElementById("imageUploadArea");
+const imagePreview = document.getElementById("imagePreview");
 
-
-/*
-    Fallback:
-    যদি id না মিলে,
-    তাহলে index দিয়ে খুঁজবে
-*/
-
-
-if(!project && projectId){
-
-
-    const index =
-    Number(projectId);
-
-
-
-    if(
-        !isNaN(index)
-        &&
-        projects[index]
-    ){
-
-        project =
-        projects[index];
-
-    }
-
-
+if (imageUploadArea) {
+    imageUploadArea.addEventListener("click", function () {
+        projectImage.click();
+    });
 }
 
-
-
-
-console.log(
-    "Selected Project:",
-    project
-);
-
-
-
-
-
-
-/* ================= PROJECT NOT FOUND ================= */
-
-
-if(!project){
-
-
-document.querySelector(
-".jd-content-section"
-).innerHTML = `
-
-
-<div class="jd-container">
-
-<div class="jd-card"
-style="text-align:center;">
-
-
-<h2>
-
-<i class="fa-solid fa-circle-exclamation"></i>
-
-</h2>
-
-
-<h2>
-Project Not Found
-</h2>
-
-
-<p>
-This project does not exist or has been removed.
-</p>
-
-
-<a href="projects.html"
-class="jd-link-button">
-
-Back To Projects
-
-</a>
-
-
-</div>
-
-</div>
-
-
-`;
-
-return;
-
-
-}
-
-
-
-/* ================= TEXT SET ================= */
-
-
-function setText(
-id,
-value
-){
-
-
-const el =
-document.getElementById(id);
-
-
-if(el){
-
-el.textContent =
-value || "-";
-
-}
-
-
-}
-
-
-
-setText(
-"projectTitle",
-project.title
-);
-
-
-setText(
-"projectShortDescription",
-project.shortDescription
-);
-
-
-
-setText(
-"projectDescription",
-project.description
-);
-
-
-
-setText(
-"projectCategory",
-project.category
-);
-
-
-
-setText(
-"projectType",
-project.category
-);
-
-
-
-setText(
-"infoCategory",
-project.category
-);
-
-
-
-setText(
-"infoStatus",
-project.status
-);
-
-
-
-setText(
-"projectDate",
-project.createdAt
-?
-new Date(
-project.createdAt
-)
-.toLocaleDateString()
-:
-"Recently Published"
-);
-
-
-
-
-
-
-/* ================= IMAGE ================= */
-
-
-const image =
-document.getElementById(
-"projectImage"
-);
-
-
-
-const placeholder =
-document.getElementById(
-"imagePlaceholder"
-);
-
-
-
-if(project.image){
-
-
-image.src =
-project.image;
-
-
-image.style.display =
-"block";
-
-
-if(placeholder){
-
-placeholder.style.display =
-"none";
-
-}
-
-
-}
-
-
-
-
-
-
-/* ================= TECHNOLOGY ================= */
-
-
-const techBox =
-document.getElementById(
-"technologyList"
-);
-
-
-
-if(techBox){
-
-
-    techBox.innerHTML = "";
-
-
-
-    let tech =
-    project.technologies || project.tech || [];
-
-
-
-    if(
-        typeof tech === "string"
-    ){
-
-        tech =
-        tech.split(",");
-
-    }
-
-
-
-    if(
-        Array.isArray(tech) &&
-        tech.length > 0
-    ){
-
-        tech.forEach(
-            item=>{
-
-
-                if(
-                    item.trim()
-                ){
-
-
-                    techBox.innerHTML +=
-                    `
-
-                    <span>
-                    ${item.trim()}
-                    </span>
-
-                    `;
-
-
-                }
-
-
+if (projectImage) {
+    projectImage.addEventListener("change", function () {
+        imagePreview.innerHTML = "";
+        const files = Array.from(this.files);
+
+        files.forEach(function (file, index) {
+            if (!file.type.startsWith("image/")) {
+                return;
             }
-        );
 
+            const reader = new FileReader();
+
+            reader.onload = function (event) {
+                const item = document.createElement("div");
+                item.className = "gallery-item";
+                item.innerHTML = `
+                    <img src="${event.target.result}" alt="Project Image ${index + 1}">
+                    <button type="button" class="gallery-remove">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                `;
+
+                item.querySelector(".gallery-remove").addEventListener("click", function (e) {
+                    e.stopPropagation();
+                    item.remove();
+                });
+
+                imagePreview.appendChild(item);
+            };
+
+            reader.readAsDataURL(file);
+        });
+    });
+}
+
+/* ================= FORM ================= */
+
+const projectForm = document.getElementById("addProjectForm");
+
+/* ================= SAVE PROJECT ================= */
+
+function saveProject(status) {
+    const title = document.getElementById("projectTitle").value.trim();
+    const category = document.getElementById("projectCategory").value;
+    const shortDescription = document.getElementById("shortDescription").value.trim();
+    const fullDescription = document.getElementById("projectDescription").value.trim();
+    
+    // টেকনোলজি ইনপুট থেকে কমা বা স্পেস দিয়ে আলাদা করে নিশ্চিতভাবে অ্যারে তৈরি করা
+    const technologiesInput = document.getElementById("technologies").value.trim();
+    const technologies = technologiesInput
+        ? technologiesInput.split(",").map(item => item.trim()).filter(item => item !== "")
+        : [];
+
+    const completionDate = new Date().toISOString();
+    const projectUrl = document.getElementById("liveUrl") ? document.getElementById("liveUrl").value.trim() : "";
+    const githubUrl = document.getElementById("githubUrl") ? document.getElementById("githubUrl").value.trim() : "";
+    const featured = document.getElementById("showPortfolio") ? document.getElementById("showPortfolio").checked : true;
+    const allowComments = document.getElementById("allowComments") ? document.getElementById("allowComments").checked : true;
+
+    // গ্যালারি ইমেজ থেকে কাভার ইমেজ সেট করা
+    let coverImageUrl = "";
+    const firstGalleryImg = imagePreview ? imagePreview.querySelector("img") : null;
+    if (firstGalleryImg) {
+        coverImageUrl = firstGalleryImg.src;
     }
-    else{
 
-        techBox.innerHTML =
-        `
-        <span style="color:var(--jd-muted);">
-        No technologies specified
-        </span>
-        `;
+    const project = {
+        id: Date.now(),
+        title: title,
+        category: category,
+        shortDescription: shortDescription,
+        description: fullDescription,
+        technologies: technologies,
+        features: document.getElementById("features") ? document.getElementById("features").value.trim() : "",
+        createdAt: completionDate,
+        liveUrl: projectUrl,
+        githubUrl: githubUrl,
+        featured: featured,
+        allowComments: allowComments,
+        status: status,
+        views: 0,
+        comments: 0,
+        image: coverImageUrl
+    };
 
+    const projects = JSON.parse(localStorage.getItem("portfolioProjects")) || [];
+    projects.unshift(project);
+
+    try {
+        localStorage.setItem("portfolioProjects", JSON.stringify(projects));
+    } catch (error) {
+        console.error(error);
+        alert("Storage Full");
     }
 
-
+    return project;
 }
 
+/* ================= PUBLISH ================= */
 
+if (projectForm) {
+    projectForm.addEventListener("submit", function (event) {
+        event.preventDefault();
 
+        const clickedButton = event.submitter;
+        let status = "published";
 
+        if (clickedButton && clickedButton.id === "saveDraftBtn") {
+            status = "draft";
+        }
 
+        if (!projectForm.checkValidity()) {
+            projectForm.reportValidity();
+            return;
+        }
 
-/* ================= FEATURES ================= */
+        saveProject(status);
 
-
-const featureBox =
-document.getElementById(
-"featureList"
-);
-
-
-
-if(featureBox){
-
-
-featureBox.innerHTML="";
-
-
-
-let features =
-project.features || [];
-
-
-
-if(
-typeof features === "string"
-){
-
-features =
-features.split("\n");
-
+        if (status === "published") {
+            alert("Project published successfully!");
+            window.location.href = "dashboard.html";
+        } else {
+            alert("Project saved as draft successfully!");
+            window.location.href = "dashboard.html";
+        }
+    });
 }
-
-
-
-features.forEach(
-item=>{
-
-
-if(
-item.trim()
-){
-
-
-featureBox.innerHTML +=
-`
-
-<li>
-${item}
-</li>
-
-`;
-
-
-}
-
-
-});
-
-
-}
-
-
-
-
-
-
-
-/* ================= LINKS ================= */
-
-
-const live =
-document.getElementById(
-"liveProjectLink"
-);
-
-
-
-const github =
-document.getElementById(
-"githubProjectLink"
-);
-
-
-
-
-if(
-project.liveUrl
-){
-
-
-live.href =
-project.liveUrl;
-
-
-}
-else{
-
-
-live.style.display="none";
-
-
-}
-
-
-
-
-
-if(
-project.githubUrl
-){
-
-
-github.href =
-project.githubUrl;
-
-
-}
-else{
-
-
-github.style.display="none";
-
-
-}
-
-
-
-
-
-
-
-});
