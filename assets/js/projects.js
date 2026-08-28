@@ -1,5 +1,5 @@
 /* =====================================================
-   PROJECTS PAGE JAVASCRIPT
+   PROJECTS PAGE JAVASCRIPT (FIXED)
    Jainal Abedin Portfolio
 ===================================================== */
 
