@@ -1,5 +1,5 @@
 /* =====================================================
-   PROJECTS PAGE JAVASCRIPT (FIXED)
+   PROJECTS PAGE JAVASCRIPT (FINAL FIXED)
    Jainal Abedin Portfolio
 ===================================================== */
 
@@ -40,6 +40,7 @@ function loadProjects(){
         allProjects = [];
     }
 
+    // শুধুমাত্র পাবলিশড প্রজেক্টগুলো ফিল্টার করা
     allProjects =
         allProjects.filter(
             project =>
@@ -62,14 +63,16 @@ function renderProjects(projects){
 
     projectsContainer.innerHTML = "";
 
-    if(projects.length === 0){
-        emptyProjects.style.display =
-            "block";
+    if(!projects || projects.length === 0){
+        if(emptyProjects) {
+            emptyProjects.style.display = "block";
+        }
         return;
     }
 
-    emptyProjects.style.display =
-        "none";
+    if(emptyProjects){
+        emptyProjects.style.display = "none";
+    }
 
     projects.forEach(
         (project)=>{
@@ -110,7 +113,7 @@ function renderProjects(projects){
             tech=>{
             tagsHTML += `
                 <span>
-                    ${tech.trim()}
+                    ${String(tech).trim()}
                 </span>
             `;
         });
@@ -119,7 +122,7 @@ function renderProjects(projects){
         <article class="project-card">
             <div class="project-card-image">
                 <img src="${image}"
-                     alt="${project.title}">
+                     alt="${project.title || 'Project'}">
             </div>
 
             <div class="project-card-content">
@@ -128,7 +131,7 @@ function renderProjects(projects){
                 </span>
 
                 <h3>
-                    ${project.title}
+                    ${project.title || "Untitled Project"}
                 </h3>
 
                 <p>
@@ -158,6 +161,7 @@ function renderProjects(projects){
     });
 }
 
+// ক্যাটাগরি ফিল্টার লজিক (ক্যাস কেস এবং ট্রিম সমস্যা দূর করার জন্য নিরাপদ তুলনামূলক পদ্ধতি)
 const filterButtons =
     document.querySelectorAll(
         ".project-filter"
@@ -181,7 +185,7 @@ filterButtons.forEach(
         );
 
         let category =
-            button.dataset.filter;
+            button.dataset.filter.trim().toLowerCase();
 
         if(category === "all"){
             renderProjects(
@@ -190,8 +194,10 @@ filterButtons.forEach(
         } else {
             let filtered =
                 allProjects.filter(
-                    project =>
-                    project.category === category
+                    project => {
+                        let projCat = project.category ? project.category.trim().toLowerCase() : "";
+                        return projCat === category;
+                    }
                 );
             renderProjects(
                 filtered
@@ -200,6 +206,7 @@ filterButtons.forEach(
     });
 });
 
+// থিম টগল সিস্টেম
 const themeButton =
     document.getElementById(
         "jaProjectThemeButton"
@@ -242,6 +249,7 @@ if(themeButton){
     });
 }
 
+// মোবাইল মেনু টগল
 const mobileButton =
     document.getElementById(
         "jaProjectMobileButton"
@@ -256,15 +264,16 @@ if(
     mobileButton &&
     mobileNavigation
 ){
-mobileButton.addEventListener(
-    "click",
-    ()=>{
-    mobileNavigation.classList.toggle(
-        "show"
-    );
-});
+    mobileButton.addEventListener(
+        "click",
+        ()=>{
+        mobileNavigation.classList.toggle(
+            "show"
+        );
+    });
 }
 
+// পেজ লোডার হ্যান্ডেলিং
 window.addEventListener(
     "load",
     ()=>{
@@ -275,10 +284,11 @@ window.addEventListener(
                 "none";
         }
         },
-        700
+        500
     );
 });
 
+// ইনিশিয়ালাইজেশন
 document.addEventListener(
     "DOMContentLoaded",
     ()=>{
