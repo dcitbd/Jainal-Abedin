@@ -1,5 +1,5 @@
 /* =====================================================
-   PROJECT DETAILS JAVASCRIPT (FINAL FIXED)
+   PROJECT DETAILS JAVASCRIPT (FINAL FIXED + LIKES & COMMENTS)
    Jainal Abedin Portfolio
 ===================================================== */
 
@@ -131,7 +131,6 @@ document.addEventListener("DOMContentLoaded", function () {
             techArray = rawTech.split(",");
         }
 
-        // যদি কোনো কারণে অবজেক্টের ভেতরে সাব-প্রপার্টি থাকে
         if (techArray.length > 0) {
             techArray.forEach(item => {
                 let cleanItem = String(item).trim();
@@ -186,6 +185,107 @@ document.addEventListener("DOMContentLoaded", function () {
         } else {
             github.style.display = "none";
         }
+    }
+
+    /* ================= LIKES & COMMENTS SYSTEM ================= */
+    const likeBtn = document.getElementById("jdLikeBtn");
+    const likeCountSpan = document.getElementById("jdLikeCount");
+    const commentForm = document.getElementById("jdCommentForm");
+    const commentList = document.getElementById("jdCommentList");
+
+    const identifier = project.id || projectId || "default_project";
+    const likeStorageKey = `project_likes_${identifier}`;
+    const userLikedKey = `project_user_liked_${identifier}`;
+    const commentStorageKey = `project_comments_${identifier}`;
+
+    let currentLikes = parseInt(localStorage.getItem(likeStorageKey)) || 10;
+    let isLiked = localStorage.getItem(userLikedKey) === "true";
+
+    function updateLikeUI() {
+        if (likeCountSpan) {
+            likeCountSpan.textContent = `${currentLikes} Likes`;
+        }
+        if (likeBtn) {
+            if (isLiked) {
+                likeBtn.classList.add("liked");
+                likeBtn.innerHTML = `<i class="fa-solid fa-heart"></i><span>Liked</span>`;
+            } else {
+                likeBtn.classList.remove("liked");
+                likeBtn.innerHTML = `<i class="fa-solid fa-heart"></i><span>Like Project</span>`;
+            }
+        }
+    }
+    updateLikeUI();
+
+    if (likeBtn) {
+        likeBtn.addEventListener("click", () => {
+            if (!isLiked) {
+                currentLikes++;
+                isLiked = true;
+            } else {
+                currentLikes--;
+                isLiked = false;
+            }
+            localStorage.setItem(likeStorageKey, currentLikes);
+            localStorage.setItem(userLikedKey, isLiked);
+            updateLikeUI();
+        });
+    }
+
+    function loadComments() {
+        if (!commentList) return;
+        const savedComments = JSON.parse(localStorage.getItem(commentStorageKey)) || [];
+        
+        commentList.innerHTML = "";
+        if (savedComments.length === 0) {
+            commentList.innerHTML = `<p style="color:var(--jd-muted); font-style:italic;">No comments yet. Be the first one to comment!</p>`;
+            return;
+        }
+
+        savedComments.forEach(cmt => {
+            commentList.innerHTML += `
+                <div class="jd-comment-item">
+                    <div class="jd-comment-header">
+                        <strong><i class="fa-solid fa-user-circle"></i> ${escapeHtml(cmt.name)}</strong>
+                        <span>${cmt.date}</span>
+                    </div>
+                    <p>${escapeHtml(cmt.text)}</p>
+                </div>
+            `;
+        });
+    }
+
+    function escapeHtml(text) {
+        return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    }
+
+    loadComments();
+
+    if (commentForm) {
+        commentForm.addEventListener("submit", (e) => {
+            e.preventDefault();
+            const nameInput = document.getElementById("commentName");
+            const textInput = document.getElementById("commentText");
+
+            const name = nameInput.value.trim();
+            const text = textInput.value.trim();
+
+            if (!name || !text) return;
+
+            const newComment = {
+                name: name,
+                text: text,
+                date: new Date().toLocaleDateString("en-US", { month: 'short', day: 'numeric', year: 'numeric' })
+            };
+
+            const savedComments = JSON.parse(localStorage.getItem(commentStorageKey)) || [];
+            savedComments.unshift(newComment);
+            localStorage.setItem(commentStorageKey, JSON.stringify(savedComments));
+
+            nameInput.value = "";
+            textInput.value = "";
+            loadComments();
+        });
     }
 
 });
