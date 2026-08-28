@@ -1,5 +1,6 @@
 /* =====================================================
    MODERN ADD PROJECT BUILDER (ULTIMATE TECH STACK FIX)
+   Jainal Abedin Portfolio
 ===================================================== */
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -44,6 +45,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     let technologies = [];
 
+    // টেকনোলজি ইনপুট ফিল্ডে এন্টার প্রেস করলে ট্যাগ হিসেবে যুক্ত হওয়া
     if (technologiesInput) {
         technologiesInput.addEventListener("keydown", function (event) {
             if (event.key === "Enter") {
@@ -75,11 +77,13 @@ document.addEventListener("DOMContentLoaded", function () {
         updatePreviewTechStack();
     }
 
+    // প্রিভিউ সেকশনে সঠিক টেকনোলজি আপডেট করা (ফলব্যাক রিমুভ করা হয়েছে যাতে কাস্টম ট্যাগ নষ্ট না হয়)
     function updatePreviewTechStack() {
         const previewTechStack = document.getElementById("previewTechStack");
         if (!previewTechStack) return;
         previewTechStack.innerHTML = "";
-        const previewItems = technologies.length ? technologies.slice(0, 4) : ["HTML", "CSS", "JS"];
+        
+        const previewItems = technologies.length > 0 ? technologies.slice(0, 4) : ["Add Technologies"];
         previewItems.forEach(function (technology) {
             const span = document.createElement("span");
             span.textContent = technology;
@@ -214,24 +218,21 @@ document.addEventListener("DOMContentLoaded", function () {
             const portElem = document.getElementById("showPortfolio");
             const showPortfolio = portElem ? portElem.checked : true;
 
-            // সুনিশ্চিত টেকনোলজি প্রসেসিং (ইনপুট ফিল্ড বা ট্যাগ অ্যারে থেকে ডেটা সংগ্রহ)
-            let finalTechnologies = [];
+            // সুনিশ্চিত এবং সঠিক টেকনোলজি প্রসেসিং (ইউজারের টাইপ করা বা এন্টার দেওয়া ট্যাগগুলো কালেক্ট করা)
+            let finalTechnologies = [...technologies];
             
             if (technologiesInput && technologiesInput.value.trim() !== "") {
-                finalTechnologies = technologiesInput.value.split(",").map(t => t.trim()).filter(t => t);
-            }
-            
-            if (finalTechnologies.length === 0 && technologies.length > 0) {
-                finalTechnologies = [...technologies];
-            } else if (technologies.length > 0) {
-                technologies.forEach(t => {
-                    if (!finalTechnologies.includes(t)) finalTechnologies.push(t);
+                const manualTechs = technologiesInput.value.split(",").map(t => t.trim()).filter(t => t);
+                manualTechs.forEach(t => {
+                    if (!finalTechnologies.includes(t)) {
+                        finalTechnologies.push(t);
+                    }
                 });
             }
 
-            // যদি এখনো খালি থাকে, তবে ডিফল্ট কিছু ট্যাগ বা ইনপুট ক্যাচ করা
+            // যদি কোনো ট্যাগ বা ইনপুট না থাকে, তবে একটি বেসিক ফিল্ড নিশ্চিত করা
             if (finalTechnologies.length === 0) {
-                finalTechnologies = ["HTML", "CSS", "JavaScript"];
+                finalTechnologies = ["Web Application"];
             }
 
             if (!title || !category || !shortText || !description) {
