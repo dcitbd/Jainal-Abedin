@@ -1,0 +1,16 @@
+[
+  {
+    "id": "template-1",
+    "title": "Agency Launch",
+    "name": "Agency Launch",
+    "category": "Business",
+    "status": "published",
+    "description": "A refined company profile and services showcase.",
+    "image": "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&auto=format&fit=crop&q=60",
+    "tags": ["Business", "Responsive"],
+    "url": "https://example.com",
+    "githubUrl": "",
+    "otherLinks": [],
+    "createdAt": "2026-08-20T10:00:00.000Z"
+  }
+]
