@@ -824,6 +824,143 @@ a{
 
 
 /* =====================================================
+   LIKE & COMMENT SECTION STYLES
+===================================================== */
+
+.jd-engagement-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--jd-card);
+    border: 1px solid var(--jd-border);
+    border-radius: 25px;
+    padding: 25px 35px;
+    margin-bottom: 25px;
+    box-shadow: 0 10px 30px rgba(0,0,0,.04);
+}
+
+.jd-like-action {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.jd-like-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 24px;
+    border-radius: 50px;
+    border: 1px solid var(--jd-border);
+    background: var(--jd-bg);
+    color: var(--jd-text);
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.jd-like-btn:hover, .jd-like-btn.liked {
+    background: var(--jd-primary);
+    color: white;
+    border-color: var(--jd-primary);
+}
+
+.jd-like-btn.liked i {
+    color: #ef4444;
+}
+
+.jd-comments-wrapper {
+    margin-top: 15px;
+}
+
+.jd-comment-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+.jd-comment-form input,
+.jd-comment-form textarea {
+    width: 100%;
+    padding: 14px 18px;
+    border-radius: 12px;
+    border: 1px solid var(--jd-border);
+    background: var(--jd-bg);
+    color: var(--jd-text);
+    font-family: inherit;
+    outline: none;
+    transition: 0.3s;
+}
+
+.jd-comment-form input:focus,
+.jd-comment-form textarea:focus {
+    border-color: var(--jd-primary);
+}
+
+.jd-comment-submit {
+    align-self: flex-start;
+    padding: 12px 25px;
+    border-radius: 12px;
+    background: var(--jd-gradient);
+    color: white;
+    font-weight: 700;
+    border: none;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.jd-comment-submit:hover {
+    opacity: 0.9;
+}
+
+.jd-comment-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.jd-comment-item {
+    padding: 20px;
+    border-radius: 15px;
+    background: var(--jd-bg);
+    border: 1px solid var(--jd-border);
+}
+
+.jd-comment-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    font-size: 14px;
+}
+
+.jd-comment-header strong {
+    color: var(--jd-text);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.jd-comment-header span {
+    color: var(--jd-muted);
+}
+
+.jd-comment-item p {
+    color: var(--jd-muted);
+    font-size: 15px;
+    line-height: 1.5;
+    white-space: pre-line;
+}
+
+
+
+
+
+
+
+
+
+/* =====================================================
    FOOTER CTA
 ===================================================== */
 
