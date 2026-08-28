@@ -1,5 +1,5 @@
 /* =====================================================
-   MODERN ADD PROJECT BUILDER (FINAL FIXED)
+   MODERN ADD PROJECT BUILDER (TECH STACK FIX)
 ===================================================== */
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -162,7 +162,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }, 3500);
     }
 
-    // ইমেজ সাইজ কম্প্রেস করার ফাংশন
     function compressImage(base64Str, maxWidth = 800, maxHeight = 800, quality = 0.7) {
         return new Promise((resolve) => {
             let img = new Image();
@@ -215,7 +214,7 @@ document.addEventListener("DOMContentLoaded", function () {
             const portElem = document.getElementById("showPortfolio");
             const showPortfolio = portElem ? portElem.checked : true;
 
-            // টেকনোলজি ইনপুট হ্যান্ডলিং (ট্যাগ এবং কমা উভয় পদ্ধতি নিশ্চিত করা হলো)
+            // টেকনোলজি ইনপুট এবং ট্যাগ উভয়টিকে একত্রিত করে নিশ্চিত অ্যারে তৈরি করা
             let finalTechnologies = [...technologies];
             if (technologiesInput && technologiesInput.value.trim() !== "") {
                 const typedTechs = technologiesInput.value.split(",").map(t => t.trim()).filter(t => t);
@@ -248,8 +247,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 status: status,
                 shortDescription: shortText,
                 description: description,
-                technologies: finalTechnologies,
-                tech: finalTechnologies,
+                technologies: finalTechnologies, // নিশ্চিত অ্যারে
+                tech: finalTechnologies,        // ব্যাকআপ প্রপার্টি
                 features: featuresText ? featuresText.split("\n").map(item => item.trim()).filter(item => item) : [],
                 liveUrl: liveUrl,
                 githubUrl: githubUrl,
