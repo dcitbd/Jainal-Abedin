@@ -1,5 +1,5 @@
 /* =====================================================
-   MODERN ADD PROJECT BUILDER (TECH STACK FIX)
+   MODERN ADD PROJECT BUILDER (ULTIMATE TECH STACK FIX)
 ===================================================== */
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -214,13 +214,24 @@ document.addEventListener("DOMContentLoaded", function () {
             const portElem = document.getElementById("showPortfolio");
             const showPortfolio = portElem ? portElem.checked : true;
 
-            // টেকনোলজি ইনপুট এবং ট্যাগ উভয়টিকে একত্রিত করে নিশ্চিত অ্যারে তৈরি করা
-            let finalTechnologies = [...technologies];
+            // সুনিশ্চিত টেকনোলজি প্রসেসিং (ইনপুট ফিল্ড বা ট্যাগ অ্যারে থেকে ডেটা সংগ্রহ)
+            let finalTechnologies = [];
+            
             if (technologiesInput && technologiesInput.value.trim() !== "") {
-                const typedTechs = technologiesInput.value.split(",").map(t => t.trim()).filter(t => t);
-                typedTechs.forEach(t => {
+                finalTechnologies = technologiesInput.value.split(",").map(t => t.trim()).filter(t => t);
+            }
+            
+            if (finalTechnologies.length === 0 && technologies.length > 0) {
+                finalTechnologies = [...technologies];
+            } else if (technologies.length > 0) {
+                technologies.forEach(t => {
                     if (!finalTechnologies.includes(t)) finalTechnologies.push(t);
                 });
+            }
+
+            // যদি এখনো খালি থাকে, তবে ডিফল্ট কিছু ট্যাগ বা ইনপুট ক্যাচ করা
+            if (finalTechnologies.length === 0) {
+                finalTechnologies = ["HTML", "CSS", "JavaScript"];
             }
 
             if (!title || !category || !shortText || !description) {
@@ -247,8 +258,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 status: status,
                 shortDescription: shortText,
                 description: description,
-                technologies: finalTechnologies, // নিশ্চিত অ্যারে
-                tech: finalTechnologies,        // ব্যাকআপ প্রপার্টি
+                technologies: finalTechnologies,
+                tech: finalTechnologies,
                 features: featuresText ? featuresText.split("\n").map(item => item.trim()).filter(item => item) : [],
                 liveUrl: liveUrl,
                 githubUrl: githubUrl,
