@@ -1,198 +1,1029 @@
 /* =====================================================
-   ADD PROJECT JAVASCRIPT
+   JAINAL ABEDIN PORTFOLIO
+   PROJECT DETAILS PAGE CSS
+   Modern Developer UI
 ===================================================== */
 
-/* ================= SIDEBAR ================= */
 
-const menuBtn = document.getElementById("menuBtn");
-const closeSidebar = document.getElementById("closeSidebar");
-const sidebar = document.getElementById("sidebar");
-const sidebarOverlay = document.getElementById("sidebarOverlay");
+/* ================= ROOT ================= */
 
-if (menuBtn) {
-    menuBtn.addEventListener("click", function () {
-        sidebar.classList.add("open");
-        sidebarOverlay.classList.add("active");
-        document.body.style.overflow = "hidden";
-    });
+:root{
+
+    --jd-primary:#6366f1;
+    --jd-secondary:#06b6d4;
+
+    --jd-bg:#f8fafc;
+    --jd-card:#ffffff;
+
+    --jd-text:#0f172a;
+    --jd-muted:#64748b;
+
+    --jd-border:#e2e8f0;
+
+    --jd-shadow:
+    0 20px 50px rgba(15,23,42,.08);
+
+
+    --jd-gradient:
+    linear-gradient(
+        135deg,
+        #6366f1,
+        #06b6d4
+    );
+
 }
 
-function closeSidebarMenu() {
-    sidebar.classList.remove("open");
-    sidebarOverlay.classList.remove("active");
-    document.body.style.overflow = "";
+
+
+body.dark-mode{
+
+    --jd-bg:#020617;
+    --jd-card:#0f172a;
+
+    --jd-text:#f8fafc;
+    --jd-muted:#94a3b8;
+
+    --jd-border:#1e293b;
+
 }
 
-if (closeSidebar) {
-    closeSidebar.addEventListener("click", closeSidebarMenu);
+
+
+
+
+
+/* ================= GLOBAL ================= */
+
+
+*{
+
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+
 }
 
-if (sidebarOverlay) {
-    sidebarOverlay.addEventListener("click", closeSidebarMenu);
+
+
+html{
+
+    scroll-behavior:smooth;
+
 }
 
-/* ================= LOGOUT ================= */
 
-const logoutBtn = document.getElementById("logoutBtn");
 
-if (logoutBtn) {
-    logoutBtn.addEventListener("click", function () {
-        const confirmLogout = confirm("Are you sure you want to logout?");
-        if (confirmLogout) {
-            localStorage.removeItem("adminLoggedIn");
-            sessionStorage.removeItem("adminLoggedIn");
-            window.location.href = "login.html";
-        }
-    });
+body{
+
+    font-family:
+    "Inter",
+    "Segoe UI",
+    sans-serif;
+
+
+    background:var(--jd-bg);
+
+    color:var(--jd-text);
+
+    transition:.3s;
+
 }
 
-/* ================= SHORT DESCRIPTION COUNT ================= */
 
-const shortDescription = document.getElementById("shortDescription");
-const shortDescriptionCount = document.getElementById("shortDescriptionCount");
 
-if (shortDescription) {
-    shortDescription.addEventListener("input", function () {
-        shortDescriptionCount.textContent = this.value.length;
-    });
+a{
+
+    text-decoration:none;
+
+    color:inherit;
+
 }
 
-/* ================= MULTI IMAGE UPLOAD ================= */
 
-const projectImage = document.getElementById("projectImage");
-const imageUploadArea = document.getElementById("imageUploadArea");
-const imagePreview = document.getElementById("imagePreview");
 
-if (imageUploadArea) {
-    imageUploadArea.addEventListener("click", function () {
-        projectImage.click();
-    });
+.jd-container{
+
+    width:min(1200px,92%);
+
+    margin:auto;
+
 }
 
-if (projectImage) {
-    projectImage.addEventListener("change", function () {
-        imagePreview.innerHTML = "";
-        const files = Array.from(this.files);
 
-        files.forEach(function (file, index) {
-            if (!file.type.startsWith("image/")) {
-                return;
-            }
 
-            const reader = new FileReader();
 
-            reader.onload = function (event) {
-                const item = document.createElement("div");
-                item.className = "gallery-item";
-                item.innerHTML = `
-                    <img src="${event.target.result}" alt="Project Image ${index + 1}">
-                    <button type="button" class="gallery-remove">
-                        <i class="fa-solid fa-xmark"></i>
-                    </button>
-                `;
 
-                item.querySelector(".gallery-remove").addEventListener("click", function (e) {
-                    e.stopPropagation();
-                    item.remove();
-                });
 
-                imagePreview.appendChild(item);
-            };
 
-            reader.readAsDataURL(file);
-        });
-    });
+/* =====================================================
+   LOADER
+===================================================== */
+
+
+.jd-loader{
+
+    position:fixed;
+
+    inset:0;
+
+    background:var(--jd-bg);
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    z-index:9999;
+
 }
 
-/* ================= FORM ================= */
 
-const projectForm = document.getElementById("addProjectForm");
+.jd-loader-box{
 
-/* ================= SAVE PROJECT ================= */
+    text-align:center;
 
-function saveProject(status) {
-    const title = document.getElementById("projectTitle").value.trim();
-    const category = document.getElementById("projectCategory").value;
-    const shortDescription = document.getElementById("shortDescription").value.trim();
-    const fullDescription = document.getElementById("projectDescription").value.trim();
-    
-    // টেকনোলজি ইনপুট থেকে কমা বা স্পেস দিয়ে আলাদা করে নিশ্চিতভাবে অ্যারে তৈরি করা
-    const technologiesInput = document.getElementById("technologies").value.trim();
-    const technologies = technologiesInput
-        ? technologiesInput.split(",").map(item => item.trim()).filter(item => item !== "")
-        : [];
+}
 
-    const completionDate = new Date().toISOString();
-    const projectUrl = document.getElementById("liveUrl") ? document.getElementById("liveUrl").value.trim() : "";
-    const githubUrl = document.getElementById("githubUrl") ? document.getElementById("githubUrl").value.trim() : "";
-    const featured = document.getElementById("showPortfolio") ? document.getElementById("showPortfolio").checked : true;
-    const allowComments = document.getElementById("allowComments") ? document.getElementById("allowComments").checked : true;
 
-    // গ্যালারি ইমেজ থেকে কাভার ইমেজ সেট করা
-    let coverImageUrl = "";
-    const firstGalleryImg = imagePreview ? imagePreview.querySelector("img") : null;
-    if (firstGalleryImg) {
-        coverImageUrl = firstGalleryImg.src;
+.jd-loader-image img{
+
+    width:90px;
+
+    height:90px;
+
+    border-radius:50%;
+
+    object-fit:cover;
+
+}
+
+
+
+.jd-loader-spinner{
+
+    width:45px;
+
+    height:45px;
+
+    margin:25px auto;
+
+    border-radius:50%;
+
+    border:4px solid #ddd;
+
+    border-top-color:var(--jd-primary);
+
+    animation:spin 1s linear infinite;
+
+}
+
+
+
+.jd-loader-box p{
+
+    color:var(--jd-muted);
+
+}
+
+
+
+@keyframes spin{
+
+    to{
+
+        transform:rotate(360deg);
+
     }
 
-    const project = {
-        id: Date.now(),
-        title: title,
-        category: category,
-        shortDescription: shortDescription,
-        description: fullDescription,
-        technologies: technologies,
-        features: document.getElementById("features") ? document.getElementById("features").value.trim() : "",
-        createdAt: completionDate,
-        liveUrl: projectUrl,
-        githubUrl: githubUrl,
-        featured: featured,
-        allowComments: allowComments,
-        status: status,
-        views: 0,
-        comments: 0,
-        image: coverImageUrl
-    };
-
-    const projects = JSON.parse(localStorage.getItem("portfolioProjects")) || [];
-    projects.unshift(project);
-
-    try {
-        localStorage.setItem("portfolioProjects", JSON.stringify(projects));
-    } catch (error) {
-        console.error(error);
-        alert("Storage Full");
-    }
-
-    return project;
 }
 
-/* ================= PUBLISH ================= */
 
-if (projectForm) {
-    projectForm.addEventListener("submit", function (event) {
-        event.preventDefault();
 
-        const clickedButton = event.submitter;
-        let status = "published";
 
-        if (clickedButton && clickedButton.id === "saveDraftBtn") {
-            status = "draft";
-        }
 
-        if (!projectForm.checkValidity()) {
-            projectForm.reportValidity();
-            return;
-        }
 
-        saveProject(status);
 
-        if (status === "published") {
-            alert("Project published successfully!");
-            window.location.href = "dashboard.html";
-        } else {
-            alert("Project saved as draft successfully!");
-            window.location.href = "dashboard.html";
-        }
-    });
+
+
+/* =====================================================
+   HEADER
+===================================================== */
+
+
+.jd-header{
+
+    position:sticky;
+
+    top:0;
+
+    z-index:1000;
+
+    background:
+    rgba(255,255,255,.75);
+
+    backdrop-filter:blur(18px);
+
+    border-bottom:1px solid var(--jd-border);
+
+}
+
+
+
+.dark-mode .jd-header{
+
+    background:
+    rgba(2,6,23,.75);
+
+}
+
+
+
+
+.jd-header-container{
+
+    width:min(1200px,92%);
+
+    margin:auto;
+
+    height:80px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+}
+
+
+
+
+.jd-brand{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+}
+
+
+
+
+.jd-brand-image img{
+
+    width:45px;
+
+    height:45px;
+
+    border-radius:50%;
+
+    object-fit:cover;
+
+}
+
+
+
+.jd-brand-name{
+
+    font-weight:800;
+
+    font-size:20px;
+
+}
+
+
+
+.jd-desktop-navigation{
+
+    display:flex;
+
+    gap:28px;
+
+}
+
+
+
+.jd-desktop-navigation a{
+
+    color:var(--jd-muted);
+
+    font-weight:600;
+
+    position:relative;
+
+}
+
+
+
+.jd-desktop-navigation a:hover,
+.jd-desktop-navigation .jd-active{
+
+
+    color:var(--jd-primary);
+
+}
+
+
+
+.jd-desktop-navigation .jd-active::after{
+
+    content:"";
+
+    position:absolute;
+
+    left:0;
+
+    bottom:-10px;
+
+    width:100%;
+
+    height:3px;
+
+    border-radius:10px;
+
+    background:var(--jd-gradient);
+
+}
+
+
+
+
+
+.jd-header-actions{
+
+    display:flex;
+
+    gap:12px;
+
+}
+
+
+
+.jd-theme-button,
+.jd-mobile-button{
+
+    width:42px;
+
+    height:42px;
+
+    border-radius:12px;
+
+    border:1px solid var(--jd-border);
+
+    background:var(--jd-card);
+
+    color:var(--jd-text);
+
+    cursor:pointer;
+
+}
+
+
+
+
+.jd-mobile-button{
+
+    display:none;
+
+}
+
+
+
+.jd-mobile-button span{
+
+    display:block;
+
+    width:20px;
+
+    height:2px;
+
+    background:var(--jd-text);
+
+    margin:5px auto;
+
+}
+
+
+
+
+.jd-mobile-navigation{
+
+    display:none;
+
+}
+
+
+
+
+
+
+
+
+
+/* =====================================================
+   HERO
+===================================================== */
+
+
+.jd-hero{
+
+    padding:90px 0 50px;
+
+    background:
+
+    radial-gradient(
+    circle at top right,
+    rgba(99,102,241,.15),
+    transparent 40%
+    );
+
+}
+
+
+
+.jd-breadcrumb{
+
+    display:flex;
+
+    gap:12px;
+
+    color:var(--jd-muted);
+
+    margin-bottom:35px;
+
+}
+
+
+
+.jd-hero-content{
+
+    max-width:850px;
+
+}
+
+
+
+.jd-category{
+
+    display:inline-block;
+
+    padding:8px 18px;
+
+    border-radius:50px;
+
+    background:
+    rgba(99,102,241,.12);
+
+    color:var(--jd-primary);
+
+    font-weight:700;
+
+    font-size:13px;
+
+}
+
+
+
+.jd-hero h1{
+
+    font-size:clamp(40px,6vw,70px);
+
+    margin:25px 0;
+
+    line-height:1.1;
+
+}
+
+
+
+.jd-hero p{
+
+    font-size:20px;
+
+    color:var(--jd-muted);
+
+    max-width:700px;
+
+}
+
+
+
+.jd-meta{
+
+    display:flex;
+
+    gap:25px;
+
+    margin-top:30px;
+
+}
+
+
+
+.jd-meta div{
+
+    display:flex;
+
+    gap:10px;
+
+    color:var(--jd-muted);
+
+}
+
+
+
+
+
+
+
+
+
+/* =====================================================
+   COVER IMAGE
+===================================================== */
+
+
+.jd-cover-section{
+
+    padding:30px 0;
+
+}
+
+
+
+.jd-cover-card{
+
+    height:600px;
+
+    overflow:hidden;
+
+    border-radius:35px;
+
+    background:var(--jd-card);
+
+    box-shadow:var(--jd-shadow);
+
+    position:relative;
+
+}
+
+
+
+.jd-cover-card img{
+
+    width:100%;
+
+    height:100%;
+
+    object-fit:cover;
+
+    display:none;
+
+}
+
+
+
+.jd-image-placeholder{
+
+    height:100%;
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:center;
+
+    align-items:center;
+
+    color:var(--jd-muted);
+
+    font-size:22px;
+
+    gap:20px;
+
+}
+
+
+
+
+
+.jd-image-placeholder i{
+
+    font-size:70px;
+
+}
+
+
+
+
+
+
+
+
+
+/* =====================================================
+   CONTENT
+===================================================== */
+
+
+.jd-content-section{
+
+    padding:70px 0;
+
+}
+
+
+
+.jd-content-grid{
+
+    display:grid;
+
+    grid-template-columns:
+
+    1fr 350px;
+
+    gap:35px;
+
+}
+
+
+
+.jd-card{
+
+    background:var(--jd-card);
+
+    border:1px solid var(--jd-border);
+
+    border-radius:25px;
+
+    padding:35px;
+
+    margin-bottom:25px;
+
+    box-shadow:0 10px 30px rgba(0,0,0,.04);
+
+}
+
+
+
+.jd-card h2{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    margin-bottom:25px;
+
+    font-size:25px;
+
+}
+
+
+
+.jd-card p{
+
+    color:var(--jd-muted);
+
+    line-height:1.8;
+
+    white-space:pre-line;
+
+}
+
+
+
+
+
+
+
+
+
+/* TECHNOLOGY (UPDATED) */
+
+
+.jd-tech-list{
+
+    display:flex;
+
+    flex-wrap:wrap;
+
+    gap:10px;
+
+}
+
+
+
+.jd-tech-list span{
+
+    padding:8px 16px;
+
+    border-radius:50px;
+
+    background: rgba(99,102,241,.12);
+
+    color: var(--jd-primary);
+
+    font-weight: 600;
+
+    font-size: 14px;
+
+    display: inline-block;
+
+}
+
+
+
+
+
+
+/* FEATURES */
+
+
+.jd-card ul{
+
+    padding-left:20px;
+
+}
+
+
+
+.jd-card li{
+
+    margin-bottom:12px;
+
+    color:var(--jd-muted);
+
+}
+
+
+
+
+
+
+
+
+/* SIDEBAR */
+
+
+.jd-link-button{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    gap:12px;
+
+    padding:15px;
+
+    border-radius:15px;
+
+    background:var(--jd-gradient);
+
+    color:white;
+
+    margin-bottom:15px;
+
+    font-weight:700;
+
+}
+
+
+
+
+.jd-info-item{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    padding:15px 0;
+
+    border-bottom:1px solid var(--jd-border);
+
+}
+
+
+
+.jd-info-item span{
+
+    color:var(--jd-muted);
+
+}
+
+
+
+
+
+
+
+
+
+/* =====================================================
+   FOOTER CTA
+===================================================== */
+
+
+.jd-footer-section{
+
+    padding:50px 0 100px;
+
+}
+
+
+
+.jd-footer-box{
+
+    padding:60px;
+
+    text-align:center;
+
+    border-radius:35px;
+
+    background:var(--jd-gradient);
+
+    color:white;
+
+}
+
+
+
+.jd-footer-box p{
+
+    margin:15px 0 30px;
+
+}
+
+
+
+.jd-footer-box a{
+
+    display:inline-flex;
+
+    gap:10px;
+
+    background:white;
+
+    color:#111;
+
+    padding:14px 30px;
+
+    border-radius:50px;
+
+    font-weight:700;
+
+}
+
+
+
+
+
+
+
+
+
+/* =====================================================
+   RESPONSIVE MOBILE
+===================================================== */
+
+
+@media(max-width:900px){
+
+
+.jd-desktop-navigation{
+
+    display:none;
+
+}
+
+
+
+.jd-mobile-button{
+
+    display:block;
+
+}
+
+
+
+.jd-mobile-navigation{
+
+    display:none;
+
+    flex-direction:column;
+
+    padding:20px;
+
+    background:var(--jd-card);
+
+}
+
+
+
+.jd-mobile-navigation.show{
+
+    display:flex;
+
+}
+
+
+
+.jd-mobile-navigation a{
+
+    padding:15px;
+
+    border-bottom:1px solid var(--jd-border);
+
+}
+
+
+
+
+.jd-content-grid{
+
+    grid-template-columns:1fr;
+
+}
+
+
+
+.jd-cover-card{
+
+    height:350px;
+
+}
+
+
+
+.jd-hero h1{
+
+    font-size:42px;
+
+}
+
+
+
+.jd-footer-box{
+
+    padding:40px 20px;
+
+}
+
+
+
+}
+
+
+
+
+
+@media(max-width:500px){
+
+
+.jd-header-container{
+
+    height:70px;
+
+}
+
+
+
+.jd-brand-name{
+
+    font-size:17px;
+
+}
+
+
+
+.jd-hero{
+
+    padding-top:50px;
+
+}
+
+
+
+.jd-meta{
+
+    flex-direction:column;
+
+}
+
+
+
+.jd-card{
+
+    padding:25px;
+
+}
+
+
+
 }
