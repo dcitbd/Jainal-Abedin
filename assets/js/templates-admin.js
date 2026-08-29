@@ -1,11 +1,12 @@
 /* =====================================================
-   ADMIN TEMPLATES LIST JAVASCRIPT (INDEXEDDB SYNCED)
+   ADMIN TEMPLATES LIST JAVASCRIPT
    Jainal Abedin Portfolio
 ===================================================== */
 (() => {
   const DB_NAME = 'JainalPortfolioDB';
   const DB_VERSION = 1;
   const STORE_NAME = 'templates';
+  const STORAGE_KEY = 'jainalTemplates';
 
   const $ = selector => document.querySelector(selector);
   const grid = $('#templatesGrid');
@@ -41,12 +42,16 @@
       const tx = db.transaction(STORE_NAME, 'readonly');
       const store = tx.objectStore(STORE_NAME);
       const req = store.getAll();
-      req.onsuccess = () => {
+      req.onsuccess = async () => {
         let list = req.result || [];
         if (list.length === 0) {
           try {
-            const ls = JSON.parse(localStorage.getItem('jainalTemplates') || '[]');
-            list = Array.isArray(ls) ? ls : [];
+            const ls = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+            if (ls.length > 0) {
+              list = ls;
+              const writeTx = db.transaction(STORE_NAME, 'readwrite');
+              list.forEach(item => writeTx.objectStore(STORE_NAME).put(item));
+            }
           } catch { list = []; }
         }
         resolve(list.map((item, index) => ({
@@ -72,9 +77,9 @@
       tx.objectStore(STORE_NAME).delete(id);
       tx.oncomplete = () => {
         try {
-          const ls = JSON.parse(localStorage.getItem('jainalTemplates') || '[]');
+          const ls = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
           const filtered = ls.filter(i => String(i.id) !== String(id));
-          localStorage.setItem('jainalTemplates', JSON.stringify(filtered));
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(filtered));
         } catch (_) {}
         resolve();
       };
@@ -93,7 +98,7 @@
     const term = search.value.trim().toLowerCase();
     return templates.filter(item =>
       (!term || [item.title, item.category, item.description, ...item.tags].join(' ').toLowerCase().includes(term)) &&
-      (!category.value || item.category === category.value) &&
+      (!category.value || item.category.toLowerCase() === category.value.toLowerCase()) &&
       (!status.value || item.status === status.value)
     );
   }
@@ -106,10 +111,10 @@
   function render() {
     const list = filteredTemplates();
     clear.classList.toggle('visible', Boolean(search.value || category.value || status.value));
-    $('#totalTemplates').textContent = templates.length;
-    $('#publishedTemplates').textContent = templates.filter(i => i.status === 'published').length;
-    $('#draftTemplates').textContent = templates.filter(i => i.status === 'draft').length;
-    result.textContent = templates.length ? `${list.length} of ${templates.length} templates shown` : 'Your saved template collection';
+    if ($('#totalTemplates')) $('#totalTemplates').textContent = templates.length;
+    if ($('#publishedTemplates')) $('#publishedTemplates').textContent = templates.filter(i => i.status === 'published').length;
+    if ($('#draftTemplates')) $('#draftTemplates').textContent = templates.filter(i => i.status === 'draft').length;
+    if (result) result.textContent = templates.length ? `${list.length} of ${templates.length} templates shown` : 'Your saved template collection';
 
     grid.innerHTML = list.map(item => `
       <article class="template-card">
@@ -130,7 +135,7 @@
     `).join('');
 
     empty.hidden = list.length > 0;
-    $('#emptyMessage').textContent = templates.length && !list.length ? 'No template matches your current filters.' : 'Add your first template to start building your collection.';
+    if ($('#emptyMessage')) $('#emptyMessage').textContent = templates.length && !list.length ? 'No template matches your current filters.' : 'Add your first template to start building your collection.';
   }
 
   function toast(message, icon = 'fa-circle-check') {
@@ -206,9 +211,9 @@
 
   function setupSidebar() {
     const sidebar = $('#adminSidebar'), overlay = $('#sidebarOverlay');
-    $('#sidebarToggle')?.addEventListener('click', () => { sidebar.classList.add('show', 'open'); overlay.classList.add('show'); });
-    $('#sidebarClose')?.addEventListener('click', () => { sidebar.classList.remove('show', 'open'); overlay.classList.remove('show'); });
-    overlay?.addEventListener('click', () => { sidebar.classList.remove('show', 'open'); overlay.classList.remove('show'); });
+    $('#sidebarToggle')?.addEventListener('click', () => { sidebar?.classList.add('show', 'open'); overlay?.classList.add('show'); });
+    $('#sidebarClose')?.addEventListener('click', () => { sidebar?.classList.remove('show', 'open'); overlay?.classList.remove('show'); });
+    overlay?.addEventListener('click', () => { sidebar?.classList.remove('show', 'open'); overlay?.classList.remove('show'); });
     $('#logoutBtn')?.addEventListener('click', () => {
       localStorage.removeItem('adminLoggedIn');
       sessionStorage.removeItem('adminLoggedIn');
