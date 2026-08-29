@@ -42,18 +42,30 @@
             <a href="../assets/pages/contact.html" class="admin-nav-link"><span class="nav-link-icon"><i class="fa-regular fa-envelope"></i></span><span>Messages</span></a>
             <a href="../index.html" target="_blank" class="admin-nav-link"><span class="nav-link-icon"><i class="fa-solid fa-globe"></i></span><span>View Website</span></a>
         </nav>
-        <div class="sidebar-footer"><div class="sidebar-status"><span class="status-indicator"></span><span>System Online</span></div><button id="logoutBtn" class="sidebar-logout" type="button"><i class="fa-solid fa-arrow-right-from-bracket"></i> Logout</button></div>
+        <div class="sidebar-footer">
+            <div class="sidebar-status"><span class="status-indicator"></span><span>System Online</span></div>
+            <button id="logoutBtn" class="sidebar-logout" type="button"><i class="fa-solid fa-arrow-right-from-bracket"></i> Logout</button>
+        </div>
     </aside>
 
     <main class="admin-main">
         <header class="admin-topbar">
-            <div class="topbar-left"><button id="sidebarToggle" class="sidebar-toggle" type="button" aria-label="Open menu"><i class="fa-solid fa-bars"></i></button><div class="breadcrumb"><span>Admin</span><i class="fa-solid fa-chevron-right"></i><strong>Templates</strong></div></div>
-            <div class="topbar-right"><a href="../assets/pages/templates.html" target="_blank" class="view-site-btn"><i class="fa-solid fa-globe"></i> View Templates</a></div>
+            <div class="topbar-left">
+                <button id="sidebarToggle" class="sidebar-toggle" type="button" aria-label="Open menu"><i class="fa-solid fa-bars"></i></button>
+                <div class="breadcrumb"><span>Admin</span><i class="fa-solid fa-chevron-right"></i><strong>Templates</strong></div>
+            </div>
+            <div class="topbar-right">
+                <a href="../assets/pages/templates.html" target="_blank" class="view-site-btn"><i class="fa-solid fa-globe"></i> View Templates</a>
+            </div>
         </header>
 
         <div class="admin-content templates-admin-content">
             <section class="templates-hero">
-                <div><span class="templates-eyebrow"><i class="fa-solid fa-cubes"></i> TEMPLATE LIBRARY</span><h1>Manage your <span>templates</span></h1><p>Create, review and organize every template shown on your public portfolio.</p></div>
+                <div>
+                    <span class="templates-eyebrow"><i class="fa-solid fa-cubes"></i> TEMPLATE LIBRARY</span>
+                    <h1>Manage your <span>templates</span></h1>
+                    <p>Create, review, edit and organize every template shown on your public portfolio.</p>
+                </div>
                 <a class="add-template-btn" href="add-template.html"><i class="fa-solid fa-plus"></i> Add Template</a>
             </section>
 
@@ -64,22 +76,35 @@
             </section>
 
             <section class="templates-panel">
-                <div class="templates-panel-header"><div><h2>All Templates</h2><p id="resultText">Your saved template collection</p></div><button id="clearFilters" class="clear-filter-btn" type="button"><i class="fa-solid fa-filter-circle-xmark"></i> Clear filters</button></div>
+                <div class="templates-panel-header">
+                    <div><h2>All Templates</h2><p id="resultText">Your saved template collection</p></div>
+                    <button id="clearFilters" class="clear-filter-btn" type="button"><i class="fa-solid fa-filter-circle-xmark"></i> Clear filters</button>
+                </div>
                 <div class="template-filters">
                     <label class="template-search"><i class="fa-solid fa-magnifying-glass"></i><input id="templateSearch" type="search" placeholder="Search templates…" autocomplete="off"></label>
                     <label><span class="sr-only">Category</span><select id="categoryFilter"><option value="">All categories</option></select></label>
                     <label><span class="sr-only">Status</span><select id="statusFilter"><option value="">All statuses</option><option value="published">Published</option><option value="draft">Draft</option></select></label>
                 </div>
                 <div id="templatesGrid" class="templates-grid" aria-live="polite"></div>
-                <div id="emptyTemplates" class="templates-empty" hidden><div class="empty-icon"><i class="fa-solid fa-cubes"></i></div><h3>No templates found</h3><p id="emptyMessage">Add your first template to start building your collection.</p><a href="add-template.html"><i class="fa-solid fa-plus"></i> Add Template</a></div>
+                <div id="emptyTemplates" class="templates-empty" hidden>
+                    <div class="empty-icon"><i class="fa-solid fa-cubes"></i></div>
+                    <h3>No templates found</h3>
+                    <p id="emptyMessage">Add your first template to start building your collection.</p>
+                    <a href="add-template.html"><i class="fa-solid fa-plus"></i> Add Template</a>
+                </div>
             </section>
         </div>
     </main>
 </div>
 <div class="sidebar-overlay" id="sidebarOverlay"></div>
 <div class="admin-toast" id="adminToast" role="status"><i class="fa-solid fa-circle-check"></i><span id="toastMessage"></span></div>
-<div class="template-modal" id="previewModal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="previewTitle"><div class="template-modal-backdrop" data-close-modal></div><div class="template-modal-dialog"><button class="modal-close" type="button" data-close-modal aria-label="Close preview"><i class="fa-solid fa-xmark"></i></button><div id="previewContent"></div></div></div>
-<script src="../assets/js/auth.js"></script>
+<div class="template-modal" id="previewModal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="previewTitle">
+    <div class="template-modal-backdrop" data-close-modal></div>
+    <div class="template-modal-dialog">
+        <button class="modal-close" type="button" data-close-modal aria-label="Close preview"><i class="fa-solid fa-xmark"></i></button>
+        <div id="previewContent"></div>
+    </div>
+</div>
 <script src="../assets/js/templates-admin.js"></script>
 </body>
 </html>
