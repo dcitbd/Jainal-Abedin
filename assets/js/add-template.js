@@ -1,20 +1,75 @@
 /* =====================================================
-   ADD TEMPLATE - DIRECT GITHUB API INTEGRATION
+   ADD / EDIT TEMPLATE SCRIPT
    Jainal Abedin Portfolio
 ===================================================== */
 (() => {
-  // আপনার GitHub কনফিগারেশন সেট করুন
-  const GITHUB_CONFIG = {
-    username: "YOUR_GITHUB_USERNAME", // আপনার GitHub ইউজারনেম
-    repo: "YOUR_REPOSITORY_NAME",     // আপনার রিপোজিটরির নাম
-    branch: "main",                   // ব্রাঞ্চের নাম (main/master)
-    filePath: "templates-data.json",  // JSON ফাইলের পাথ
-    token: "YOUR_GITHUB_PERSONAL_ACCESS_TOKEN" // GitHub Fine-grained বা Personal Access Token (repo scope সহ)
-  };
+  const DB_NAME = 'JainalPortfolioDB';
+  const DB_VERSION = 1;
+  const STORE_NAME = 'templates';
+  const STORAGE_KEY = 'jainalTemplates';
 
   const $ = selector => document.querySelector(selector);
   const form = $('#templateForm');
   let imageData = '';
+
+  const urlParams = new URLSearchParams(window.location.search);
+  const editId = urlParams.get('edit');
+
+  function openDB() {
+    return new Promise((resolve, reject) => {
+      const request = indexedDB.open(DB_NAME, DB_VERSION);
+      request.onupgradeneeded = (e) => {
+        const db = e.target.result;
+        if (!db.objectStoreNames.contains(STORE_NAME)) {
+          db.createObjectStore(STORE_NAME, { keyPath: "id" });
+        }
+      };
+      request.onsuccess = () => resolve(request.result);
+      request.onerror = () => reject(request.error);
+    });
+  }
+
+  async function saveTemplateToDB(template) {
+    const db = await openDB();
+    return new Promise((resolve, reject) => {
+      const tx = db.transaction(STORE_NAME, 'readwrite');
+      const store = tx.objectStore(STORE_NAME);
+      store.put(template);
+      tx.oncomplete = () => {
+        try {
+          const ls = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+          const index = ls.findIndex(item => String(item.id) === String(template.id));
+          if (index !== -1) {
+            ls[index] = template;
+          } else {
+            ls.unshift(template);
+          }
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(ls));
+        } catch (e) {
+          console.error("LocalStorage error:", e);
+        }
+        resolve();
+      };
+      tx.onerror = () => reject(tx.error);
+    });
+  }
+
+  async function getTemplateById(id) {
+    const db = await openDB();
+    return new Promise((resolve) => {
+      const tx = db.transaction(STORE_NAME, 'readonly');
+      const store = tx.objectStore(STORE_NAME);
+      const req = store.get(id);
+      req.onsuccess = () => {
+        if (req.result) return resolve(req.result);
+        try {
+          const ls = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+          resolve(ls.find(i => String(i.id) === String(id)) || null);
+        } catch { resolve(null); }
+      };
+      req.onerror = () => resolve(null);
+    });
+  }
 
   const toast = (message, icon = 'fa-circle-check') => {
     const toastEl = $('#adminToast');
@@ -28,13 +83,41 @@
   const showImage = src => {
     imageData = src || '';
     const upload = $('#imageUpload');
-    if ($('#imagePreview')) $('#imagePreview').src = imageData;
-    if ($('#cardPreviewImage')) $('#cardPreviewImage').src = imageData;
+    const previewImg = $('#imagePreview');
+    const cardImg = $('#cardPreviewImage');
+    const previewWrap = $('.preview-image-wrap');
+    const removeBtn = $('#removeImage');
+
+    if (previewImg) previewImg.src = imageData;
+    if (cardImg) cardImg.src = imageData;
     if (upload) upload.classList.toggle('has-image', Boolean(imageData));
-    if ($('#removeImage')) $('#removeImage').hidden = !imageData;
+    if (previewWrap) previewWrap.classList.toggle('has-image', Boolean(imageData));
+    if (removeBtn) removeBtn.hidden = !imageData;
   };
 
-  // ইমেজ সাইজ অপ্টিমাইজেশন
+  function updateLivePreview() {
+    const nameVal = $('#templateName')?.value.trim() || 'Template name';
+    const catVal = $('#templateCategory')?.value.trim() || 'CATEGORY';
+    const descVal = $('#templateDescription')?.value.trim() || 'Your description will appear here.';
+    const statusVal = $('#templateStatus')?.value.trim() || 'published';
+    const tagsVal = $('#templateTags')?.value || '';
+
+    if ($('#previewName')) $('#previewName').textContent = nameVal;
+    if ($('#previewCategory')) $('#previewCategory').textContent = catVal.toUpperCase();
+    if ($('#previewDescription')) $('#previewDescription').textContent = descVal;
+    if ($('#previewStatus')) $('#previewStatus').textContent = statusVal.toUpperCase();
+
+    if ($('#descriptionCount')) {
+      $('#descriptionCount').textContent = $('#templateDescription')?.value.length || 0;
+    }
+
+    const tagsContainer = $('#previewTags');
+    if (tagsContainer) {
+      const tags = tagsVal.split(',').map(t => t.trim()).filter(Boolean);
+      tagsContainer.innerHTML = tags.slice(0, 3).map(t => `<span>${t}</span>`).join('');
+    }
+  }
+
   function compressImage(base64Str, maxWidth = 800, maxHeight = 800, quality = 0.6) {
     return new Promise((resolve) => {
       let img = new Image();
@@ -63,82 +146,30 @@
     });
   }
 
-  // ইমেজ সিলেক্ট হ্যান্ডলার
-  const fileInput = $('#templateImage');
-  if (fileInput) {
-    fileInput.addEventListener('change', event => {
-      const file = event.target.files[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.addEventListener('load', async () => {
-        const compressed = await compressImage(reader.result);
-        showImage(compressed);
-      });
-      reader.readAsDataURL(file);
+  // ইভেন্ট লিসেনার
+  $('#templateName')?.addEventListener('input', updateLivePreview);
+  $('#templateCategory')?.addEventListener('change', updateLivePreview);
+  $('#templateStatus')?.addEventListener('change', updateLivePreview);
+  $('#templateDescription')?.addEventListener('input', updateLivePreview);
+  $('#templateTags')?.addEventListener('input', updateLivePreview);
+
+  $('#templateImage')?.addEventListener('change', event => {
+    const file = event.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.addEventListener('load', async () => {
+      const compressed = await compressImage(reader.result);
+      showImage(compressed);
     });
-  }
+    reader.readAsDataURL(file);
+  });
 
-  // GitHub থেকে বর্তমান ফাইল ডাটা এবং SHA নিয়ে আসা
-  async function getFileFromGitHub() {
-    const url = `https://api.github.com/repos/${GITHUB_CONFIG.username}/${GITHUB_CONFIG.repo}/contents/${GITHUB_CONFIG.filePath}?ref=${GITHUB_CONFIG.branch}`;
-    const response = await fetch(url, {
-      headers: {
-        'Authorization': `Bearer ${GITHUB_CONFIG.token}`,
-        'Accept': 'application/vnd.github.v3+json'
-      }
-    });
+  $('#removeImage')?.addEventListener('click', () => {
+    $('#templateImage').value = '';
+    showImage('');
+  });
 
-    if (response.status === 404) {
-      return { content: [], sha: null };
-    }
-
-    if (!response.ok) {
-      throw new Error(`GitHub Fetch Error: ${response.statusText}`);
-    }
-
-    const data = await response.json();
-    const decodedContent = decodeURIComponent(escape(atob(data.content)));
-    return {
-      content: JSON.parse(decodedContent || '[]'),
-      sha: data.sha
-    };
-  }
-
-  // GitHub API দিয়ে নতুন ডাটা কমিট ও পুশ করা
-  async function saveToGitHub(newContentList, fileSha) {
-    const url = `https://api.github.com/repos/${GITHUB_CONFIG.username}/${GITHUB_CONFIG.repo}/contents/${GITHUB_CONFIG.filePath}`;
-    const stringContent = JSON.stringify(newContentList, null, 2);
-    const encodedContent = btoa(unescape(encodeURIComponent(stringContent)));
-
-    const body = {
-      message: `Add new template: ${$('#templateName').value.trim()}`,
-      content: encodedContent,
-      branch: GITHUB_CONFIG.branch
-    };
-
-    if (fileSha) {
-      body.sha = fileSha;
-    }
-
-    const response = await fetch(url, {
-      method: 'PUT',
-      headers: {
-        'Authorization': `Bearer ${GITHUB_CONFIG.token}`,
-        'Content-Type': 'application/json',
-        'Accept': 'application/vnd.github.v3+json'
-      },
-      body: JSON.stringify(body)
-    });
-
-    if (!response.ok) {
-      const err = await response.json();
-      throw new Error(err.message || 'Failed to commit to GitHub');
-    }
-
-    return await response.json();
-  }
-
-  // ফর্ম সাবমিশন
+  // ফর্ম সাবমিট
   if (form) {
     form.addEventListener('submit', async event => {
       event.preventDefault();
@@ -147,45 +178,76 @@
       const submitBtn = form.querySelector('button[type="submit"]');
       const originalText = submitBtn.innerHTML;
       submitBtn.disabled = true;
-      submitBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Saving to GitHub...`;
+      submitBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Saving...`;
 
       try {
-        const { content: currentTemplates, sha } = await getFileFromGitHub();
-
         const titleVal = $('#templateName').value.trim();
-        const newTemplate = {
-          id: `template-${Date.now()}`,
+        const templateData = {
+          id: editId || `template-${Date.now()}`,
           title: titleVal,
           name: titleVal,
           category: $('#templateCategory').value,
           description: $('#templateDescription').value.trim(),
-          image: imageData || 'https://via.placeholder.com/600x400',
+          image: imageData || 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&auto=format&fit=crop&q=60',
           tags: $('#templateTags').value.split(',').map(v => v.trim()).filter(Boolean),
           status: $('#templateStatus').value,
           url: $('#templateUrl').value.trim(),
-          githubUrl: $('#githubUrl').value.trim(),
-          otherLinks: $('#otherUrl').value.trim() ? [$('#otherUrl').value.trim()] : [],
+          githubUrl: $('#githubUrl')?.value.trim() || '',
+          otherLinks: $('#otherUrl')?.value.trim() ? [$('#otherUrl').value.trim()] : [],
           createdAt: new Date().toISOString()
         };
 
-        currentTemplates.unshift(newTemplate);
+        await saveTemplateToDB(templateData);
 
-        await saveToGitHub(currentTemplates, sha);
-
-        // লোকালস্টোরেজ ক্যাশ ব্যাকআপ
-        localStorage.setItem('jainalTemplates', JSON.stringify(currentTemplates));
-
-        toast('Template successfully published to GitHub!');
+        toast(editId ? 'Template updated successfully!' : 'Template added successfully!');
         setTimeout(() => {
           window.location.href = 'templates.html';
-        }, 1200);
+        }, 1000);
 
       } catch (error) {
-        console.error('GitHub Sync Error:', error);
+        console.error(error);
         toast(`Error: ${error.message}`, 'fa-circle-exclamation');
         submitBtn.disabled = false;
         submitBtn.innerHTML = originalText;
       }
     });
   }
+
+  // এডিট মোড ইনিশিয়ালাইজেশন
+  async function loadEditData() {
+    if (!editId) return;
+    if ($('#pageTitle')) $('#pageTitle').innerHTML = 'Edit <span>Template</span>';
+    if ($('#breadcrumbTitle')) $('#breadcrumbTitle').textContent = 'Edit Template';
+    if ($('#saveButtonText')) $('#saveButtonText').textContent = 'Update Template';
+
+    const item = await getTemplateById(editId);
+    if (!item) return;
+
+    if ($('#templateName')) $('#templateName').value = item.title || item.name || '';
+    if ($('#templateCategory')) $('#templateCategory').value = item.category || '';
+    if ($('#templateStatus')) $('#templateStatus').value = item.status || 'published';
+    if ($('#templateDescription')) $('#templateDescription').value = item.description || '';
+    if ($('#templateTags')) $('#templateTags').value = Array.isArray(item.tags) ? item.tags.join(', ') : (item.tags || '');
+    if ($('#templateUrl')) $('#templateUrl').value = item.url || '';
+    if ($('#githubUrl')) $('#githubUrl').value = item.githubUrl || '';
+    if ($('#otherUrl')) $('#otherUrl').value = (item.otherLinks && item.otherLinks[0]) || '';
+
+    if (item.image) {
+      showImage(item.image);
+    }
+    updateLivePreview();
+  }
+
+  // সাইডবার
+  const sidebar = $('#adminSidebar'), overlay = $('#sidebarOverlay');
+  $('#sidebarToggle')?.addEventListener('click', () => { sidebar?.classList.add('show', 'open'); overlay?.classList.add('show'); });
+  $('#sidebarClose')?.addEventListener('click', () => { sidebar?.classList.remove('show', 'open'); overlay?.classList.remove('show'); });
+  overlay?.addEventListener('click', () => { sidebar?.classList.remove('show', 'open'); overlay?.classList.remove('show'); });
+  $('#logoutBtn')?.addEventListener('click', () => {
+    localStorage.removeItem('adminLoggedIn');
+    sessionStorage.removeItem('adminLoggedIn');
+    window.location.href = 'login.html';
+  });
+
+  loadEditData();
 })();
