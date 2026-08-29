@@ -1,5 +1,5 @@
 /* =====================================================
-   PUBLIC TEMPLATES PAGE JAVASCRIPT (INDEXEDDB & SYNCED)
+   PUBLIC TEMPLATES PAGE JAVASCRIPT
    Jainal Abedin Portfolio
 ===================================================== */
 
@@ -8,9 +8,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const DB_VERSION = 1;
     const STORE_NAME = "templates";
     const STORAGE_KEY = "jainalTemplates";
-    
-    // GitHub রিমোট ফাইল কনফিগারেশন
-    const GITHUB_RAW_URL = "https://raw.githubusercontent.com/jainalsagor/portfolio/main/templates-data.json";
 
     /* ================= LOADER ================= */
     const loader = document.getElementById("jaCompaniesLoader");
@@ -23,7 +20,6 @@ document.addEventListener("DOMContentLoaded", function () {
     /* ================= MOBILE MENU ================= */
     const menuButton = document.getElementById("jaCompaniesMenu");
     const mobileNav = document.getElementById("jaCompaniesMobileNav");
-
     if (menuButton && mobileNav) {
         menuButton.addEventListener("click", function () {
             mobileNav.classList.toggle("show");
@@ -88,7 +84,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     /* ================= TEMPLATE STORAGE & FETCH ================= */
     async function getTemplates() {
-        // ১. IndexedDB থেকে ডেটা ফেচ করা (বড় ইমেজ ও আনলিমিটেড স্টোরেজের জন্য)
+        // ১. IndexedDB থেকে আনা
         const idbData = await new Promise((resolve) => {
             const req = indexedDB.open(DB_NAME, DB_VERSION);
             req.onupgradeneeded = (e) => {
@@ -98,7 +94,9 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
             };
             req.onsuccess = () => {
-                const tx = req.result.transaction(STORE_NAME, "readonly");
+                const db = req.result;
+                if (!db.objectStoreNames.contains(STORE_NAME)) return resolve([]);
+                const tx = db.transaction(STORE_NAME, "readonly");
                 const store = tx.objectStore(STORE_NAME);
                 const getAll = store.getAll();
                 getAll.onsuccess = () => resolve(getAll.result || []);
@@ -111,26 +109,16 @@ document.addEventListener("DOMContentLoaded", function () {
             return idbData;
         }
 
-        // ২. রিমোট গিটহাব থেকে লোড করার চেষ্টা (যদি লাইভ হোস্ট করা থাকে)
+        // ২. LocalStorage ফলব্যাক
         try {
-            const response = await fetch(GITHUB_RAW_URL, { cache: "no-store" });
-            if (response.ok) {
-                const data = await response.json();
-                if (Array.isArray(data) && data.length > 0) {
-                    return data;
-                }
+            const ls = localStorage.getItem(STORAGE_KEY);
+            if (ls) {
+                const parsed = JSON.parse(ls);
+                if (Array.isArray(parsed) && parsed.length > 0) return parsed;
             }
         } catch (_) {}
 
-        // ৩. লোকালস্টোরেজ ফলব্যাক
-        try {
-            const ls = localStorage.getItem(STORAGE_KEY);
-            if (!ls) return [];
-            const parsed = JSON.parse(ls);
-            return Array.isArray(parsed) ? parsed : [];
-        } catch (_) {
-            return [];
-        }
+        return [];
     }
 
     /* ================= CREATE CARD ================= */
@@ -214,7 +202,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         const allTemplates = await getTemplates();
         
-        // শুধুমাত্র পাবলিশড টেম্প্লেট ফিল্টার করা
+        // শুধু পাবলিশড টেম্প্লেট ফিল্টার করা
         const templates = allTemplates.filter(t => String(t.status || "published").toLowerCase() !== "draft");
 
         buildCategories(templates);
@@ -285,6 +273,5 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
-    // ইনিশিয়াল লোড
     renderTemplates();
 });
